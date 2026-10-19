@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>职业图景 · Career OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <style>
+/* ============================================================
+   global.css | Career OS — 全局公共样式
+   ============================================================ */
+:root {
+    --primary: #0F766E; --primary-hover: #0D6B63; --primary-light: #14B8A6;
+    --primary-50: #F0FDFA; --primary-100: #CCFBF1; --primary-200: #99F6E4;
+    --white: #FFFFFF;
+    --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0;
+    --gray-300: #CBD5E1; --gray-400: #94A3B8; --gray-500: #64748B;
+    --gray-600: #475569; --gray-900: #0F172A;
+    --accent: #F59E0B; --accent-light: #FEF3C7;
+    --indigo: #6366F1; --indigo-light: #EEF2FF;
+    --rose: #F43F5E; --rose-light: #FFF1F2;
+    --violet: #8B5CF6; --violet-light: #F5F3FF;
+    --sky: #0EA5E9; --sky-light: #E0F2FE;
+    --shadow-xs: 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.02);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+    --radius-sm: 12px; --radius-md: 16px; --radius-lg: 22px; --radius-xl: 28px;
+    --nav-h: 56px; --tab-h: 60px;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--gray-100);color:var(--gray-900);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--gray-50);position:relative}
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(248,250,252,0.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--gray-500);background:none;border:none;font-family:inherit;cursor:pointer;transition:color .2s;padding:4px 0}
+.nav-back:active{color:var(--gray-900)}
+.nav-back svg{width:18px;height:18px}
+.nav-title{position:absolute;left:50%;transform:translateX(-50%);font-size:15px;font-weight:600;color:var(--gray-900);letter-spacing:-.01em}
+.screen{display:none;padding:20px;padding-bottom:80px;flex-direction:column}
+.screen.active{display:flex;animation:screenIn .35s ease both}
+.btn-primary{width:100%;padding:13px 24px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px rgba(15,118,110,.25);transition:all .2s}
+.btn-primary:active{transform:scale(.97)}
+.btn-outline{width:100%;padding:13px 24px;background:transparent;color:var(--primary);border:1.5px solid var(--primary);border-radius:var(--radius-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s}
+.btn-outline:active{background:var(--primary-50);transform:scale(.98)}
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--gray-900);color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:200;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes screenIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@media(min-width:431px){body{background:#E2E8F0}.app{box-shadow:0 0 80px rgba(0,0,0,.08)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+/* === career-vision 独有样式 === */
+.cv-hero{width:100%;background:linear-gradient(145deg,#0D5F59,var(--primary),var(--primary-light));border-radius:var(--radius-xl);padding:28px 24px;color:#fff;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;animation:fadeUp .5s ease both}
+.cv-hero::before{content:'';position:absolute;top:-30%;right:-15%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,255,255,.1) 0%,transparent 65%);border-radius:50%}
+.cv-code{font-size:32px;font-weight:800;letter-spacing:.04em;margin-bottom:6px}
+.cv-code-sub{font-size:13px;opacity:.85;line-height:1.5}
+.cv-goal-count{display:inline-block;margin-top:10px;padding:4px 12px;background:rgba(255,255,255,.18);border-radius:100px;font-size:11px;font-weight:500;backdrop-filter:blur(6px)}
+.cv-section{width:100%;margin-bottom:20px;animation:fadeUp .4s ease both}
+.cv-section-title{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.cv-section-title svg{width:18px;height:18px;color:var(--primary)}
+.cv-dims{animation:fadeUp .4s ease .1s both}
+.dim-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dim-label{width:28px;font-size:12px;font-weight:700;color:var(--gray-500);flex-shrink:0}
+.dim-name{width:48px;font-size:11px;color:var(--gray-400);flex-shrink:0}
+.dim-track{flex:1;height:6px;background:var(--gray-100);border-radius:3px;overflow:hidden}
+.dim-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.22,1,.36,1)}
+.dim-fill.top{background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+.dim-fill.mid{background:linear-gradient(90deg,var(--indigo),#818CF8)}
+.dim-fill.low{background:var(--gray-300)}
+.dim-pct{width:28px;font-size:11px;font-weight:600;color:var(--gray-500);text-align:right;flex-shrink:0}
+.dim-pct.top{color:var(--primary)}
+.dim-pct.mid{color:var(--indigo)}
+.cv-profile{width:100%;background:#fff;border-radius:var(--radius-md);padding:16px 18px;border:1px solid var(--gray-100);margin-bottom:20px;animation:fadeUp .4s ease .15s both}
+.cv-profile-title{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.cv-profile-text{font-size:13px;color:var(--gray-600);line-height:1.7}
+.cv-ai-summary{width:100%;background:#fff;border-radius:var(--radius-md);padding:16px 18px;border:1px solid var(--gray-100);margin-bottom:20px;animation:fadeUp .4s ease both}
+.cv-ai-summary-label{font-size:11px;font-weight:600;color:var(--primary);margin-bottom:8px;display:flex;align-items:center;gap:4px}
+.cv-ai-summary-text{font-size:13px;color:var(--gray-600);line-height:1.7}
+.career-section{width:100%;margin-bottom:20px;animation:fadeUp .4s ease .2s both}
+.career-section-title{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.career-section-title svg{width:18px;height:18px;color:var(--primary)}
+.career-rpt-card{background:#fff;border-radius:var(--radius-md);padding:18px;border:1px solid var(--gray-100);margin-bottom:12px;animation:fadeUp .4s ease both}
+.career-rpt-card:nth-child(2){animation-delay:.08s}
+.career-rpt-card:nth-child(3){animation-delay:.16s}
+.career-rpt-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.career-rpt-rank{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.career-rpt-rank.r1{background:linear-gradient(135deg,#FBBF24,#F59E0B)}
+.career-rpt-rank.r2{background:linear-gradient(135deg,#94A3B8,#64748B)}
+.career-rpt-rank.r3{background:linear-gradient(135deg,#D97706,#B45309)}
+.career-rpt-name{flex:1;font-size:15px;font-weight:700;color:var(--gray-900)}
+.career-rpt-match{font-size:20px;font-weight:800;color:var(--primary);flex-shrink:0}
+.career-rpt-match span{font-size:12px;font-weight:500}
+.career-rpt-bar{width:100%;height:6px;background:var(--gray-100);border-radius:3px;overflow:hidden;margin-bottom:14px}
+.career-rpt-bar-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.22,1,.36,1)}
+.career-rpt-bar-fill.r1{background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+.career-rpt-bar-fill.r2{background:linear-gradient(90deg,var(--indigo),#818CF8)}
+.career-rpt-bar-fill.r3{background:linear-gradient(90deg,var(--sky),#38BDF8)}
+.career-rpt-reasons{margin-bottom:12px}
+.career-rpt-reasons-title{font-size:11.5px;font-weight:600;color:var(--gray-500);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.career-rpt-reason{font-size:12.5px;color:var(--gray-600);line-height:1.55;padding-left:12px;margin-bottom:4px;position:relative}
+.career-rpt-reason::before{content:'';position:absolute;left:0;top:8px;width:4px;height:4px;border-radius:50%;background:var(--primary)}
+.career-rpt-skills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.career-rpt-skill{font-size:11px;font-weight:500;padding:4px 10px;border-radius:100px;background:var(--primary-50);color:var(--primary)}
+.career-rpt-growth{font-size:12px;color:var(--gray-500);line-height:1.5;padding:10px 12px;background:var(--gray-50);border-radius:8px;margin-bottom:0}
+.career-rpt-growth-label{font-size:11px;font-weight:600;color:var(--gray-400);margin-bottom:2px}
+.cv-goal-list{display:flex;flex-direction:column;gap:8px}
+.cv-goal-item{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border-radius:var(--radius-sm);border:1px solid var(--gray-100)}
+.cv-goal-dot{width:8px;height:8px;border-radius:50%;background:var(--primary);flex-shrink:0}
+.cv-goal-name{font-size:13px;font-weight:600;color:var(--gray-900)}
+.cv-timeline-card{width:100%;background:#fff;border-radius:var(--radius-md);padding:16px 18px;border:1px solid var(--gray-100);animation:fadeUp .4s ease both}
+.cv-timeline-text{font-size:13px;color:var(--gray-600);line-height:1.7}
+.cv-hint-card{width:100%;background:var(--primary-50);border-radius:var(--radius-md);padding:18px;border:1px dashed var(--primary-light);text-align:center;margin-bottom:20px;animation:fadeUp .4s ease both}
+.cv-hint-icon{font-size:28px;margin-bottom:8px}
+.cv-hint-text{font-size:13px;color:var(--gray-600);margin-bottom:12px;line-height:1.6}
+.cv-hint-btn{display:inline-block;padding:10px 24px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(15,118,110,.2);transition:all .2s}
+.cv-hint-btn:active{transform:scale(.97)}
+.cv-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center;animation:fadeUp .5s ease both}
+.cv-empty-icon{font-size:56px;margin-bottom:16px}
+.cv-empty-title{font-size:18px;font-weight:700;color:var(--gray-900);margin-bottom:8px}
+.cv-empty-desc{font-size:13px;color:var(--gray-500);line-height:1.6;margin-bottom:24px;max-width:260px}
+.cv-empty-btn{display:inline-block;padding:12px 32px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px rgba(15,118,110,.25);transition:all .2s}
+.cv-empty-btn:active{transform:scale(.97)}
+.cv-footer{padding:20px;padding-bottom:calc(20px + var(--safe-b));text-align:center}
+.cv-retest-btn{padding:10px 24px;background:transparent;color:var(--gray-500);border:1.5px solid var(--gray-300);border-radius:var(--radius-sm);font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .2s}
+.cv-retest-btn:active{background:var(--gray-100);transform:scale(.98)}
+/* === AI 拆解中长期目标模块 === */
+.gp-card{background:#fff;border-radius:var(--radius-md);border:1px solid var(--gray-100);overflow:hidden;animation:fadeUp .4s ease both}
+.gp-generate{text-align:center;padding:28px 20px;background:var(--primary-50);border:1px dashed var(--primary-light);border-radius:var(--radius-md);animation:fadeUp .4s ease both}
+.gp-generate-icon{font-size:32px;margin-bottom:8px}
+.gp-generate-title{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:6px}
+.gp-generate-desc{font-size:12.5px;color:var(--gray-500);line-height:1.65;margin-bottom:16px}
+.gp-btn{display:inline-block;padding:9px 20px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(15,118,110,.2);transition:all .2s}
+.gp-btn:active{transform:scale(.97)}
+.gp-btn.small{padding:7px 12px;font-size:12px;flex-shrink:0;border-radius:8px;box-shadow:none}
+.gp-btn.done{background:var(--gray-200);color:var(--gray-500);box-shadow:none;cursor:default}
+.gp-stage{margin-bottom:12px}
+.gp-stage:last-child{margin-bottom:0}
+.gp-stage-head{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--gray-50)}
+.gp-stage-name{font-size:13px;font-weight:700;color:var(--gray-900)}
+.gp-stage-tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:100px;background:var(--primary-100);color:var(--primary)}
+.gp-stage-first .gp-stage-tag{background:var(--accent-light);color:#B45309}
+.gp-item{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border-bottom:1px solid var(--gray-50);transition:all .2s}
+.gp-item:last-child{border-bottom:none}
+.gp-item.done{opacity:.55}
+.gp-cb{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--gray-300);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff;cursor:pointer;transition:all .2s}
+.gp-cb svg{width:12px;height:12px;color:#fff;opacity:0}
+.gp-item.done .gp-cb{background:var(--primary);border-color:var(--primary)}
+.gp-item.done .gp-cb svg{opacity:1}
+.gp-info{flex:1;min-width:0}
+.gp-name{font-size:13.5px;font-weight:600;color:var(--gray-900);transition:all .2s}
+.gp-item.done .gp-name{color:var(--gray-400);text-decoration:line-through}
+.gp-reason{font-size:11.5px;color:var(--gray-500);line-height:1.5;margin-top:2px}
+.gp-msteps{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.gp-mstep{font-size:10.5px;padding:3px 10px;border-radius:100px;background:var(--gray-100);color:var(--gray-500);cursor:pointer;transition:all .2s;border:1px solid transparent;font-family:inherit}
+.gp-mstep.cur{background:var(--primary-50);color:var(--primary);border-color:var(--primary-light);font-weight:600}
+.gp-mstep.done{background:var(--primary-100);color:var(--primary)}
+.gp-mstep.open{background:#fff;color:var(--primary);border-color:var(--primary);font-weight:600}
+.gp-task-row{display:none;margin-top:8px;padding:8px 10px;background:var(--gray-50);border-radius:8px;animation:fadeUp .25s ease both}
+.gp-task-row.show{display:block}
+.gp-task{display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer}
+.gp-task-cb{width:15px;height:15px;border-radius:5px;border:1.5px solid var(--gray-300);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;transition:all .2s}
+.gp-task-cb svg{width:9px;height:9px;opacity:0;transition:opacity .2s}
+.gp-task-cb.checked{background:var(--primary);border-color:var(--primary)}
+.gp-task-cb.checked svg{opacity:1}
+.gp-task-name{font-size:11.5px;color:var(--gray-700);line-height:1.45}
+.gp-task.done .gp-task-name{color:var(--gray-400);text-decoration:line-through}
+.gp-mbar{display:flex;align-items:center;gap:8px;margin-top:8px}
+.gp-mbar-track{flex:1;height:5px;background:var(--gray-100);border-radius:3px;overflow:hidden}
+.gp-mbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--primary),var(--primary-light));transition:width .3s}
+.gp-mpct{font-size:10.5px;font-weight:700;color:var(--primary);flex-shrink:0}
+.gp-note{font-size:11px;color:var(--gray-400);text-align:center;padding:10px 14px;background:var(--gray-50);border-radius:8px;margin-top:12px;line-height:1.6;animation:fadeUp .4s ease both}
+</style>
+</head>
+<body>
+<div class="app">
+<nav class="top-nav">
+<button class="nav-back" onclick="goBack()" aria-label="返回"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg><span>返回</span></button>
+<span class="nav-title">职业图景</span>
+<span style="width:60px"></span>
+</nav>
+<div class="screen active" id="screen-vision">
+<div id="vision-body"></div>
+</div>
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+/* ============================================================
+   store.js | Career OS — 全局数据存储
+   所有跨页面共享数据统一存放于此，使用 localStorage 持久化
+   ============================================================ */
+var Store = (function () {
+    var STORAGE_KEY = 'career_os_store';
+    var _defaults = {
+        user: null,
+        assessment: null,
+        careerGoal: null,
+        goalPool: null,
+        timeline: null,
+        dailyTasks: null,
+        portfolio: null
+    };
+    var _data = {};
+    function _load() {
+        try {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) { _data = JSON.parse(raw); } else { _data = _deepClone(_defaults); }
+        } catch (e) { _data = _deepClone(_defaults); }
+        for (var key in _defaults) { if (_data[key] === undefined) { _data[key] = _defaults[key]; } }
+    }
+    function _save() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(_data)); } catch (e) { console.warn('[Store] localStorage 写入失败', e); }
+    }
+    function _deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
+    _load();
+    return {
+        get: function (key) { if (key) return _data[key]; return _deepClone(_data); },
+        set: function (key, value) { _data[key] = value; _save(); },
+        batch: function (updates) { for (var key in updates) { if (updates.hasOwnProperty(key)) { _data[key] = updates[key]; } } _save(); },
+        clear: function () { _data = _deepClone(_defaults); _save(); },
+        remove: function (key) { _data[key] = _defaults[key] !== undefined ? _defaults[key] : null; _save(); },
+        hasAssessment: function () { return !!(_data.assessment && _data.assessment.code); },
+        hasCareerGoal: function () { return !!(_data.careerGoal && _data.careerGoal.length > 0); }
+    };
+})();
+</script>
+    <script>
+/* ============================================================
+   router.js | Career OS — 页面跳转辅助函数
+   所有页面跳转优先使用此模块，统一管理路由
+   ============================================================ */
+var Router = (function () {
+    var BASE = '';
+    return {
+        go: function (page) { window.location.href = BASE + page; },
+        toIndex: function () { this.go('index.html'); },
+        toAssessment: function () { this.go('assessment.html'); },
+        toAiAnalysis: function () { this.go('ai-analysis.html'); },
+        toAiChat: function () { this.go('ai-chat.html'); },
+        toCareerVision: function () { this.go('career-vision.html'); },
+        toSettings: function () { this.go('settings.html'); },
+        toLogin: function () { this.go('login.html'); },
+        back: function () { window.history.back(); },
+        currentPage: function () { var path = window.location.pathname; var file = path.substring(path.lastIndexOf('/') + 1); return file.replace('.html', ''); }
+    };
+})();
+</script>
+<script>
+var toastTimer;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function showToast(m){var t=document.getElementById('toast');clearTimeout(toastTimer);t.textContent=m;t.classList.add('show');toastTimer=setTimeout(function(){t.classList.remove('show');},2200);}
+function goBack(){if(typeof Router!=='undefined'){Router.toIndex();}else{window.location.href='index.html';}}
+
+var DIM_INFO={R:{name:'实际型',desc:'喜欢动手、实操、工具、技术',emoji:'🔧',color:'var(--primary-50)',cc:'var(--primary)'},I:{name:'研究型',desc:'喜欢分析、探索、研究、找规律',emoji:'🔬',color:'var(--indigo-light)',cc:'var(--indigo)'},A:{name:'艺术型',desc:'喜欢创意、表达、设计、创造',emoji:'🎨',color:'var(--violet-light)',cc:'var(--violet)'},S:{name:'社会型',desc:'喜欢沟通、帮助、服务、教育',emoji:'🤝',color:'var(--sky-light)',cc:'var(--sky)'},E:{name:'企业型',desc:'喜欢影响、组织、说服、管理',emoji:'🚀',color:'var(--accent-light)',cc:'#B45309'},C:{name:'传统型',desc:'喜欢规则、流程、细节、秩序',emoji:'📋',color:'var(--rose-light)',cc:'var(--rose)'}};
+var DIM_PROFILE={R:'你偏好实操与行动，善于把想法落地为看得见的成果',I:'你偏好思考与分析，享受拆解问题、探索未知的过程',A:'你偏好创造与表达，渴望打破常规、留下独特印记',S:'你偏好连接与助人，在倾听和支持中找到自我价值',E:'你偏好影响与推动，善于组织统筹、带领团队拿结果',C:'你偏好秩序与规范，让复杂的事情井井有条、稳妥运转'};
+
+function render(){
+  var body=document.getElementById('vision-body');
+  if(!body)return;
+  if(typeof Store==='undefined'||!Store.hasAssessment()){
+    body.innerHTML=renderEmpty();return;
+  }
+  var assessment=Store.get('assessment');
+  var careerGoal=Store.get('careerGoal');
+  var timeline=Store.get('timeline');
+  var aiReport=assessment&&assessment.aiReport?assessment.aiReport:null;
+  var scores=assessment.scores||{R:0,I:0,A:0,S:0,E:0,C:0};
+  var code=assessment.code||'';
+  var sorted=Object.keys(scores).map(function(d){return{d:d,s:scores[d]};}).sort(function(a,b){return b.s-a.s;});
+  var codeNames=code.split('').map(function(d){return DIM_INFO[d]?DIM_INFO[d].name:d;}).join(' + ');
+  var h='';
+  var goalCount=(careerGoal&&careerGoal.length)?careerGoal.length:0;
+  h+='<div class="cv-hero"><div class="cv-code">'+esc(code)+'</div><div class="cv-code-sub">'+esc(codeNames)+' 型</div>';
+  if(goalCount>0){h+='<div class="cv-goal-count">已选 '+goalCount+' 个职业目标</div>';}
+  h+='</div>';
+  h+='<div class="cv-section cv-dims"><div class="cv-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>兴趣维度分布</div>';
+  sorted.forEach(function(item,idx){
+    var pct=Math.round(item.s/16*100);
+    var cls=idx<2?'top':idx<4?'mid':'low';
+    var pctCls=idx<2?'top':idx<4?'mid':'';
+    var info=DIM_INFO[item.d];var dimName=info?info.name:item.d;
+    h+='<div class="dim-row"><div class="dim-label">'+esc(item.d)+'</div><div class="dim-name">'+esc(dimName)+'</div><div class="dim-track"><div class="dim-fill '+cls+'" data-p="'+pct+'" style="width:0%"></div></div><div class="dim-pct '+pctCls+'">'+pct+'%</div></div>';
+  });
+  h+='</div>';
+  var profileText='';
+  if(sorted.length>=2){
+    var d0=sorted[0].d,d1=sorted[1].d;
+    var n0=DIM_INFO[d0]?DIM_INFO[d0].name:d0;
+    var n1=DIM_INFO[d1]?DIM_INFO[d1].name:d1;
+    profileText='你的核心人格以「'+n0+'」为主导，同时具有鲜明的「'+n1+'」特征。'+DIM_PROFILE[d0]+'；同时，'+DIM_PROFILE[d1]+'。';
+    if(code.length>=3&&sorted.length>2){
+      var d2=sorted[2].d;var n2=DIM_INFO[d2]?DIM_INFO[d2].name:d2;
+      profileText+='此外，你的「'+n2+'」倾向也不弱——'+DIM_PROFILE[d2]+'。';
+    }
+  }
+  h+='<div class="cv-profile"><div class="cv-profile-title">✨ 人格解读</div><div class="cv-profile-text">'+esc(profileText)+'</div></div>';
+  if(!aiReport){
+    h+='<div class="cv-hint-card"><div class="cv-hint-icon">🤖</div><div class="cv-hint-text">让 AI 为你深度分析，获取个性化职业推荐</div><button class="cv-hint-btn" onclick="goToAiAnalysis()">去 AI 分析</button></div>';
+  }else{
+    if(aiReport.summary){h+='<div class="cv-ai-summary"><div class="cv-ai-summary-label">🤖 AI 深度分析摘要</div><div class="cv-ai-summary-text">'+esc(aiReport.summary)+'</div></div>';}
+    if(aiReport.careers&&aiReport.careers.length>0){
+      h+='<div class="career-section"><div class="career-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>职业岗位推荐</div>';
+      var rankCls=['r1','r2','r3'];var medals=['🥇','🥈','🥉'];
+      aiReport.careers.forEach(function(c,idx){
+        h+='<div class="career-rpt-card"><div class="career-rpt-top"><div class="career-rpt-rank '+rankCls[idx]+'">'+medals[idx]+'</div><div class="career-rpt-name">'+esc(c.name)+'</div><div class="career-rpt-match">'+esc(c.match)+'<span>%</span></div></div>';
+        h+='<div class="career-rpt-bar"><div class="career-rpt-bar-fill '+rankCls[idx]+'" data-p="'+c.match+'" style="width:0%"></div></div>';
+        if(c.reasons&&c.reasons.length){h+='<div class="career-rpt-reasons"><div class="career-rpt-reasons-title">📝 匹配原因</div>';c.reasons.forEach(function(r){h+='<div class="career-rpt-reason">'+esc(r)+'</div>';});h+='</div>';}
+        if(c.skills&&c.skills.length){h+='<div class="career-rpt-skills">';c.skills.forEach(function(sk){h+='<span class="career-rpt-skill">'+esc(sk)+'</span>';});h+='</div>';}
+        if(c.growth){h+='<div class="career-rpt-growth"><div class="career-rpt-growth-label">📈 成长路径</div>'+esc(c.growth)+'</div>';}
+        h+='</div>';
+      });
+      h+='</div>';
+    }
+  }
+  h+='<div class="cv-section"><div class="cv-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>职业目标</div>';
+  if(careerGoal&&careerGoal.length>0){
+    h+='<div class="cv-goal-list">';
+    careerGoal.forEach(function(g){var gName=g.name||g;h+='<div class="cv-goal-item"><div class="cv-goal-dot"></div><div class="cv-goal-name">'+esc(gName)+'</div></div>';});
+    h+='</div>';
+  }else{
+    h+='<div class="cv-hint-card"><div class="cv-hint-icon">🎯</div><div class="cv-hint-text">还没有选定职业目标<br>去测评页勾选 或 去 AI 分析选择岗位</div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="cv-hint-btn" onclick="goToAssessment()">去测评</button>';
+    if(aiReport){h+='<button class="cv-hint-btn" onclick="goToAiAnalysis()" style="background:var(--indigo);box-shadow:0 4px 12px rgba(99,102,241,.2)">去 AI 分析</button>';}
+    h+='</div></div>';
+  }
+  h+='</div>';
+  h+='<div class="cv-section"><div class="cv-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>AI 拆解中长期目标</div>';
+  var goalPool=ensureGoalMilestones();
+  if(!goalPool||!goalPool.length){
+    h+='<div class="gp-generate"><div class="gp-generate-icon">🤖</div><div class="gp-generate-title">AI 拆解中长期目标</div><div class="gp-generate-desc">基于你的职业图景画像，AI 将按阶段拆解当下最适合你去做的中长期目标。你可以打勾标记已完成，并挑选一个目标设为「当前目标」，之后会在首页展示。</div><button class="gp-btn" id="gp-generate-btn" onclick="generateGoalPool()">开始 AI 拆解</button></div>';
+  }else{
+    var currentNames=currentGoalNames();
+    h+='<div class="gp-card">';
+    GOAL_POOL_STAGES.forEach(function(st,si){
+      var items=goalPool.filter(function(x){return x.stage===st.key;});
+      if(!items.length)return;
+      h+='<div class="gp-stage'+(si===0?' gp-stage-first':'')+'"><div class="gp-stage-head"><span class="gp-stage-name">'+esc(st.name)+'</span><span class="gp-stage-tag">'+esc(st.tag)+'</span></div>';
+      items.forEach(function(g){
+        var isCurrent=currentNames.indexOf(g.name)>-1;
+        var ms=g.milestones||[];
+        var mpct=0;
+        if(ms.length){
+          var totalT=0,dnT=0;
+          ms.forEach(function(x){
+            var ts=x.tasks||[];
+            var td=x.tasksDone||[];
+            totalT+=ts.length;
+            for(var k=0;k<ts.length;k++){if(td[k])dnT++;}
+          });
+          mpct=totalT?Math.round(dnT/totalT*100):0;
+        }
+        h+='<div class="gp-item'+(g.done?' done':'')+'" data-gp-id="'+g.id+'">'+
+          '<div class="gp-cb" onclick="toggleGoalDone(\''+g.id+'\',this)" aria-label="标记完成">'+(g.done?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':'')+'</div>'+
+          '<div class="gp-info"><div class="gp-name">'+esc(g.name)+'</div><div class="gp-reason">'+esc(g.reason)+'</div>';
+        if(ms.length){
+          h+='<div class="gp-msteps">';
+          ms.forEach(function(mst,mi){
+            var curCls=false;
+            if(!mst.done){
+              var beforeAllDone=true;
+              for(var b=0;b<mi;b++){if(!ms[b].done){beforeAllDone=false;break;}}
+              curCls=beforeAllDone;
+            }
+            h+='<span class="gp-mstep'+(mst.done?' done':'')+(curCls?' cur':'')+(mi===0?' open':'')+'" onclick="toggleMsOpen(\''+g.id+'\','+mi+',this)">'+esc(mst.name)+'</span>';
+          });
+          h+='</div>';
+          ms.forEach(function(mst,mi){
+            var ts=mst.tasks||[];
+            h+='<div class="gp-task-row'+(mi===0?' show':'')+'" data-mi="'+mi+'">';
+            ts.forEach(function(t,ti){
+              var td=!!(mst.tasksDone&&mst.tasksDone[ti]);
+              h+='<div class="gp-task'+(td?' done':'')+'" onclick="toggleTask(\''+g.id+'\','+mi+','+ti+',this)"><div class="gp-task-cb'+(td?' checked':'')+'">'+(td?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':'')+'</div><span class="gp-task-name">'+esc(t)+'</span></div>';
+            });
+            h+='</div>';
+          });
+          h+='<div class="gp-mbar"><div class="gp-mbar-track"><div class="gp-mbar-fill" style="width:'+mpct+'%"></div></div><span class="gp-mpct">'+mpct+'%</span></div>';
+        }
+        h+='</div>'+
+          (isCurrent?'<span class="gp-btn small done">✓ 已设为目标</span>':'<button class="gp-btn small" onclick="setAsCurrentGoal(\''+g.id+'\')">设为当前目标</button>')+
+          '</div>';
+      });
+      h+='</div>';
+    });
+    h+='</div>';
+    h+='<div style="text-align:center;margin-top:12px"><button class="gp-btn small" onclick="regenerateGoalPool()" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary)">↻ 重新拆解</button></div>';
+    h+='<div class="gp-note">每个目标都拆好了专属阶段和小任务：点击阶段标签可展开该阶段的任务清单，勾选小任务后阶段自动标绿（当前阶段高亮）；打勾 = 标记整个目标已完成；设为「当前目标」后可在首页查看全部、编辑进度</div>';
+  }
+  h+='</div>';
+  h+='<div class="cv-footer"><button class="cv-retest-btn" onclick="goToAssessment()">重新测评</button></div>';
+  body.innerHTML=h;
+  setTimeout(function(){
+    document.querySelectorAll('.dim-fill[data-p]').forEach(function(el){el.style.width=el.dataset.p+'%';});
+    document.querySelectorAll('.career-rpt-bar-fill[data-p]').forEach(function(el){el.style.width=el.dataset.p+'%';});
+  },200);
+}
+function renderEmpty(){
+  return '<div class="cv-empty"><div class="cv-empty-icon">🧭</div><div class="cv-empty-title">你还没有完成职业测评</div><div class="cv-empty-desc">完成职业测评后，这里将展示你的完整职业图景：兴趣分析、人格解读、AI 推荐和职业目标</div><button class="cv-empty-btn" onclick="goToAssessment()">去测评</button></div>';
+}
+function goToAssessment(){if(typeof Router!=='undefined'){Router.toAssessment();}else{window.location.href='assessment.html';}}
+function goToAiAnalysis(){if(typeof Router!=='undefined'){Router.toAiAnalysis();}else{window.location.href='ai-analysis.html';}}
+
+/* ═══════════ AI 拆解中长期目标 ═══════════
+   目标 = 职业计划(按用户选定的职业) + 测评特质(RIASEC 主导维度) 动态生成
+   阶段 = 按大学成长时间线细化 5 个阶段 */
+var GOAL_POOL_STAGES=[
+  {key:'explore',name:'认知探索期',tag:'大一大二'},
+  {key:'base',name:'基础夯实期',tag:'大二'},
+  {key:'build',name:'技能进阶期',tag:'大二·大三'},
+  {key:'practice',name:'实战积累期',tag:'大三'},
+  {key:'sprint',name:'求职冲刺期',tag:'大三大四'}
+];
+/* RIASEC 测评特质目标（插入认知探索期，带专属阶段与小任务） */
+var RIASEC_DIM_GOAL={
+  R:{name:'动手实操训练',reason:'你的核心特质是实际型（R），动手实践能最快积累信心——从一个小型可落地的动手项目开始，做出来比想清楚更重要',milestones:[
+    {name:'选定实操项目',tasks:['列出 2-3 个 1-2 周能完成的小项目想法','选定一个最想做的，明确交付标准']},
+    {name:'动手制作',tasks:['完成核心功能的动手实现','记录过程中遇到的问题与解决办法']},
+    {name:'成果检验',tasks:['向 3 个人演示并收集反馈','总结这次实操可复用的经验']}
+  ]},
+  I:{name:'行业深度研究',reason:'你的核心特质是研究型（I），先做一份目标行业/职业的深度调研报告，把信息差变成你的认知优势',milestones:[
+    {name:'选定研究主题',tasks:['确定目标行业或职业的研究方向','列出 5 个最想搞清楚的问题']},
+    {name:'收集与分析',tasks:['收集 10 份以上行业资料与数据','完成信息整理、交叉验证与结论提炼']},
+    {name:'输出报告',tasks:['撰写一份结构化的调研报告','提炼 3 条可直接指导自己行动的建议']}
+  ]},
+  A:{name:'原创创意作品',reason:'你的核心特质是艺术型（A），把创意表达放进作品集——先完成一个不受约束的原创概念作品，作为能力名片',milestones:[
+    {name:'灵感与定位',tasks:['收集灵感素材并确定作品主题','确定作品形式与目标受众']},
+    {name:'创作执行',tasks:['完成作品初稿','打磨细节、提升完成度']},
+    {name:'展示与反馈',tasks:['发布或公开展示作品','收集反馈并迭代一版']}
+  ]},
+  S:{name:'社群与助人实践',reason:'你的核心特质是社会型（S），通过参与校园社群、公益或帮带项目积累真实沟通与助人经验，软实力同样进简历',milestones:[
+    {name:'找到实践场景',tasks:['盘点可参与的校园社群/公益/帮带项目','选定一个可以持续参与的场景']},
+    {name:'深度参与',tasks:['完成 2 次以上的实际参与','记录自己贡献的具体价值与关键沟通']},
+    {name:'沉淀收获',tasks:['整理实践中的沟通协作案例','把这段经历更新进简历']}
+  ]},
+  E:{name:'组织与商业实践',reason:'你的核心特质是企业型（E），适合牵头一个小项目、社团活动或摆摊实践，尽早锻炼组织推动与拿结果的能力',milestones:[
+    {name:'确定项目',tasks:['提出一个可牵头的小项目或活动','拆解需要的资源与成员分工']},
+    {name:'组织执行',tasks:['牵头推进项目按节点落地','协调成员完成关键环节']},
+    {name:'复盘成果',tasks:['复盘组织过程中的得与失','用数据总结项目成果并记录']}
+  ]},
+  C:{name:'流程与规范训练',reason:'你的核心特质是传统型（C），系统学习目标岗位的标准流程、文档与工具规范，用秩序感建立专业感',milestones:[
+    {name:'选择规范对象',tasks:['选定目标岗位的核心流程/文档类型','找到 3 份真实范例进行学习']},
+    {name:'实操练习',tasks:['按规范独立完成 1 份完整文档或流程','请他人点评并修正问题']},
+    {name:'内化应用',tasks:['把规范应用到自己的真实项目里','总结一份个人检查清单']}
+  ]}
+};
+/* 职业定制计划：AI 推荐 18 个岗位全覆盖，每阶段 2 个目标 */
+var CAREER_PLAN={
+  '产品经理':{
+    explore:[{name:'产品经理工作全貌',reason:'你已选定产品经理方向：先看懂「需求→方案→开发→上线→迭代」的产品链路，明确每个环节的交付物',milestones:[
+      {name:'梳理产品链路',tasks:['画出「需求→方案→开发→上线→迭代」全流程图','标注每个环节的协作方与交付物']},
+      {name:'拆解岗位能力',tasks:['列出 PM 硬技能（PRD/原型/数据）与软技能（沟通/决策）','对照自己标记 3 项最需补的能力']},
+      {name:'输出认知笔记',tasks:['写一篇 800 字的产品经理岗位认知笔记','找 1 位从业者帮忙点评补充']}
+    ]},{name:'拆解 5 份 PM 校招 JD',reason:'从招聘平台收集 5 份产品经理 JD，提炼高频能力词，形成你的能力差距清单',milestones:[
+      {name:'收集 JD',tasks:['在招聘平台收集 5 份产品经理校招/实习 JD','记录岗位职责与任职要求原文']},
+      {name:'提炼要求',tasks:['用词频统计提炼高频能力词（原型/数据/PRD 等）','标注每个要求出现的次数']},
+      {name:'形成清单',tasks:['输出「能力差距清单」：已具备/待补/完全空白','按优先级给待补项排序']}
+    ]}],
+    base:[{name:'产品方法论基础',reason:'系统学习需求分析、优先级排序、PRD 写作，这是 PM 面试的必考框架',milestones:[
+      {name:'学习需求分析',tasks:['学用户需求收集与分析方法（访谈/问卷/竞品）','完成 2 个需求分析练习案例']},
+      {name:'学习优先级与 PRD',tasks:['学优先级排序（RICE/KANO）与 PRD 写作结构','用模板写 1 份简易 PRD 骨架']},
+      {name:'输出框架',tasks:['整理自己的产品方法论知识地图','每天复习 15 分钟巩固']}
+    ]},{name:'竞品分析报告',reason:'选定一个赛道做 3 个竞品的深度对比分析，输出结构化的分析报告',milestones:[
+      {name:'选定赛道与竞品',tasks:['选定一个感兴趣的产品赛道','确定 3 个对比竞品对象']},
+      {name:'深度拆解',tasks:['从定位/功能/体验/商业化 4 个维度拆解竞品','对比提炼差异与可借鉴点']},
+      {name:'输出报告',tasks:['输出结论先行的竞品分析报告','提出 3 条给自己的产品启发']}
+    ]}],
+    build:[{name:'原型工具 + PRD 能力',reason:'用 Figma 完成一个 App 的完整可点击原型，并配套写一份规范 PRD，这是岗位硬门槛',milestones:[
+      {name:'工具上手',tasks:['系统学 Figma 基础操作（组件/Auto Layout）','完成一个官方教程项目']},
+      {name:'原型设计',tasks:['选定一个 App 完成完整可点击原型','覆盖主要流程与关键状态']},
+      {name:'PRD 撰写',tasks:['为原型撰写规范 PRD（功能清单/边界状态）','请 PM 前辈或社群评审一次']}
+    ]},{name:'完成 2 个产品项目',reason:'走「用户调研→方案→原型→PRD」完整闭环做 2 个项目，每个都要有数据结果',milestones:[
+      {name:'项目一：改版项目',tasks:['选改版类项目：调研→方案→原型→PRD','收集 5 人以上用户反馈']},
+      {name:'项目二：新功能项目',tasks:['选新功能类项目跑完整闭环','记录每个环节的关键决策']},
+      {name:'数据补充',tasks:['为 2 个项目补数据结果（漏斗/留存/问卷）','写成可讲解的项目案例']}
+    ]}],
+    practice:[{name:'产品实战/比赛',reason:'把项目放进真实场景（黑客松、课程设计、校园需求），拿真实用户反馈验证判断',milestones:[
+      {name:'找到战场',tasks:['选择黑客松/课程设计/校园真实需求','组队或独立确认项目目标']},
+      {name:'实战执行',tasks:['按 PM 流程推进项目落地','每周记录进展与遇到的问题']},
+      {name:'验证复盘',tasks:['收集真实用户反馈验证产品判断','复盘做得对与错的地方']}
+    ]},{name:'数据复盘训练',reason:'学会用漏斗、留存等指标复盘项目效果，PM 的每个决策都要有数据支撑',milestones:[
+      {name:'学指标',tasks:['学漏斗、留存、转化等核心产品指标','理解每个指标的含义与口径']},
+      {name:'拆案例',tasks:['拆解 3 个产品的数据复盘案例','模仿其分析思路做笔记']},
+      {name:'实践复盘',tasks:['用自己项目的真实数据做一次复盘','输出改进建议并跟踪验证']}
+    ]}],
+    sprint:[{name:'简历与作品集打磨',reason:'用 STAR + 数据重写简历，把 2 个产品项目整理成可讲解的案例集',milestones:[
+      {name:'素材整理',tasks:['列出所有可写进简历的经历与项目','为每个项目提炼 STAR 素材']},
+      {name:'简历重写',tasks:['用 STAR + 数据重写简历','针对目标岗位定制关键词']},
+      {name:'案例讲解准备',tasks:['每个项目准备 3 分钟讲解故事线','找 2 人试听并改进表达']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次产品经理模拟面试，重点练需求题和估算题，然后投递目标公司实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['在招聘平台筛选 5-10 个目标实习岗位','确认 2-3 个最想投递的公司与岗位']},
+      {name:'寻找面试题目',tasks:['收集目标公司面经与高频问题','整理产品经理题库（需求/估算/项目题）']},
+      {name:'进行面试模拟',tasks:['每周完成 2 次完整模拟面试','每次录音并记录卡壳点']},
+      {name:'面试复盘记录',tasks:['复盘每场模拟的失分点','针对短板专项补强后再投递']}
+    ]}]
+  },
+  'UX设计师':{
+    explore:[{name:'UX 行业全链路认知',reason:'你已选定 UX 设计师方向：先读懂「用户研究→信息架构→交互设计→可用性测试」的完整链路',milestones:[
+      {name:'梳理 UX 链路',tasks:['画出「用户研究→信息架构→交互设计→可用性测试」链路图','标注每个环节的产出物']},
+      {name:'认识岗位分工',tasks:['了解 UX/UI/交互/用研的职责边界','标记自己最感兴趣的方向']},
+      {name:'输出认知笔记',tasks:['写一篇 UX 岗位认知笔记','与 1 位设计师交流补充视角']}
+    ]},{name:'拆解 5 份 UX JD',reason:'收集 UX 设计师岗位 JD，提炼高频技能词（用户研究/原型/测试），形成能力清单',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份 UX 设计师校招/实习 JD','记录任职要求原文']},
+      {name:'提炼技能词',tasks:['提炼高频技能词（用户研究/原型/测试/作品集）','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照清单标记已具备/待补/空白','给待补项排优先级']}
+    ]}],
+    base:[{name:'设计基础系统课',reason:'补版式、色彩、设计规范等 UI 基础，每天 1 小时建立审美与规范手感',milestones:[
+      {name:'版式与色彩',tasks:['学版式原则（对齐/层级/留白）与色彩理论','完成 5 组小练习']},
+      {name:'设计规范',tasks:['学 iOS/Android 设计规范与组件','整理自己的规范笔记']},
+      {name:'审美积累',tasks:['每天收集 3 个优秀界面并写一句点评','周末回顾本周收藏']}
+    ]},{name:'用户体验经典入门',reason:'通读《用户体验要素》并输出思维导图，这是 UX 面试必聊的框架',milestones:[
+      {name:'阅读与笔记',tasks:['通读《用户体验要素》关键章节','每章输出要点笔记']},
+      {name:'框架梳理',tasks:['用思维导图梳理五层模型（战略/范围/结构/框架/表现）','用自己产品举例对应']},
+      {name:'应用练习',tasks:['用五层模型拆解 1 个自己常用的 App','输出拆解短文']}
+    ]}],
+    build:[{name:'掌握核心工具链',reason:'Figma 组件化设计 + 原型交互进阶，能独立完成一个真实页面的重构',milestones:[
+      {name:'Figma 组件化',tasks:['学组件、样式与 Auto Layout','搭建自己的基础组件库']},
+      {name:'原型交互进阶',tasks:['学 Smart Animate 与交互状态','做一个可交互的高保真原型']},
+      {name:'真实页面重构',tasks:['挑一个真实页面按规范重构','对比重构前后差异并记录']}
+    ]},{name:'完成 2 个完整 Case Study',reason:'用「调研→设计→验证」闭环做改版首页 + 新功能流程 2 个项目，每个带过程与结论',milestones:[
+      {name:'项目一：首页改版',tasks:['调研现状与用户痛点','设计方案并做可用性测试']},
+      {name:'项目二：新功能流程',tasks:['定义新功能流程与交互细节','产出高保真原型']},
+      {name:'验证与整理',tasks:['两项目都收集真实反馈','写成完整 Case Study（过程+数据+结论）']}
+    ]}],
+    practice:[{name:'真实项目实战',reason:'把设计放进比赛或真实需求（黑客松/课程/校园产品），拿到真实用户反馈',milestones:[
+      {name:'找实战场景',tasks:['选择黑客松/课程设计/校园真实需求','确认项目范围与时间']},
+      {name:'设计与迭代',tasks:['按完整流程推进设计','根据反馈迭代至少 2 轮']},
+      {name:'沉淀成果',tasks:['整理实战过程与结果','提炼可写进简历的数据']}
+    ]},{name:'作品集网站上线',reason:'把 Case Study 整理成可访问的在线作品集，附设计过程、数据结果与复盘',milestones:[
+      {name:'内容整理',tasks:['挑选 2-3 个最有说服力的项目','每个项目写清问题/方案/结果']},
+      {name:'网站搭建',tasks:['用工具搭建作品集页面（可部署访问）','移动端与桌面端都适配']},
+      {name:'打磨发布',tasks:['请 3 人浏览并收集反馈','优化后正式发布']}
+    ]}],
+    sprint:[{name:'求职材料打磨',reason:'简历按 UX 项目法重写，准备好作品集的故事线讲解（每个项目 3 分钟讲完）',milestones:[
+      {name:'简历重写',tasks:['按「项目+数据+工具」结构重写简历','针对目标岗位定制关键词']},
+      {name:'作品集故事线',tasks:['每个项目准备 3 分钟讲解','突出你的角色、方法与结果']},
+      {name:'试讲打磨',tasks:['找 2 人试讲收集反馈','压缩到时间可控、逻辑清晰']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次 UX 模拟面试，练作品集讲解与设计题，然后投递目标公司实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选 5-10 个目标 UX 实习岗位','确认 2-3 个最想投递的公司']},
+      {name:'寻找面试题目',tasks:['收集目标公司面经与设计题','整理高频题库（作品集/设计/用研题）']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','录音并记录卡壳点']},
+      {name:'面试复盘记录',tasks:['复盘失分点并专项补强','再投递目标岗位']}
+    ]}]
+  },
+  'UI/UX 设计师':{
+    explore:[{name:'UI/UX 职业路径认知',reason:'你已选定 UI/UX 设计师方向：先分清 UI（视觉执行）与 UX（体验策略）的能力边界，再决定自己的侧重',milestones:[
+      {name:'分清 UI 与 UX',tasks:['了解 UI（视觉/规范）与 UX（体验/策略）的边界','判断自己的兴趣侧重']},
+      {name:'研究行业分工',tasks:['看 5 个设计团队的岗位配置案例','标记 UI/UX 融合岗位的要求']},
+      {name:'输出认知笔记',tasks:['写一篇 UI/UX 路径认知笔记','确定自己 1 年内的主攻方向']}
+    ]},{name:'拆解 5 份 UI/UX JD',reason:'收集目标岗位 JD，提炼设计规范、组件库、用户测试等高频关键词',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份 UI/UX 设计师 JD','记录任职要求原文']},
+      {name:'提炼关键词',tasks:['提炼设计规范/组件库/用户测试等高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'视觉基础 + 设计规范',reason:'系统学版式、色彩、字体与 iOS/Android 设计规范，建立像素级审美',milestones:[
+      {name:'视觉基础',tasks:['学版式、色彩、字体排印基础','完成 5 组小练习']},
+      {name:'平台规范',tasks:['学 iOS/Android 设计规范','整理常用组件尺寸笔记']},
+      {name:'审美积累',tasks:['每天收集 3 个优秀界面并点评','周末复盘本周收藏']}
+    ]},{name:'图标与组件练习',reason:'临摹主流 App 的图标和组件库（每天 2 个），量变产生质变',milestones:[
+      {name:'图标临摹',tasks:['每天临摹 2 个高质量图标','注意像素对齐与视觉重量']},
+      {name:'组件复刻',tasks:['复刻主流 App 的 5 个核心组件','对比原版找出差距']},
+      {name:'作品整理',tasks:['把练习整理成组件练习集','记录每轮改进点']}
+    ]}],
+    build:[{name:'组件化设计能力',reason:'用 Figma 建一套自己的组件库并应用到一个完整界面项目，理解设计系统',milestones:[
+      {name:'搭建组件库',tasks:['定义色彩/字体/间距 Token','建按钮/输入框/导航等核心组件']},
+      {name:'设计系统理解',tasks:['学设计系统的层级与规范','整理设计系统笔记']},
+      {name:'落地应用',tasks:['用组件库完成一个完整界面项目','保证还原度与一致性']}
+    ]},{name:'完成 2 个界面项目',reason:'完成「App 主界面 + 品牌落地页」2 个高保真项目，输出规范标注',milestones:[
+      {name:'项目一：App 主界面',tasks:['完成 App 主要页面高保真设计','输出规范标注']},
+      {name:'项目二：品牌落地页',tasks:['完成品牌落地页设计','覆盖桌面与移动端']},
+      {name:'整理输出',tasks:['两项目整理成作品集条目','附设计说明']}
+    ]}],
+    practice:[{name:'设计实战/比赛',reason:'参加设计比赛或接真实需求，体验从需求到交付的完整协作流程',milestones:[
+      {name:'参加比赛/接需求',tasks:['选择设计比赛或真实需求','确认交付标准与时间']},
+      {name:'协作交付',tasks:['按需求→设计→评审→交付推进','主动沟通确认需求']},
+      {name:'复盘沉淀',tasks:['复盘协作中的问题','把作品整理进作品集']}
+    ]},{name:'作品集整理上线',reason:'把项目整理成在线作品集，重点展示设计规范与还原度',milestones:[
+      {name:'内容挑选',tasks:['挑选 2-3 个高质量项目','按「背景→方案→规范→成果」组织']},
+      {name:'站点搭建',tasks:['搭建可访问的在线作品集','保证加载速度与适配']},
+      {name:'发布打磨',tasks:['请 3 人浏览收集反馈','优化后正式发布']}
+    ]}],
+    sprint:[{name:'求职材料打磨',reason:'简历突出视觉作品与规范能力，准备作品集逐页讲解',milestones:[
+      {name:'简历优化',tasks:['突出视觉作品、组件库与规范能力','量化设计成果']},
+      {name:'作品集讲解',tasks:['准备作品集逐页讲解','讲清设计决策与还原度']},
+      {name:'试讲反馈',tasks:['找 2 人试讲并改进','控制好讲解时长']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次设计岗位模拟面试，练设计题与作品集讲解，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标设计岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集设计岗面经与设计题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','录音记录卡壳点']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '交互设计师':{
+    explore:[{name:'交互设计链路认知',reason:'你已选定交互设计师方向：先理解「用户流程→信息架构→交互细节→动效反馈」的完整链条',milestones:[
+      {name:'梳理交互链路',tasks:['画出「用户流程→信息架构→交互细节→动效」链路','标注每个环节的交付物']},
+      {name:'认识岗位要求',tasks:['了解交互设计师在团队中的职责与协作方','标记自己感兴趣的方向']},
+      {name:'输出认知笔记',tasks:['写一篇交互设计岗位认知笔记','与 1 位从业者交流补充']}
+    ]},{name:'拆解 5 份交互 JD',reason:'收集交互设计师 JD，提炼流程图、原型、动效、逻辑思维等高频要求',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份交互设计师 JD','记录任职要求原文']},
+      {name:'提炼关键词',tasks:['提炼流程图/原型/动效/逻辑思维等高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'人机交互原理入门',reason:'读《设计心理学》《交互设计精髓》提炼核心原则，建立交互判断力',milestones:[
+      {name:'阅读经典',tasks:['通读《设计心理学》核心章节','每章输出要点笔记']},
+      {name:'提炼原则',tasks:['整理心智模型/反馈/防错等交互原则','每个原则配 1 个 App 案例']},
+      {name:'应用判断',tasks:['用原则分析 5 个 App 的交互细节','记录自己的判断与改进想法']}
+    ]},{name:'流程图与线框图练习',reason:'每天拆解一个主流 App 的功能流程，重画流程图与关键线框',milestones:[
+      {name:'流程拆解',tasks:['每天拆解 1 个 App 功能流程','画出用户流程图（含分支与异常）']},
+      {name:'线框重画',tasks:['为关键页面重画线框图','标注信息层级与交互元素']},
+      {name:'总结沉淀',tasks:['整理 10 个拆解案例','总结常见交互模式']}
+    ]}],
+    build:[{name:'交互原型进阶',reason:'用 Figma 智能动画/Auto Layout 做高保真可交互原型，含动效与状态切换',milestones:[
+      {name:'Auto Layout 进阶',tasks:['掌握 Auto Layout 自适应布局','搭出响应式组件']},
+      {name:'智能动画与动效',tasks:['学 Smart Animate 做转场动效','设计关键状态切换']},
+      {name:'高保真原型',tasks:['完成一个完整功能的高保真可交互原型','覆盖边界与异常状态']}
+    ]},{name:'完成 2 个交互 Case',reason:'做「新用户引导 + 复杂表单流程」2 个交互专项，输出流程图、线框与动效稿',milestones:[
+      {name:'Case一：新用户引导',tasks:['定义引导流程与目标','设计并测试引导方案']},
+      {name:'Case二：复杂表单',tasks:['梳理表单字段与分步逻辑','设计防错与进度反馈']},
+      {name:'整理输出',tasks:['两 Case 输出流程图/线框/动效稿','写成完整交互说明']}
+    ]}],
+    practice:[{name:'真实项目实战',reason:'参与真实产品/比赛项目，验证交互方案的可落地性',milestones:[
+      {name:'加入项目',tasks:['选择真实产品/比赛项目','明确自己的交互分工']},
+      {name:'方案落地',tasks:['产出交互方案并推进评审','根据反馈迭代方案']},
+      {name:'复盘沉淀',tasks:['复盘方案落地过程','整理进作品集']}
+    ]},{name:'交互文档输出',reason:'规范输出交互说明文档（含边界状态、异常流），这是岗位日常交付物',milestones:[
+      {name:'学文档规范',tasks:['找 3 份真实交互文档范例','学习结构与写法']},
+      {name:'撰写文档',tasks:['为自己项目撰写完整交互说明','覆盖边界/异常/空状态']},
+      {name:'评审修订',tasks:['请开发/设计师评审文档','按反馈修订']}
+    ]}],
+    sprint:[{name:'求职材料打磨',reason:'简历突出逻辑拆解与动效能力，作品集按「问题→方案→验证」讲交互案例',milestones:[
+      {name:'简历优化',tasks:['突出逻辑拆解与动效能力','量化交互项目成果']},
+      {name:'作品集梳理',tasks:['按「问题→方案→验证」组织交互案例','补充设计过程']},
+      {name:'试讲反馈',tasks:['找 2 人试讲并改进','控制时长与重点']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次交互模拟面试，练设计题与场景题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标交互设计岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集交互面经与设计题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','录音记录卡壳点']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '数据分析师':{
+    explore:[{name:'数据岗位路径认知',reason:'你已选定数据分析师方向：先了解「取数→分析→可视化→决策」的工作流，明确 SQL 和 BI 是基础门槛',milestones:[
+      {name:'梳理工作流',tasks:['画出「取数→分析→可视化→决策」工作流','标注每步的工具与产出']},
+      {name:'认识能力要求',tasks:['了解 SQL/统计/可视化/业务感的要求','标记自己的差距']},
+      {name:'输出认知笔记',tasks:['写一篇数据岗位认知笔记','确定 1 年内的学习主线']}
+    ]},{name:'拆解 5 份数分 JD',reason:'收集数据分析师 JD，提炼 SQL、Python、统计学、可视化等高频技能',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份数据分析师 JD','记录任职要求原文']},
+      {name:'提炼技能',tasks:['提炼 SQL/Python/统计学/可视化高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'SQL + Excel 数据分析',reason:'系统学 SQL 查询与 Excel 数据透视，能独立完成取数与基础分析',milestones:[
+      {name:'SQL 系统学',tasks:['学 SELECT/JOIN/聚合/窗口函数','在练习库完成 30 道题']},
+      {name:'Excel 数据分析',tasks:['学数据透视/函数/图表','完成一个数据分析小案例']},
+      {name:'综合练习',tasks:['用真实数据集独立完成取数与分析','输出一份分析结果']}
+    ]},{name:'统计学基础',reason:'掌握描述统计、假设检验、相关与回归，分析结论才站得住脚',milestones:[
+      {name:'描述统计',tasks:['学均值/中位数/标准差/分布','理解异常值处理']},
+      {name:'推断统计',tasks:['学假设检验与置信区间','理解 p 值的含义与局限']},
+      {name:'相关与回归',tasks:['学相关分析与简单线性回归','用 Python 完成练习']}
+    ]}],
+    build:[{name:'Python 数据分析 + 可视化',reason:'用 Pandas 做数据清洗分析、Matplotlib/BI 工具出图，形成标准分析流程',milestones:[
+      {name:'Pandas 数据清洗',tasks:['学 Pandas 读取/清洗/聚合','处理一个脏数据集']},
+      {name:'可视化出图',tasks:['学 Matplotlib/Seaborn 与 BI 工具','做 5 张分析图']},
+      {name:'标准流程',tasks:['形成「清洗→探索→分析→可视化」标准流程','输出一份完整分析']}
+    ]},{name:'完成 2 个分析项目',reason:'做「用户留存分析 + 销售漏斗分析」2 个项目，每个输出结论与建议',milestones:[
+      {name:'项目一：用户留存',tasks:['找留存数据集（或模拟）','做留存率与分群分析']},
+      {name:'项目二：销售漏斗',tasks:['找漏斗数据','分析各环节转化率与瓶颈']},
+      {name:'输出报告',tasks:['两项目输出结论+图表+建议','整理成可展示的分析报告']}
+    ]}],
+    practice:[{name:'真实数据实战',reason:'用公开数据集（Kaggle/天池）或校园数据做完整分析项目，放进简历',milestones:[
+      {name:'选数据集',tasks:['选择 Kaggle/天池或校园真实数据','明确要回答的业务问题']},
+      {name:'完整分析',tasks:['完成清洗/分析/可视化/结论全流程','记录分析过程']},
+      {name:'成果整理',tasks:['输出分析报告并发布（博客/GitHub）','提炼简历数据']}
+    ]},{name:'分析报告规范化',reason:'练就「结论先行 + 图表支撑 + 行动建议」的报告写作，这是岗位日常',milestones:[
+      {name:'学报告结构',tasks:['拆解 3 份优秀分析报告','学习结构与表达']},
+      {name:'模仿写作',tasks:['按规范写 2 份分析报告','结论先行、图表支撑']},
+      {name:'评审改进',tasks:['请人评审报告','修订表达与逻辑']}
+    ]}],
+    sprint:[{name:'简历与项目集打磨',reason:'简历量化分析成果（样本量/提升幅度），整理可演示的分析项目集',milestones:[
+      {name:'简历量化',tasks:['用样本量/提升幅度量化成果','突出分析技能']},
+      {name:'项目集整理',tasks:['整理 2-3 个可演示项目','每个讲清问题/方法/结论']},
+      {name:'可演示准备',tasks:['准备 3 分钟项目讲解','数据与图表可现场展示']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次数分模拟面试，重点练 SQL 手写与业务题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标数分岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集数分面经与 SQL/业务题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','重点练 SQL 手写']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '产品运维工程师':{
+    explore:[{name:'运维/DevOps 路径认知',reason:'你已选定产品运维工程师方向：先了解「监控→部署→故障排查→自动化」的运维工作流',milestones:[
+      {name:'梳理运维链路',tasks:['画出「监控→部署→排查→自动化」工作流','标注每步的工具']},
+      {name:'认识岗位要求',tasks:['了解 Linux/脚本/容器/CI/CD 的要求','标记自己的差距']},
+      {name:'输出认知笔记',tasks:['写一篇运维岗位认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份 DevOps JD',reason:'收集 DevOps/运维 JD，提炼 Linux、脚本、容器、CI/CD 等高频技能',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份 DevOps/运维 JD','记录任职要求原文']},
+      {name:'提炼技能',tasks:['提炼 Linux/脚本/容器/CI/CD 高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'Linux + 网络基础',reason:'系统学 Linux 常用命令与网络基础（DNS/TCP），能独立部署服务',milestones:[
+      {name:'Linux 命令',tasks:['学文件/权限/进程/日志常用命令','每天练习 20 分钟']},
+      {name:'网络基础',tasks:['学 DNS/TCP/IP/HTTP 基础','理解常见网络故障']},
+      {name:'部署实操',tasks:['在虚拟机/服务器部署一个服务','跑通 Nginx + 应用']}
+    ]},{name:'系统实操练习',reason:'自己搭一台服务器环境，练习权限、进程、日志排查等日常操作',milestones:[
+      {name:'环境搭建',tasks:['搭建自己的服务器环境','配置 SSH 与安全']},
+      {name:'日常运维操作',tasks:['练习权限/进程/日志排查','记录操作手册']},
+      {name:'故障演练',tasks:['模拟 3 个常见故障并排查','总结排查思路']}
+    ]}],
+    build:[{name:'自动化脚本 + 容器',reason:'学 Shell/Python 自动化脚本与 Docker 容器化，把重复操作脚本化',milestones:[
+      {name:'Shell/Python 脚本',tasks:['学脚本语法与常用工具','自动化 3 个重复操作']},
+      {name:'Docker 容器化',tasks:['学 Docker 镜像/容器/编排','把服务容器化部署']},
+      {name:'脚本沉淀',tasks:['整理自己的脚本库','写清用法与注释']}
+    ]},{name:'CI/CD 实践项目',reason:'搭一套简单 CI/CD 流水线（代码提交→自动构建→部署），跑通全流程',milestones:[
+      {name:'理解 CI/CD',tasks:['学 CI/CD 概念与工具（GitHub Actions 等）','画流水线设计']},
+      {name:'搭建流水线',tasks:['搭「提交→构建→测试→部署」流水线','跑通全流程']},
+      {name:'优化记录',tasks:['优化构建时间与部署策略','记录实践文档']}
+    ]}],
+    practice:[{name:'真实系统运维项目',reason:'参与课程/开源项目的部署运维，积累真实故障排查经验',milestones:[
+      {name:'加入项目',tasks:['选择课程/开源项目','负责部署运维部分']},
+      {name:'实际运维',tasks:['完成部署/监控/更新等操作','记录遇到的问题']},
+      {name:'沉淀案例',tasks:['整理 2-3 个运维案例','写清排查过程']}
+    ]},{name:'监控与告警实践',reason:'实践监控指标与告警配置，理解「先发现、再定位、后解决」的运维节奏',milestones:[
+      {name:'监控基础',tasks:['学监控指标（CPU/内存/磁盘/流量）','理解关键指标含义']},
+      {name:'告警配置',tasks:['用工具配置监控与告警规则','测试告警触发']},
+      {name:'实践沉淀',tasks:['模拟一次告警处置','总结处置流程']}
+    ]}],
+    sprint:[{name:'简历与项目打磨',reason:'简历突出自动化与稳定性成果（如部署耗时降低、故障数归零）',milestones:[
+      {name:'成果量化',tasks:['量化自动化/稳定性成果','准备数据支撑']},
+      {name:'简历重写',tasks:['突出运维技能与项目','针对目标岗位定制']},
+      {name:'项目讲解准备',tasks:['准备项目讲解','讲清价值与难点']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次运维岗位模拟面试，练故障场景题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标运维岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集运维面经与故障场景题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练故障排查思路']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '嵌入式开发工程师':{
+    explore:[{name:'嵌入式路径认知',reason:'你已选定嵌入式开发方向：先了解「硬件基础→单片机→RTOS→驱动/应用」的技术路线',milestones:[
+      {name:'梳理技术路线',tasks:['画出「硬件→单片机→RTOS→驱动/应用」路线','标注每阶段的知识点']},
+      {name:'认识岗位要求',tasks:['了解 C/C++、单片机、RTOS 的要求','标记自己的差距']},
+      {name:'输出认知笔记',tasks:['写一篇嵌入式路径认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份嵌入式 JD',reason:'收集嵌入式开发 JD，提炼 C/C++、单片机、RTOS、通信协议等高频要求',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份嵌入式开发 JD','记录任职要求原文']},
+      {name:'提炼技能',tasks:['提炼 C/C++/单片机/RTOS/协议高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'C 语言 + 电路基础',reason:'扎实过一遍 C 语言（指针/结构体/位运算）与电路基础（数电/模电入门）',milestones:[
+      {name:'C 语言夯实',tasks:['过指针/结构体/位运算/内存管理','刷 50 道 C 练习题']},
+      {name:'电路基础',tasks:['学数电/模电入门（电平/时序/IO）','理解原理图基本符号']},
+      {name:'综合练习',tasks:['用 C 实现一个小型数据结构项目','写清注释']}
+    ]},{name:'单片机入门',reason:'用一块开发板（STM32/ESP32）点亮第一个外设，跑通「点灯」到「串口通信」',milestones:[
+      {name:'开发环境',tasks:['搭建开发环境（IDE/编译/烧录）','跑通点灯程序']},
+      {name:'外设练习',tasks:['学 GPIO/串口/定时器','完成按键、串口收发练习']},
+      {name:'小系统集成',tasks:['把多个外设组合成一个小系统','输出接线与代码文档']}
+    ]}],
+    build:[{name:'RTOS + 外设驱动',reason:'学 FreeRTOS 任务调度与常见外设驱动（GPIO/定时器/中断），理解嵌入式软件架构',milestones:[
+      {name:'RTOS 入门',tasks:['学任务/调度/信号量/队列','移植一个 RTOS 例程']},
+      {name:'驱动开发',tasks:['写 GPIO/定时器/中断驱动','理解寄存器操作']},
+      {name:'架构理解',tasks:['理解裸机 vs RTOS 架构','记录对比总结']}
+    ]},{name:'完成 2 个硬件项目',reason:'做「传感器数据采集 + 小型控制系统」2 个项目，输出代码与硬件接线文档',milestones:[
+      {name:'项目一：数据采集',tasks:['接传感器采集数据','通过串口/屏幕展示']},
+      {name:'项目二：控制系统',tasks:['做一个小型控制系统（温控/循迹）','实现闭环控制']},
+      {name:'文档输出',tasks:['两项目输出代码+接线+说明文档','整理进作品集']}
+    ]}],
+    practice:[{name:'科创/竞赛项目',reason:'参加电子设计竞赛或科创项目，实战解决硬件调试问题',milestones:[
+      {name:'报名项目',tasks:['参加电赛/科创项目','明确分工与目标']},
+      {name:'实战调试',tasks:['解决硬件调试问题（电源/时序/通信）','记录调试日志']},
+      {name:'复盘沉淀',tasks:['复盘项目得失','整理技术笔记']}
+    ]},{name:'代码与文档规范',reason:'练习可读性代码、注释与设计文档，工程师交付物要能交接',milestones:[
+      {name:'学规范',tasks:['学习嵌入式代码规范（命名/分层）','整理规范清单']},
+      {name:'规范实践',tasks:['重构自己的一个项目代码','补充完整注释']},
+      {name:'文档输出',tasks:['写设计文档（架构/接口/测试）','保证可交接']}
+    ]}],
+    sprint:[{name:'简历与项目打磨',reason:'简历突出项目中的资源占用、功耗、稳定性等硬指标',milestones:[
+      {name:'指标量化',tasks:['量化资源占用/功耗/稳定性指标','准备数据支撑']},
+      {name:'简历重写',tasks:['突出硬件项目与技能','针对目标岗位定制']},
+      {name:'项目讲解',tasks:['准备项目讲解与现场演示','讲清难点与方案']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次嵌入式模拟面试，练驱动与操作系统题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标嵌入式岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集嵌入式面经与驱动/OS 题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练驱动与 OS 题']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '测试开发工程师':{
+    explore:[{name:'测试开发路径认知',reason:'你已选定测试开发方向：先了解「功能测试→自动化→性能→质量平台」的成长路线',milestones:[
+      {name:'梳理成长路线',tasks:['画出「功能→自动化→性能→质量平台」路线','标注每阶段的能力点']},
+      {name:'认识岗位要求',tasks:['了解 Python/自动化框架/CI/CD 的要求','标记自己的差距']},
+      {name:'输出认知笔记',tasks:['写一篇测开岗位认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份测开 JD',reason:'收集测试开发 JD，提炼 Python、自动化框架、CI/CD、接口测试等高频技能',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份测开 JD','记录任职要求原文']},
+      {name:'提炼技能',tasks:['提炼 Python/自动化/CI/CD/接口测试高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'测试理论 + Python 基础',reason:'学测试用例设计方法与 Python 编程，能独立设计覆盖用例',milestones:[
+      {name:'测试理论',tasks:['学等价类/边界值/场景法等用例设计','完成用例设计练习']},
+      {name:'Python 基础',tasks:['学 Python 语法与常用库','能独立写脚本']},
+      {name:'综合练习',tasks:['为一个小功能设计完整用例集','覆盖正常/异常/边界']}
+    ]},{name:'手工测试实践',reason:'对 2 个 App/网站做系统性手工测试，输出缺陷报告',milestones:[
+      {name:'测试对象选择',tasks:['选择 2 个 App/网站','梳理功能清单']},
+      {name:'执行测试',tasks:['按用例执行测试并记录缺陷','覆盖主要功能路径']},
+      {name:'输出报告',tasks:['整理缺陷报告（步骤/预期/实际/优先级）','提交给开发或复盘']}
+    ]}],
+    build:[{name:'自动化测试框架',reason:'用 Pytest + Selenium 搭一套 Web/接口自动化用例，能一键跑回归',milestones:[
+      {name:'Pytest 学习',tasks:['学 Pytest 断言/夹具/参数化','写 10 个用例']},
+      {name:'Selenium/接口自动化',tasks:['学 Web 自动化或接口自动化（Requests）','实现 10 条用例']},
+      {name:'框架搭建',tasks:['搭自动化框架（用例/报告/一键运行）','跑通回归']}
+    ]},{name:'完成 2 个测试项目',reason:'做「Web 端自动化 + 接口测试」2 个项目，输出用例集与报告',milestones:[
+      {name:'项目一：Web 自动化',tasks:['选一个网站做自动化用例','覆盖核心流程']},
+      {name:'项目二：接口测试',tasks:['选一个 API 做接口测试用例','覆盖参数与异常']},
+      {name:'输出报告',tasks:['两项目输出用例集与测试报告','整理进作品集']}
+    ]}],
+    practice:[{name:'真实项目测试',reason:'参与开源项目或课程的测试环节，积累真实缺陷排查经验',milestones:[
+      {name:'加入项目',tasks:['选择开源/课程项目','负责测试环节']},
+      {name:'实际测试',tasks:['执行测试并跟踪缺陷','记录排查过程']},
+      {name:'沉淀案例',tasks:['整理 2-3 个缺陷案例','写清定位思路']}
+    ]},{name:'性能与 CI 实践',reason:'入门性能测试（JMeter）并接入 CI 流水线，理解质量门禁',milestones:[
+      {name:'性能测试入门',tasks:['学 JMeter 基础（线程组/断言/报告）','跑通一个压测场景']},
+      {name:'CI 接入',tasks:['把自动化用例接入 CI 流水线','配置质量门禁']},
+      {name:'实践沉淀',tasks:['总结性能与 CI 实践文档','记录成果']}
+    ]}],
+    sprint:[{name:'简历与项目打磨',reason:'简历突出自动化覆盖率、发现缺陷数、提效数据',milestones:[
+      {name:'成果量化',tasks:['量化覆盖率/缺陷数/提效数据','准备数据支撑']},
+      {name:'简历重写',tasks:['突出自动化与测试项目','针对目标岗位定制']},
+      {name:'项目讲解',tasks:['准备项目讲解','讲清框架与价值']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次测开模拟面试，练测试设计题与代码题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标测开岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集测开面经与测试设计/代码题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练测试设计与手写代码']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '算法研究员':{
+    explore:[{name:'AI 岗位路径认知',reason:'你已选定算法研究方向：先了解「机器学习→深度学习→论文/工程」的路线与真实岗位分工',milestones:[
+      {name:'梳理技术路线',tasks:['画出「ML→DL→论文/工程」路线','标注每阶段的知识点']},
+      {name:'认识岗位分工',tasks:['了解算法研究员与算法工程师的差异','标记自己的倾向']},
+      {name:'输出认知笔记',tasks:['写一篇算法岗位认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份算法 JD',reason:'收集算法研究员 JD，提炼数学基础、框架、论文复现等高频要求',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份算法 JD','记录任职要求原文']},
+      {name:'提炼技能',tasks:['提炼数学/框架/论文复现高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'数学基础 + Python',reason:'扎实过线代、概率论与 Python（NumPy/Pandas），这是所有模型的地基',milestones:[
+      {name:'数学基础',tasks:['过线性代数/概率论/微积分重点','每天练习 30 分钟']},
+      {name:'Python 科学计算',tasks:['学 NumPy/Pandas/Matplotlib','完成数据操作练习']},
+      {name:'地基自检',tasks:['完成一份数学+Python 自测','补薄弱环节']}
+    ]},{name:'机器学习入门',reason:'系统学经典 ML 算法（回归/树/聚类）并手动实现至少 3 个',milestones:[
+      {name:'理论系统学',tasks:['学回归/决策树/聚类/集成方法','理解原理与适用场景']},
+      {name:'手动实现',tasks:['手动实现 3 个经典算法','用 sklearn 验证正确性']},
+      {name:'项目练习',tasks:['在一个小数据集上完成建模流程','记录实验对比']}
+    ]}],
+    build:[{name:'深度学习框架实战',reason:'用 PyTorch 跑通训练流程（数据→模型→训练→评估），理解反向传播与调参',milestones:[
+      {name:'PyTorch 上手',tasks:['学张量/自动求导/模块构建','跑通官方教程']},
+      {name:'完整训练流程',tasks:['完成「数据→模型→训练→评估」流程','理解反向传播']},
+      {name:'调参实践',tasks:['做学习率/正则化调参实验','记录参数影响']}
+    ]},{name:'复现 1 篇论文',reason:'完整复现一篇领域内经典论文，能讲清方法、实验与可改进点',milestones:[
+      {name:'选论文',tasks:['选一篇领域经典论文','通读并理解方法']},
+      {name:'复现实现',tasks:['用框架复现核心方法','跑通主要实验']},
+      {name:'总结输出',tasks:['写清方法/实验/可改进点','整理成技术博客']}
+    ]}],
+    practice:[{name:'算法竞赛实战',reason:'参加 Kaggle/天池竞赛，实战处理数据与模型调优，产出可量化的榜单成绩',milestones:[
+      {name:'报名竞赛',tasks:['选择 Kaggle/天池比赛','明确任务与指标']},
+      {name:'实战建模',tasks:['完成特征工程/建模/调优','跟踪榜单成绩']},
+      {name:'沉淀总结',tasks:['写竞赛复盘','提炼可复用技巧']}
+    ]},{name:'科研/开源参与',reason:'尝试参与导师课题或开源项目，积累实验设计与论文写作经验',milestones:[
+      {name:'找机会',tasks:['联系导师课题或找开源项目','明确可参与部分']},
+      {name:'实验参与',tasks:['协助设计/运行实验','记录实验数据']},
+      {name:'写作积累',tasks:['练习实验报告/论文写作','整理成文档']}
+    ]}],
+    sprint:[{name:'简历与论文/项目打磨',reason:'简历突出竞赛成绩、复现论文与代码仓库，整理可演示的算法项目',milestones:[
+      {name:'成果整理',tasks:['整理竞赛/复现/项目成果','准备代码仓库']},
+      {name:'简历重写',tasks:['量化算法成果','针对目标岗位定制']},
+      {name:'项目讲解',tasks:['准备技术讲解','讲清思路与结果']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次算法模拟面试，重点练手推公式与代码题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标算法岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集算法面经与手推/代码题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练手推与代码']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '产品策略分析师':{
+    explore:[{name:'策略分析岗位认知',reason:'你已选定产品策略分析方向：先了解「行业研究→竞品分析→策略建议」的分析师工作流',milestones:[
+      {name:'梳理工作流',tasks:['画出「行业研究→竞品分析→策略建议」流程','标注每步产出']},
+      {name:'认识能力要求',tasks:['了解框架/数据/报告能力要求','标记自己的差距']},
+      {name:'输出认知笔记',tasks:['写一篇策略分析岗位认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份策略 JD',reason:'收集策略/商业分析 JD，提炼框架思维、数据、报告写作等高频要求',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份策略/商业分析 JD','记录任职要求原文']},
+      {name:'提炼要求',tasks:['提炼框架/数据/报告高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'商业分析框架',reason:'学 SWOT、波特五力、用户画像等分析框架，形成结构化思考习惯',milestones:[
+      {name:'框架学习',tasks:['学 SWOT/波特五力/用户画像等框架','理解适用场景']},
+      {name:'案例应用',tasks:['用框架拆解 3 个真实案例','练习结构化表达']},
+      {name:'框架沉淀',tasks:['整理自己的分析框架库','标注适用条件']}
+    ]},{name:'行业研究训练',reason:'选定一个行业完成深度研究报告（市场规模/玩家/趋势）',milestones:[
+      {name:'选定行业',tasks:['选定一个感兴趣的行业','定义研究问题']},
+      {name:'数据收集',tasks:['收集市场规模/玩家/趋势资料','交叉验证数据']},
+      {name:'输出报告',tasks:['撰写行业研究报告','提炼关键结论']}
+    ]}],
+    build:[{name:'数据 + 报告能力',reason:'掌握 Excel/SQL 取数与 PPT 汇报表达，把分析结论做成可汇报的报告',milestones:[
+      {name:'取数能力',tasks:['学 Excel/SQL 取数与整理','完成练习']},
+      {name:'PPT 表达',tasks:['学金字塔结构汇报表达','做 1 份分析汇报 PPT']},
+      {name:'报告成型',tasks:['把分析结论做成可汇报报告','请人评审']}
+    ]},{name:'完成 2 个分析项目',reason:'做「竞品对比 + 市场进入策略」2 个专项，输出结论与行动建议',milestones:[
+      {name:'项目一：竞品对比',tasks:['选赛道做竞品深度对比','输出对比矩阵']},
+      {name:'项目二：市场进入',tasks:['做市场进入策略分析','给出建议方案']},
+      {name:'整理输出',tasks:['两项目输出报告与建议','整理进作品集']}
+    ]}],
+    practice:[{name:'商业竞赛/咨询实践',reason:'参加商业分析类比赛或咨询项目，实战练框架与汇报',milestones:[
+      {name:'找实践机会',tasks:['报名商赛或咨询项目','明确任务']},
+      {name:'实战执行',tasks:['用框架完成分析与汇报','每周推进']},
+      {name:'复盘沉淀',tasks:['复盘实战得失','整理经验']}
+    ]},{name:'数据驱动复盘',reason:'用真实数据复盘一个产品/活动，训练「假设-验证-结论」闭环',milestones:[
+      {name:'选定对象',tasks:['选一个产品/活动','定义复盘问题与假设']},
+      {name:'数据验证',tasks:['用数据验证假设','分析结论']},
+      {name:'输出复盘',tasks:['输出复盘报告与建议','跟踪落实']}
+    ]}],
+    sprint:[{name:'简历与案例集打磨',reason:'简历突出分析框架与报告成果，整理可讲解的案例集',milestones:[
+      {name:'案例整理',tasks:['整理 2-3 个分析案例','每个讲清问题/框架/结论']},
+      {name:'简历重写',tasks:['突出框架与报告能力','量化成果']},
+      {name:'讲解准备',tasks:['准备案例讲解','练结构化表达']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次策略岗模拟面试，练估算题与案例分析，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标策略岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集面经与估算/案例题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练估算与案例分析']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '内容创意策划':{
+    explore:[{name:'内容行业路径认知',reason:'你已选定内容创意策划方向：先了解「洞察→创意→内容→传播→复盘」的策划工作流',milestones:[
+      {name:'梳理策划链路',tasks:['画出「洞察→创意→内容→传播→复盘」流程','标注每步产出']},
+      {name:'认识岗位要求',tasks:['了解文案/洞察/方案能力要求','标记自己的差距']},
+      {name:'输出认知笔记',tasks:['写一篇策划岗位认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份策划 JD',reason:'收集内容/创意策划 JD，提炼文案、洞察、方案呈现等高频要求',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份策划 JD','记录任职要求原文']},
+      {name:'提炼要求',tasks:['提炼文案/洞察/方案高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'文案与创意基础',reason:'系统学文案写作与创意方法（洞察/借势/反差），每天拆解 2 个爆款案例',milestones:[
+      {name:'文案写作',tasks:['学标题/正文/卖点表达','每天写 1 条文案']},
+      {name:'创意方法',tasks:['学洞察/借势/反差等创意手法','积累创意案例']},
+      {name:'爆款拆解',tasks:['每天拆解 2 个爆款案例','提炼可复用套路']}
+    ]},{name:'审美与视觉语言',reason:'学排版、构图与品牌视觉调性，策划方案要有画面感',milestones:[
+      {name:'排版构图',tasks:['学基础排版与构图原则','完成练习']},
+      {name:'品牌调性',tasks:['研究 5 个品牌的视觉语言','总结调性差异']},
+      {name:'方案视觉化',tasks:['把策划方案做成有画面感的呈现','练习 PPT/文档排版']}
+    ]}],
+    build:[{name:'全案策划能力',reason:'掌握从策略单到创意延展的全案写作，完成 1 份完整 Campaign 方案',milestones:[
+      {name:'学全案结构',tasks:['拆解 3 份完整 Campaign 方案','学习结构']},
+      {name:'方案创作',tasks:['为假设品牌写完整全案','覆盖策略/创意/传播']},
+      {name:'评审打磨',tasks:['请人评审方案','按反馈迭代']}
+    ]},{name:'内容账号 0-1 实战',reason:'自己运营一个内容账号从 0 到 1，验证创意判断与内容手感',milestones:[
+      {name:'账号定位',tasks:['确定账号主题/人设/目标受众','做内容规划']},
+      {name:'内容创作',tasks:['持续产出内容（每周 N 条）','记录数据反馈']},
+      {name:'数据优化',tasks:['按数据迭代选题与形式','复盘爆款/扑街原因']}
+    ]}],
+    practice:[{name:'真实项目/比赛',reason:'参加广告创意比赛或真实项目，体验从提案到执行的协作',milestones:[
+      {name:'找机会',tasks:['报名创意比赛或接真实项目','明确任务']},
+      {name:'提案执行',tasks:['完成提案并推进执行','每周记录进展']},
+      {name:'复盘沉淀',tasks:['复盘项目过程','整理作品']}
+    ]},{name:'数据复盘训练',reason:'用阅读量、转化等数据复盘内容效果，迭代自己的内容方法论',milestones:[
+      {name:'数据指标',tasks:['学阅读/互动/转化指标含义','建立数据观']},
+      {name:'复盘案例',tasks:['复盘自己的内容数据','找规律']},
+      {name:'方法论迭代',tasks:['更新自己的内容方法论','文档化']}
+    ]}],
+    sprint:[{name:'简历与作品集打磨',reason:'简历突出创意案例与数据（爆款/增长），整理方案集与账号数据',milestones:[
+      {name:'作品整理',tasks:['整理方案集与账号数据','精选代表作品']},
+      {name:'简历重写',tasks:['突出创意案例与数据','量化成果']},
+      {name:'讲解准备',tasks:['准备作品讲解','练提案表达']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次策划岗模拟面试，练创意提案题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标策划岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集面经与创意提案题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练提案与创意题']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '新媒体运营':{
+    explore:[{name:'新媒体路径认知',reason:'你已选定新媒体运营方向：先了解「内容→增长→转化→留存」的运营工作流与平台差异',milestones:[
+      {name:'梳理运营链路',tasks:['画出「内容→增长→转化→留存」链路','标注每步指标']},
+      {name:'平台研究',tasks:['研究 2 个主流平台规则与内容形态','对比差异']},
+      {name:'输出认知笔记',tasks:['写一篇新媒体运营认知笔记','确定主攻平台']}
+    ]},{name:'拆解 5 份运营 JD',reason:'收集新媒体运营 JD，提炼内容创作、数据分析、平台规则等高频技能',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份运营 JD','记录任职要求原文']},
+      {name:'提炼技能',tasks:['提炼内容/数据/平台规则高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'平台规则 + 内容基础',reason:'深度研究 2 个主流平台的算法与内容形态，建立创作基础',milestones:[
+      {name:'算法研究',tasks:['研究 2 个平台推荐算法机制','做笔记总结']},
+      {name:'内容形态',tasks:['分析各平台内容形式（图文/视频/直播）','整理模板']},
+      {name:'创作基础',tasks:['完成 10 条内容创作练习','对标平台爆款']}
+    ]},{name:'竞品账号拆解',reason:'拆解 10 个对标账号（选题/封面/互动），提炼爆款共性',milestones:[
+      {name:'账号筛选',tasks:['选 10 个对标账号','分类记录']},
+      {name:'深度拆解',tasks:['拆选题/封面/标题/互动','提炼共性规律']},
+      {name:'总结输出',tasks:['输出爆款方法论笔记','供创作使用']}
+    ]}],
+    build:[{name:'账号 0-1 运营',reason:'独立运营一个账号并跑出第一篇小爆款，验证选题与方法',milestones:[
+      {name:'账号定位',tasks:['确定账号主题与人设','做内容规划']},
+      {name:'内容发布',tasks:['持续发布内容','每周复盘数据']},
+      {name:'爆款验证',tasks:['优化选题冲第一篇小爆款','记录方法论']}
+    ]},{name:'数据工具上手',reason:'学会用数据工具分析内容表现，用数据指导选题与发布时间',milestones:[
+      {name:'工具学习',tasks:['学平台数据后台与第三方工具','理解指标']},
+      {name:'数据诊断',tasks:['诊断自己内容数据','找问题']},
+      {name:'数据化运营',tasks:['用数据优化选题/标题/时间','记录前后对比']}
+    ]}],
+    practice:[{name:'真实增长实战',reason:'把账号做到一定粉丝/互动量级，积累可写进简历的增长数据',milestones:[
+      {name:'目标设定',tasks:['设定粉丝/互动阶段目标','制定增长策略']},
+      {name:'执行增长',tasks:['执行内容+互动+推广策略','每周跟踪数据']},
+      {name:'成果沉淀',tasks:['总结增长数据与经验','整理成简历素材']}
+    ]},{name:'活动策划实战',reason:'策划并执行一次线上活动（抽奖/话题/联名），复盘转化链路',milestones:[
+      {name:'活动策划',tasks:['设计活动主题与机制','确定目标与预算']},
+      {name:'执行落地',tasks:['发布与推广活动','跟进参与数据']},
+      {name:'复盘转化',tasks:['复盘转化链路','总结可复用打法']}
+    ]}],
+    sprint:[{name:'简历与数据打磨',reason:'简历突出粉丝增长、爆款篇数、互动率等硬数据，附账号主页链接',milestones:[
+      {name:'数据整理',tasks:['整理粉丝/爆款/互动数据','准备截图与链接']},
+      {name:'简历重写',tasks:['量化运营成果','附账号主页']},
+      {name:'讲解准备',tasks:['准备账号运营故事讲解','讲清方法与结果']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次运营模拟面试，练内容题与数据题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标运营岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集运营面经与内容/数据题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练内容与数据题']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '人力资源业务伙伴（HRBP）':{
+    explore:[{name:'HR 三支柱认知',reason:'你已选定 HRBP 方向：先理解「专家中心-业务伙伴-共享中心」的人力资源三支柱模型',milestones:[
+      {name:'理解三支柱',tasks:['画出 COE-HRBP-SSC 三支柱模型图','理解各自职责']},
+      {name:'认识 HRBP 角色',tasks:['了解 HRBP 如何贴近业务','标记兴趣点']},
+      {name:'输出认知笔记',tasks:['写一篇 HRBP 岗位认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份 HRBP JD',reason:'收集 HRBP/HR 校招 JD，提炼六大模块、劳动法、组织能力等高频要求',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份 HRBP/HR JD','记录任职要求原文']},
+      {name:'提炼要求',tasks:['提炼六大模块/劳动法/组织能力高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'人力资源六大模块',reason:'系统学招聘、培训、绩效、薪酬、员工关系等模块，建立 HR 知识框架',milestones:[
+      {name:'模块学习',tasks:['逐个学六大模块核心内容','每模块输出笔记']},
+      {name:'框架梳理',tasks:['画出六大模块与 HRBP 的关系图','理解联动']},
+      {name:'应用练习',tasks:['用六大模块分析一家公司 HR 做法','写案例分析']}
+    ]},{name:'劳动法基础',reason:'学习劳动合同、试用期、社保等基础法规，HR 的专业感来自合规',milestones:[
+      {name:'法规学习',tasks:['学劳动合同/试用期/社保法规','整理要点']},
+      {name:'案例理解',tasks:['拆解 3 个劳动纠纷案例','理解合规边界']},
+      {name:'知识内化',tasks:['整理劳动法速查笔记','定期复习']}
+    ]}],
+    build:[{name:'招聘与面试技能',reason:'学简历筛选、结构化面试与候选人沟通，能独立组织一场面试',milestones:[
+      {name:'简历筛选',tasks:['学简历筛选方法与评分表','练习筛 20 份简历']},
+      {name:'结构化面试',tasks:['学 STAR 与结构化提问','设计面试问题库']},
+      {name:'面试演练',tasks:['模拟完整面试流程','复盘提问质量']}
+    ]},{name:'校园招聘项目实践',reason:'参与/组织一场校园招聘或宣讲会，实战练全流程',milestones:[
+      {name:'项目筹备',tasks:['参与/组织校招或宣讲会筹备','明确分工']},
+      {name:'执行落地',tasks:['推进宣传/宣讲/面试环节','记录问题']},
+      {name:'复盘总结',tasks:['复盘项目数据与流程','沉淀经验']}
+    ]}],
+    practice:[{name:'HR 实习/项目实战',reason:'尝试 HR 相关实习或校园组织项目，积累员工关系与组织诊断案例',milestones:[
+      {name:'找机会',tasks:['找 HR 实习或校园组织项目','明确职责']},
+      {name:'实战积累',tasks:['参与员工关系/组织工作','记录案例']},
+      {name:'案例沉淀',tasks:['整理 2-3 个实践案例','写复盘']}
+    ]},{name:'员工关系案例学习',reason:'拆解 5 个真实员工关系案例，练习沟通与处理边界',milestones:[
+      {name:'案例收集',tasks:['收集 5 个员工关系案例','分类整理']},
+      {name:'深度拆解',tasks:['分析冲突/沟通/处理边界','写拆解笔记']},
+      {name:'方法论沉淀',tasks:['提炼沟通与处理原则','形成个人方法']}
+    ]}],
+    sprint:[{name:'简历与案例打磨',reason:'简历突出招聘数据（到面率/offer 率）与组织项目成果',milestones:[
+      {name:'数据量化',tasks:['量化招聘与项目数据','准备支撑']},
+      {name:'简历重写',tasks:['突出 HR 技能与成果','针对目标岗位']},
+      {name:'讲解准备',tasks:['准备案例讲解','讲清处理思路']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次 HR 岗位模拟面试，练情景题与结构化面试题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标 HR 岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集 HR 面经与情景/结构题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练情景题']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '教育产品经理':{
+    explore:[{name:'教育行业路径认知',reason:'你已选定教育产品经理方向：先了解在线教育「课程→工具→服务」的产品形态与行业玩家',milestones:[
+      {name:'行业研究',tasks:['研究在线教育产品形态','梳理行业玩家']},
+      {name:'产品拆解',tasks:['拆解 2 个教育产品（题库/网课/工具）','理解商业模式']},
+      {name:'输出认知笔记',tasks:['写一篇教育产品认知笔记','确定兴趣方向']}
+    ]},{name:'拆解 5 份教育产品 JD',reason:'收集教育产品经理 JD，提炼用户研究、课程设计、数据等高频要求',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份教育产品 JD','记录任职要求原文']},
+      {name:'提炼要求',tasks:['提炼用研/课程/数据高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'教育场景研究',reason:'深入研究一个教育产品（题库/网课/学习工具），拆解其用户与商业模式',milestones:[
+      {name:'选定产品',tasks:['选定一个教育产品','确定研究角度']},
+      {name:'用户研究',tasks:['研究目标用户与场景','理解需求']},
+      {name:'商业模式拆解',tasks:['拆解商业模式与数据指标','输出研究笔记']}
+    ]},{name:'产品方法论基础',reason:'系统学需求分析、PRD 与优先级排序，打牢 PM 基本功',milestones:[
+      {name:'需求分析',tasks:['学需求收集与分析方法','完成练习']},
+      {name:'PRD 写作',tasks:['学 PRD 结构与写法','写 1 份骨架']},
+      {name:'优先级排序',tasks:['学 RICE 等方法','做排序练习']}
+    ]}],
+    build:[{name:'原型 + 教育产品设计',reason:'针对一个学习场景（如背单词）完成原型设计与 PRD，融入教学法思考',milestones:[
+      {name:'场景定义',tasks:['选学习场景并研究用户','定义核心问题']},
+      {name:'原型设计',tasks:['用 Figma 完成可点击原型','融入教学法思考']},
+      {name:'PRD 输出',tasks:['撰写配套 PRD','含功能与边界']}
+    ]},{name:'完成 2 个教育产品项目',reason:'做「学习工具 + 课程产品」2 个项目，每个带用户验证与数据',milestones:[
+      {name:'项目一：学习工具',tasks:['设计学习工具方案','做用户验证']},
+      {name:'项目二：课程产品',tasks:['设计课程产品方案','做用户验证']},
+      {name:'数据整理',tasks:['两项目补数据结果','写成案例']}
+    ]}],
+    practice:[{name:'教育产品实战/竞赛',reason:'参加教育类产品比赛或真实项目，验证产品判断',milestones:[
+      {name:'找实战机会',tasks:['报名教育类比赛或项目','明确任务']},
+      {name:'实战执行',tasks:['推进产品设计与迭代','每周记录']},
+      {name:'复盘沉淀',tasks:['复盘产品判断','整理案例']}
+    ]},{name:'用户学习数据复盘',reason:'用留存、完课率等教育核心指标复盘产品，理解教育产品节奏',milestones:[
+      {name:'指标学习',tasks:['学留存/完课率/续费等指标','理解口径']},
+      {name:'数据复盘',tasks:['用真实/模拟数据复盘产品','找问题']},
+      {name:'优化建议',tasks:['输出改进建议','验证效果']}
+    ]}],
+    sprint:[{name:'简历与案例打磨',reason:'简历突出教育场景洞察与产品数据，整理可讲解的案例集',milestones:[
+      {name:'案例整理',tasks:['整理 2-3 个教育产品案例','每个讲清问题/方案/结果']},
+      {name:'简历重写',tasks:['突出教育洞察与数据','量化成果']},
+      {name:'讲解准备',tasks:['准备案例讲解','练表达']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次教育产品模拟面试，练场景题与数据题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标教育产品岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集面经与场景/数据题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练场景与数据题']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '用户成功经理':{
+    explore:[{name:'用户成功岗位认知',reason:'你已选定用户成功方向：先了解「客户 onboarding→使用率→留存→续费」的 CS 工作流',milestones:[
+      {name:'梳理 CS 链路',tasks:['画出 onboarding→使用→留存→续费链路','标注每步目标']},
+      {name:'认识岗位要求',tasks:['了解沟通/诊断/留存能力要求','标记差距']},
+      {name:'输出认知笔记',tasks:['写一篇用户成功岗位认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份 CS JD',reason:'收集用户成功经理 JD，提炼客户沟通、问题诊断、留存策略等高频技能',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份 CS JD','记录任职要求原文']},
+      {name:'提炼技能',tasks:['提炼沟通/诊断/留存高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'客户沟通与表达',reason:'系统练客户沟通话术与结构化表达，CS 的核心是建立信任',milestones:[
+      {name:'话术学习',tasks:['学客户沟通话术模板','分类整理']},
+      {name:'结构化表达',tasks:['练结论先行的表达','完成 5 组练习']},
+      {name:'模拟沟通',tasks:['模拟客户沟通场景','复盘改进']}
+    ]},{name:'产品理解训练',reason:'深度使用 3 个 SaaS 产品，理解功能与用户价值的映射',milestones:[
+      {name:'产品体验',tasks:['深度使用 3 个 SaaS 产品','记录功能与体验']},
+      {name:'价值映射',tasks:['梳理功能→用户价值映射','画价值图']},
+      {name:'文档沉淀',tasks:['写产品理解笔记','覆盖核心功能']}
+    ]}],
+    build:[{name:'问题诊断方法论',reason:'学客户问题诊断框架（痛点/根因/方案），能独立处理复杂咨询',milestones:[
+      {name:'诊断框架',tasks:['学痛点/根因/方案诊断框架','理解步骤']},
+      {name:'案例练习',tasks:['拆解 5 个客户问题案例','练诊断']},
+      {name:'实战模拟',tasks:['模拟处理复杂客户咨询','复盘']}
+    ]},{name:'留存策略学习',reason:'拆解 5 个产品的留存策略（onboarding/触达/召回），提炼可复用打法',milestones:[
+      {name:'案例收集',tasks:['选 5 个产品研究留存策略','分类整理']},
+      {name:'策略拆解',tasks:['拆 onboarding/触达/召回打法','提炼共性']},
+      {name:'打法沉淀',tasks:['整理可复用留存打法库','文档化']}
+    ]}],
+    practice:[{name:'真实服务/社群实践',reason:'参与真实客户服务或运营社群，积累满意度与问题解决案例',milestones:[
+      {name:'找实践场景',tasks:['参与客服或社群运营','明确职责']},
+      {name:'实际服务',tasks:['处理真实问题与咨询','记录案例']},
+      {name:'案例沉淀',tasks:['整理 2-3 个服务案例','写复盘']}
+    ]},{name:'客户数据分析',reason:'用使用率、流失预警等数据识别客户风险，训练数据敏感度',milestones:[
+      {name:'指标学习',tasks:['学使用率/流失预警等指标','理解含义']},
+      {name:'数据诊断',tasks:['用数据识别客户风险','练习分析']},
+      {name:'预警实践',tasks:['制定客户风险预警清单','实践应用']}
+    ]}],
+    sprint:[{name:'简历与案例打磨',reason:'简历突出客户满意度、留存提升、问题解决率等数据',milestones:[
+      {name:'数据量化',tasks:['量化满意度/留存/解决率','准备支撑']},
+      {name:'简历重写',tasks:['突出 CS 能力与成果','针对目标岗位']},
+      {name:'讲解准备',tasks:['准备服务案例讲解','讲清处理思路']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次 CS 岗位模拟面试，练服务场景题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标 CS 岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集面经与服务场景题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练服务场景题']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '增长运营负责人':{
+    explore:[{name:'增长岗位路径认知',reason:'你已选定增长运营方向：先了解「用户生命周期 × 增长模型（AARRR）」的底层框架',milestones:[
+      {name:'学 AARRR',tasks:['学 AARRR 模型各环节','理解指标']},
+      {name:'生命周期研究',tasks:['研究用户生命周期','画周期图']},
+      {name:'输出认知笔记',tasks:['写一篇增长岗位认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份增长 JD',reason:'收集增长运营 JD，提炼实验设计、渠道策略、数据等高频技能',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份增长 JD','记录任职要求原文']},
+      {name:'提炼技能',tasks:['提炼实验/渠道/数据高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'增长方法论入门',reason:'系统学 AARRR 与增长实验设计，理解「假设-实验-复盘」循环',milestones:[
+      {name:'方法论学习',tasks:['学 AARRR 与增长实验设计','输出笔记']},
+      {name:'案例研究',tasks:['拆解 3 个增长案例','提炼打法']},
+      {name:'实验设计',tasks:['设计 2 个增长实验假设','写实验方案']}
+    ]},{name:'渠道与内容研究',reason:'研究 5 个主流获客渠道的玩法与成本，建立渠道地图',milestones:[
+      {name:'渠道研究',tasks:['研究 5 个主流获客渠道','记录玩法与成本']},
+      {name:'内容研究',tasks:['研究各渠道内容打法','整理模板']},
+      {name:'渠道地图',tasks:['建立渠道地图与优先级','文档化']}
+    ]}],
+    build:[{name:'增长实验实战',reason:'对一个产品设计并执行 2 轮增长实验（渠道/文案/机制），记录数据结论',milestones:[
+      {name:'实验一',tasks:['设计并执行第一轮实验','记录数据']},
+      {name:'实验二',tasks:['设计并执行第二轮实验','记录数据']},
+      {name:'结论沉淀',tasks:['对比两轮数据','输出结论']}
+    ]},{name:'数据工具掌握',reason:'掌握漏斗分析、AB 测试与数据看板工具，让增长动作可度量',milestones:[
+      {name:'工具学习',tasks:['学漏斗/AB 测试/看板工具','理解用法']},
+      {name:'实践应用',tasks:['用工具做数据分析','完成案例']},
+      {name:'度量体系',tasks:['建立自己的增长度量体系','文档化']}
+    ]}],
+    practice:[{name:'真实增长项目',reason:'参与/发起一个真实增长项目（社群/内容/活动），拿到转化数据',milestones:[
+      {name:'项目发起',tasks:['发起/参与真实增长项目','设定目标']},
+      {name:'执行优化',tasks:['执行增长策略并迭代','跟踪数据']},
+      {name:'数据沉淀',tasks:['总结转化数据与经验','整理案例']}
+    ]},{name:'活动策划与复盘',reason:'完整策划一次增长活动并复盘，输出增长案例',milestones:[
+      {name:'活动策划',tasks:['设计活动机制与目标','确定预算']},
+      {name:'执行推广',tasks:['执行活动并推广','跟进数据']},
+      {name:'复盘输出',tasks:['复盘活动效果','输出增长案例']}
+    ]}],
+    sprint:[{name:'简历与数据打磨',reason:'简历突出实验次数、增长幅度、获客成本等硬指标',milestones:[
+      {name:'数据整理',tasks:['整理实验/增长/成本数据','准备支撑']},
+      {name:'简历重写',tasks:['量化增长成果','针对目标岗位']},
+      {name:'讲解准备',tasks:['准备增长案例讲解','讲清实验逻辑']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次增长岗位模拟面试，练实验设计与数据题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标增长岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集面经与实验/数据题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练实验设计']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '管理咨询顾问':{
+    explore:[{name:'咨询行业路径认知',reason:'你已选定管理咨询方向：先了解「假设-框架-验证-汇报」的咨询项目工作流',milestones:[
+      {name:'梳理咨询流程',tasks:['画出「假设-框架-验证-汇报」流程','标注每步交付物']},
+      {name:'认识岗位要求',tasks:['了解框架/案例/汇报能力要求','标记差距']},
+      {name:'输出认知笔记',tasks:['写一篇咨询岗位认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份咨询 JD',reason:'收集咨询顾问 JD，提炼框架思维、案例分析、PPT 汇报等高频要求',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份咨询顾问 JD','记录任职要求原文']},
+      {name:'提炼要求',tasks:['提炼框架/案例/汇报高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'商业分析框架',reason:'系统学波特五力、BCG 矩阵、价值链条等框架，练结构化拆解',milestones:[
+      {name:'框架学习',tasks:['学波特五力/BCG/价值链框架','理解适用场景']},
+      {name:'框架应用',tasks:['用框架拆解 5 个案例','练结构化表达']},
+      {name:'框架沉淀',tasks:['整理框架库','标注适用条件']}
+    ]},{name:'案例学习训练',reason:'每天拆解 1 个咨询案例（市场规模/利润/进入策略），练框架应用',milestones:[
+      {name:'案例收集',tasks:['收集 20 个咨询案例','分类']},
+      {name:'每日拆解',tasks:['每天拆解 1 个案例','写框架笔记']},
+      {name:'总结输出',tasks:['总结常见案例套路','形成模板']}
+    ]}],
+    build:[{name:'PPT 汇报 + 数据能力',reason:'掌握咨询级 PPT 表达（金字塔结构）与 Excel 数据建模',milestones:[
+      {name:'金字塔表达',tasks:['学金字塔结构表达','完成练习']},
+      {name:'PPT 实战',tasks:['做 1 份咨询级汇报 PPT','请人评审']},
+      {name:'数据建模',tasks:['学 Excel 建模基础','完成模型']}
+    ]},{name:'完成 2 个案例研究',reason:'做「市场进入 + 成本优化」2 个完整案例，输出结构与建议',milestones:[
+      {name:'Case一：市场进入',tasks:['定义问题与假设','搭框架并收集数据']},
+      {name:'Case二：成本优化',tasks:['分析成本结构','给出优化建议']},
+      {name:'汇报输出',tasks:['两 Case 输出汇报','练口头表达']}
+    ]}],
+    practice:[{name:'商业竞赛实战',reason:'参加贝恩杯等商赛，实战练团队协作与现场汇报',milestones:[
+      {name:'组队报名',tasks:['组队报名商赛','明确分工']},
+      {name:'实战推进',tasks:['推进案例分析','每周汇报进展']},
+      {name:'现场汇报',tasks:['完成现场汇报','复盘表现']}
+    ]},{name:'咨询实习/项目',reason:'尝试咨询相关实习或校园咨询项目，积累真实项目经验',milestones:[
+      {name:'找机会',tasks:['投递咨询实习/校园项目','明确任务']},
+      {name:'项目参与',tasks:['参与项目并交付','记录过程']},
+      {name:'经验沉淀',tasks:['复盘项目经验','整理案例']}
+    ]}],
+    sprint:[{name:'简历与案例打磨',reason:'简历突出案例分析经验与汇报能力，准备行为面试故事',milestones:[
+      {name:'案例整理',tasks:['整理 Case 与项目经验','写 STAR 故事']},
+      {name:'简历重写',tasks:['突出分析与汇报能力','针对目标']},
+      {name:'行为面试准备',tasks:['准备行为面试故事库','练表达']}
+    ]},{name:'Case 面试训练 + 投递',reason:'每周 2 次 Case 面试训练（估算/框架题），然后投递咨询实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标咨询岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集 Case 面经与题库','整理估算/框架题']},
+      {name:'进行 Case 训练',tasks:['每周 2 次完整 Case 训练','录音复盘']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '财务分析师':{
+    explore:[{name:'财务岗位路径认知',reason:'你已选定财务分析师方向：先了解「三大报表→财务建模→分析决策」的财务分析工作流',milestones:[
+      {name:'梳理财务链路',tasks:['画出「报表→建模→分析决策」流程','标注每步工具']},
+      {name:'认识岗位要求',tasks:['了解报表/建模/Excel 能力要求','标记差距']},
+      {name:'输出认知笔记',tasks:['写一篇财务岗位认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份财务 JD',reason:'收集财务分析师 JD，提炼财务建模、Excel、合规等高频技能',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份财务分析师 JD','记录任职要求原文']},
+      {name:'提炼技能',tasks:['提炼建模/Excel/合规高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'会计与报表基础',reason:'系统学会计基础与三大财务报表勾稽关系，这是财务分析的起点',milestones:[
+      {name:'会计基础',tasks:['学借贷记账与会计科目','理解基础分录']},
+      {name:'三大报表',tasks:['学资产负债表/利润表/现金流','理解勾稽关系']},
+      {name:'报表练习',tasks:['找 2 家公司年报','练报表解读']}
+    ]},{name:'Excel 财务实操',reason:'掌握 Excel 数据透视、函数与图表，财务人 70% 时间在 Excel',milestones:[
+      {name:'Excel 函数',tasks:['学常用函数（VLOOKUP/IF/SUMIF 等）','完成练习']},
+      {name:'数据透视',tasks:['学数据透视与图表','完成案例']},
+      {name:'财务应用',tasks:['用 Excel 做财务分析小案例','输出结果']}
+    ]}],
+    build:[{name:'财务建模能力',reason:'学财务建模（利润表/现金流预测），独立搭一个简易模型',milestones:[
+      {name:'建模基础',tasks:['学三表模型与假设驱动建模','理解结构']},
+      {name:'模型搭建',tasks:['搭一个简易财务预测模型','验证勾稽']},
+      {name:'模型优化',tasks:['加敏感性分析','输出模型说明']}
+    ]},{name:'完成 2 个分析项目',reason:'做「公司财务健康度 + 行业财务对比」2 个项目，输出分析报告',milestones:[
+      {name:'项目一：财务健康度',tasks:['选公司分析财务健康度','输出指标分析']},
+      {name:'项目二：行业对比',tasks:['做行业财务对比','提炼结论']},
+      {name:'报告输出',tasks:['两项目输出分析报告','整理作品']}
+    ]}],
+    practice:[{name:'财务实习/真实数据',reason:'尝试财务实习或课程项目，用真实财务数据练分析',milestones:[
+      {name:'找实践机会',tasks:['找财务实习/课程项目','明确任务']},
+      {name:'数据分析',tasks:['用真实数据做分析','记录过程']},
+      {name:'经验沉淀',tasks:['复盘分析经验','整理案例']}
+    ]},{name:'合规与披露学习',reason:'学习财报披露与合规要点，理解数字背后的规则',milestones:[
+      {name:'披露规则',tasks:['学财报披露规则要点','整理笔记']},
+      {name:'合规理解',tasks:['理解财务合规要求','看案例']},
+      {name:'知识内化',tasks:['整理合规速查笔记','定期复习']}
+    ]}],
+    sprint:[{name:'简历与项目打磨',reason:'简历突出建模能力与项目成果，附可演示的财务模型',milestones:[
+      {name:'成果整理',tasks:['整理建模与项目成果','准备模型演示']},
+      {name:'简历重写',tasks:['突出建模与分析能力','量化成果']},
+      {name:'讲解准备',tasks:['准备模型与报告讲解','练表达']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次财务岗模拟面试，练报表题与估算题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标财务岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集面经与报表/估算题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练报表与估算']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  },
+  '合规管理专员':{
+    explore:[{name:'合规岗位路径认知',reason:'你已选定合规管理方向：先了解「法规解读→风险评估→制度落地」的合规工作流',milestones:[
+      {name:'梳理合规流程',tasks:['画出「法规→风险→制度」流程','标注每步产出']},
+      {name:'认识岗位要求',tasks:['了解法规/风险/审计能力要求','标记差距']},
+      {name:'输出认知笔记',tasks:['写一篇合规岗位认知笔记','确定学习主线']}
+    ]},{name:'拆解 5 份合规 JD',reason:'收集合规管理 JD，提炼法规、风险、审计等高频要求',milestones:[
+      {name:'收集 JD',tasks:['收集 5 份合规 JD','记录任职要求原文']},
+      {name:'提炼要求',tasks:['提炼法规/风险/审计高频词','标注出现次数']},
+      {name:'形成差距清单',tasks:['对照自身标记差距项','给补强项排优先级']}
+    ]}],
+    base:[{name:'合规法规基础',reason:'系统学习基础法律框架（公司法/数据合规/行业监管），建立合规知识库',milestones:[
+      {name:'法规学习',tasks:['学公司法/数据合规/行业监管基础','整理要点']},
+      {name:'框架梳理',tasks:['画法规框架图','理解层级']},
+      {name:'知识库建立',tasks:['建合规法规知识库','分类归档']}
+    ]},{name:'风险识别训练',reason:'学习风险评估方法论，练从业务动作中发现合规风险点',milestones:[
+      {name:'方法论学习',tasks:['学风险评估方法','理解维度']},
+      {name:'案例练习',tasks:['拆解 5 个风险案例','练识别']},
+      {name:'实战模拟',tasks:['模拟业务场景找风险点','输出清单']}
+    ]}],
+    build:[{name:'合规制度文档能力',reason:'练制度、流程、指引类文档写作，合规的交付物是清晰的规则',milestones:[
+      {name:'文档规范',tasks:['找 3 份合规制度范例','学习结构']},
+      {name:'文档写作',tasks:['写一份制度/流程文档','覆盖关键点']},
+      {name:'评审修订',tasks:['请人评审文档','按反馈修订']}
+    ]},{name:'完成 2 个合规案例',reason:'做「数据合规自查 + 行业监管对照」2 个专项，输出报告与建议',milestones:[
+      {name:'Case一：数据合规',tasks:['按法规自查数据合规','输出问题清单']},
+      {name:'Case二：监管对照',tasks:['对照行业监管要求','分析差距']},
+      {name:'报告输出',tasks:['两专项输出报告与建议','整理作品']}
+    ]}],
+    practice:[{name:'合规项目/实习',reason:'参与真实合规项目或相关实习，积累检查与整改经验',milestones:[
+      {name:'找机会',tasks:['找合规项目/实习','明确任务']},
+      {name:'检查整改',tasks:['参与合规检查与整改','记录案例']},
+      {name:'经验沉淀',tasks:['复盘项目经验','整理案例']}
+    ]},{name:'案例库建设',reason:'收集整理行业违规案例库，训练敏感度与预判力',milestones:[
+      {name:'案例收集',tasks:['收集 20 个行业违规案例','分类']},
+      {name:'案例分析',tasks:['分析违规原因与后果','提炼教训']},
+      {name:'案例库成型',tasks:['建成个人案例库','定期更新']}
+    ]}],
+    sprint:[{name:'简历与案例打磨',reason:'简历突出法规知识与风险评估成果，准备合规场景面试题',milestones:[
+      {name:'案例整理',tasks:['整理合规案例与项目','准备素材']},
+      {name:'简历重写',tasks:['突出法规与风险能力','针对目标']},
+      {name:'场景题准备',tasks:['准备合规场景面试题','练表达']}
+    ]},{name:'模拟面试 + 投递',reason:'每周 2 次合规岗模拟面试，练法规题与情景题，然后投递实习',milestones:[
+      {name:'寻找并确认面试岗位',tasks:['筛选目标合规岗位','确认 2-3 个最想投递的']},
+      {name:'寻找面试题目',tasks:['收集面经与法规/情景题','整理高频题库']},
+      {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','练法规与情景题']},
+      {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+    ]}]
+  }
+};
+/* 未收录职业的兜底计划（带专属阶段与小任务） */
+var GENERIC_PLAN={
+  explore:[{name:'职业路径认知',reason:'先系统了解目标职业的工作内容、能力要求与成长路线，画出自己的三年路径图',milestones:[
+    {name:'职业调研',tasks:['研究目标职业工作内容与能力要求','看 5 个从业者的经验分享']},
+    {name:'路径规划',tasks:['画出三年成长路径图','标记关键里程碑']},
+    {name:'认知输出',tasks:['写一篇职业认知笔记','与前辈交流验证']}
+  ]},{name:'拆解 5 份目标 JD',reason:'收集目标岗位 JD，提炼高频技能词，形成你的能力差距清单',milestones:[
+    {name:'收集 JD',tasks:['收集 5 份目标岗位 JD','记录任职要求原文']},
+    {name:'提炼技能',tasks:['提炼高频技能词','标注出现次数']},
+    {name:'形成清单',tasks:['输出能力差距清单','排优先级']}
+  ]}],
+  base:[{name:'专业基础夯实',reason:'把专业核心课和基本功打扎实，GPA 是校招筛选的第一道关',milestones:[
+    {name:'课程梳理',tasks:['列出专业核心课清单','标记薄弱科目']},
+    {name:'补强学习',tasks:['补强薄弱科目','每周固定学习时间']},
+    {name:'成绩提升',tasks:['目标学期 GPA 提升','定期自查']}
+  ]},{name:'考级考证规划',reason:'按目标岗位需要规划证书（英语四六级/计算机二级等），尽早拿下硬性门槛',milestones:[
+    {name:'证书规划',tasks:['查目标岗位需要哪些证书','排时间表']},
+    {name:'备考执行',tasks:['按计划备考','每周模拟']},
+    {name:'报名通过',tasks:['报名并完成考试','复盘经验']}
+  ]}],
+  build:[{name:'核心岗位技能',reason:'对照 JD 拆解技能清单，逐个补齐目标岗位的核心硬技能',milestones:[
+    {name:'技能清单',tasks:['对照 JD 拆解技能清单','标优先级']},
+    {name:'逐个补齐',tasks:['逐个学习核心技能','每项配练习']},
+    {name:'技能验证',tasks:['做一个小项目验证技能','记录成果']}
+  ]},{name:'完成代表作品',reason:'独立完成一个能代表你能力的作品/项目，作为求职核心谈资',milestones:[
+    {name:'选题',tasks:['选能代表能力的作品方向','定交付标准']},
+    {name:'制作执行',tasks:['完成作品制作','每周推进']},
+    {name:'打磨展示',tasks:['打磨细节并公开展示','收集反馈']}
+  ]}],
+  practice:[{name:'竞赛/项目实战',reason:'参加比赛或真实项目，用实战验证能力并积累可讲的项目故事',milestones:[
+    {name:'找实战机会',tasks:['报名比赛或真实项目','明确任务']},
+    {name:'实战执行',tasks:['推进项目落地','每周记录']},
+    {name:'复盘沉淀',tasks:['复盘项目得失','整理项目故事']}
+  ]},{name:'实习尝试',reason:'投递相关实习岗位，用真实职场经验反哺自己的职业方向',milestones:[
+    {name:'投递准备',tasks:['准备简历与作品','筛选岗位']},
+    {name:'面试投递',tasks:['投递并参加面试','每周推进']},
+    {name:'实习沉淀',tasks:['入职实习并沉淀经验','复盘调整方向']}
+  ]}],
+  sprint:[{name:'求职材料准备',reason:'简历、自我介绍、面试题库打磨到位，求职季不手忙脚乱',milestones:[
+    {name:'简历打磨',tasks:['按 STAR+数据重写简历','针对目标岗位']},
+    {name:'自我介绍',tasks:['准备 1 分钟/3 分钟版本','练习表达']},
+    {name:'题库整理',tasks:['整理高频面试题','写答题要点']}
+  ]},{name:'模拟面试 + 投递',reason:'每周 2 次模拟面试，补齐表达短板，系统投递目标公司',milestones:[
+    {name:'寻找并确认面试岗位',tasks:['筛选目标岗位','确认 2-3 个最想投递的']},
+    {name:'寻找面试题目',tasks:['收集面经与高频题','整理题库']},
+    {name:'进行面试模拟',tasks:['每周 2 次完整模拟面试','录音记录卡壳点']},
+    {name:'面试复盘记录',tasks:['复盘失分点专项补强','再投递目标岗位']}
+  ]}]
+};
+function buildGoalPool(){
+  var careers=(Store.get('careerGoal')||[]).map(function(c){return (c&&c.name)||c;});
+  var pool=[];var idx=0;
+  function push(stage,goal){
+    if(pool.some(function(x){return x.name===goal.name;}))return;
+    pool.push({id:'gp-'+(idx++),stage:stage,name:goal.name,reason:goal.reason,done:false,
+      milestones:(goal.milestones||[]).map(function(m){
+        var ts=m.tasks||[];
+        return {name:m.name,tasks:ts.slice(),done:false,tasksDone:ts.map(function(){return false;})};
+      })});
+  }
+  /* 测评主导维度目标（仅在有测评结果时插入认知探索期） */
+  var assessment=Store.get('assessment');
+  var code=assessment&&assessment.code?assessment.code:'';
+  var dimGoal=code?(RIASEC_DIM_GOAL[code.charAt(0)]||RIASEC_DIM_GOAL.R):null;
+  if(dimGoal)push('explore',dimGoal);
+  /* 职业定制目标（按用户选定职业，每阶段内去重计划） */
+  GOAL_POOL_STAGES.forEach(function(st){
+    var stagePlans=[];
+    careers.forEach(function(c){
+      var plan=CAREER_PLAN[c]||GENERIC_PLAN;
+      if(stagePlans.indexOf(plan)>-1)return;
+      stagePlans.push(plan);
+      (plan[st.key]||[]).forEach(function(g){push(st.key,g);});
+    });
+  });
+  pool._v=2;
+  Store.set('goalPool',pool);
+  return pool;
+}
+function generateGoalPool(){
+  var btn=document.getElementById('gp-generate-btn');
+  if(btn){btn.disabled=true;btn.textContent='AI 拆解中…';}
+  setTimeout(function(){
+    buildGoalPool();
+    render();
+  },1400);
+}
+function regenerateGoalPool(){
+  if(!window.confirm('重新拆解会替换当前目标清单（已设为当前目标的不受影响），确定继续吗？'))return;
+  var btn=document.getElementById('gp-generate-btn');
+  setTimeout(function(){
+    buildGoalPool();
+    render();
+    showToast('已按最新职业与测评重新拆解 🤖');
+  },900);
+}
+function toggleGoalDone(id,el){
+  var pool=Store.get('goalPool')||[];
+  var g=null;
+  pool.forEach(function(x){if(x.id===id)g=x;});
+  if(!g)return;
+  g.done=!g.done;
+  Store.set('goalPool',pool);
+  var item=el?el.closest('.gp-item'):null;
+  if(item)item.classList.toggle('done',g.done);
+}
+/* 每个目标的内部阶段（里程碑）模板，按计划阶段区分 */
+var GOAL_MILESTONE_TMPL={
+  explore:['明确方向','信息收集','方案拆解','输出成果'],
+  base:['基础学习','练习巩固','阶段检验','复盘调整'],
+  build:['理论学习','工具实操','项目练习','成果输出'],
+  practice:['方案设计','实战执行','反馈迭代','复盘沉淀'],
+  sprint:['材料准备','技能补强','模拟演练','正式投递']
+};
+/* 兼容旧数据：v2 数据（目标自带阶段+小任务）直接返回，旧版本数据自动重建 */
+function ensureGoalMilestones(){
+  var pool=Store.get('goalPool');
+  if(!pool||!pool.length)return pool;
+  if(pool._v===2)return pool;
+  return buildGoalPool();
+}
+function toggleMsOpen(id,mi,el){
+  var item=el?el.closest('.gp-item'):null;
+  if(!item)return;
+  item.querySelectorAll('.gp-task-row').forEach(function(r,i){r.classList.toggle('show',i===mi);});
+  item.querySelectorAll('.gp-mstep').forEach(function(ms,i){ms.classList.toggle('open',i===mi);});
+}
+function toggleTask(id,mi,ti,el){
+  var pool=Store.get('goalPool')||[];
+  var g=null;
+  pool.forEach(function(x){if(x.id===id)g=x;});
+  if(!g||!g.milestones||!g.milestones[mi])return;
+  var ms=g.milestones[mi];
+  if(!ms.tasksDone)ms.tasksDone=(ms.tasks||[]).map(function(){return false;});
+  ms.tasksDone[ti]=!ms.tasksDone[ti];
+  var ts=ms.tasks||[];
+  ms.done=ts.every(function(t,k){return ms.tasksDone[k];});
+  Store.set('goalPool',pool);
+  var item=el?el.closest('.gp-item'):null;
+  if(!item)return;
+  /* 更新该任务勾选样式 */
+  var row=item.querySelectorAll('.gp-task-row')[mi];
+  if(row){
+    var tasks=row.querySelectorAll('.gp-task');
+    if(tasks[ti]){
+      tasks[ti].classList.toggle('done',!!ms.tasksDone[ti]);
+      var cb=tasks[ti].querySelector('.gp-task-cb');
+      if(cb){
+        cb.classList.toggle('checked',!!ms.tasksDone[ti]);
+        cb.innerHTML=ms.tasksDone[ti]?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':'';
+      }
+    }
+  }
+  /* 更新阶段标签状态 */
+  item.querySelectorAll('.gp-mstep').forEach(function(msEl,i){
+    var m=g.milestones[i];if(!m)return;
+    var curCls=false;
+    if(!m.done){
+      var beforeAllDone=true;
+      for(var b=0;b<i;b++){if(!g.milestones[b].done){beforeAllDone=false;break;}}
+      curCls=beforeAllDone;
+    }
+    var openCls=msEl.classList.contains('open');
+    msEl.className='gp-mstep'+(m.done?' done':'')+(curCls?' cur':'')+(openCls?' open':'');
+  });
+  /* 进度按任务数重算 */
+  var total=0,dn=0;
+  g.milestones.forEach(function(mm){
+    var tts=mm.tasks||[];
+    if(!mm.tasksDone)mm.tasksDone=tts.map(function(){return false;});
+    total+=tts.length;
+    for(var k=0;k<tts.length;k++){if(mm.tasksDone[k])dn++;}
+  });
+  var pct=total?Math.round(dn/total*100):0;
+  var fill=item.querySelector('.gp-mbar-fill');
+  var pctEl=item.querySelector('.gp-mpct');
+  if(fill)fill.style.width=pct+'%';
+  if(pctEl)pctEl.textContent=pct+'%';
+}
+function currentGoalNames(){
+  var gs=[];
+  try{gs=JSON.parse(localStorage.getItem('cos_goals_data')||'[]');}catch(e){gs=[];}
+  if(!Array.isArray(gs))gs=[];
+  return gs.map(function(x){return (x.title||'').replace(/^🎯\s*/,'');});
+}
+/* 同步每日任务：把当前目标的「当前未完成阶段」子任务拆解为每日任务，写入 Store.dailyTasks */
+function syncDailyTasksFromGoals(gs){
+  var list=[];
+  (gs||[]).forEach(function(g){
+    var ms=g.milestones||[];
+    var curMi=-1;
+    for(var i=0;i<ms.length;i++){if(!ms[i].done){curMi=i;break;}}
+    if(curMi<0)return;
+    var m=ms[curMi];
+    (m.subtasks||[]).forEach(function(s,ti){
+      list.push({
+        id:g.id+':'+curMi+':'+ti,
+        name:s.name,
+        time:'',
+        tag:'ai',
+        done:!!s.done,
+        goalId:g.id,
+        subtaskRef:{goalId:g.id,mi:curMi,ti:ti},
+        fromMilestone:m.name
+      });
+    });
+  });
+  if(typeof Store!=='undefined')Store.set('dailyTasks',list);
+}
+function setAsCurrentGoal(id){
+  var pool=Store.get('goalPool')||[];
+  var g=null;
+  pool.forEach(function(x){if(x.id===id)g=x;});
+  if(!g)return;
+  var gs=[];
+  try{gs=JSON.parse(localStorage.getItem('cos_goals_data')||'[]');}catch(e){gs=[];}
+  if(!Array.isArray(gs))gs=[];
+  if(gs.some(function(x){return (x.title||'').replace(/^🎯\s*/,'')===g.name;})){
+    showToast('该目标已在当前目标中');return;
+  }
+  gs.unshift({
+    id:'goal-'+Date.now(),
+    title:'🎯 '+g.name,
+    desc:g.reason,
+    stages:[],
+    start:'',end:'',
+    progress:0,
+    theme:'teal',
+    milestones:(g.milestones||[]).map(function(m,mi){
+      var beforeAllDone=true;
+      for(var b=0;b<mi;b++){if(!g.milestones[b].done){beforeAllDone=false;break;}}
+      return {name:m.name,desc:'',done:m.done,current:!m.done&&beforeAllDone,subtasks:(m.tasks||[]).map(function(t){return{name:t,done:false};})};
+    }),
+    aiSuggest:'AI 拆解目标建议：'+g.reason
+  });
+  try{localStorage.setItem('cos_goals_data',JSON.stringify(gs));}catch(e){console.warn('[career-vision] cos_goals_data 写入失败',e);}
+  syncDailyTasksFromGoals(gs);
+  showToast('已设为当前目标 🎯');
+  render();
+}
+render();
+</script>
+</body>
+</html>

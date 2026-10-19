@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Career OS · 设置</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <style>
+/* ============================================================
+   global.css | Career OS — 全局公共样式
+   所有页面共用，页面独有样式写在各自style内
+   ============================================================ */
+
+/* ── CSS 变量（全量超集） ── */
+:root {
+    --primary: #0F766E; --primary-hover: #0D6B63; --primary-light: #14B8A6;
+    --primary-50: #F0FDFA; --primary-100: #CCFBF1; --primary-200: #99F6E4;
+    --white: #FFFFFF;
+    --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0;
+    --gray-300: #CBD5E1; --gray-400: #94A3B8; --gray-500: #64748B;
+    --gray-600: #475569; --gray-900: #0F172A;
+    --accent: #F59E0B; --accent-light: #FEF3C7;
+    --indigo: #6366F1; --indigo-light: #EEF2FF;
+    --rose: #F43F5E; --rose-light: #FFF1F2;
+    --violet: #8B5CF6; --violet-light: #F5F3FF;
+    --sky: #0EA5E9; --sky-light: #E0F2FE;
+    --shadow-xs: 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.02);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+    --radius-sm: 12px; --radius-md: 16px; --radius-lg: 22px; --radius-xl: 28px;
+    --nav-h: 56px; --tab-h: 60px;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+/* ── Reset ── */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+/* ── Body ── */
+body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--gray-100);color:var(--gray-900);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── App 容器 ── */
+.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--gray-50);position:relative}
+
+/* ── 顶部导航栏（基础） ── */
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(248,250,252,0.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+
+/* ── 品牌标识（首页 / 设置页） ── */
+.nav-brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:17px;color:var(--gray-900);letter-spacing:-0.03em}
+.nav-brand-icon{width:30px;height:30px;background:linear-gradient(145deg,var(--primary),var(--primary-light));border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800}
+
+/* ── AI 按钮（首页 / 设置页） ── */
+.nav-ai-btn{display:flex;align-items:center;gap:5px;padding:7px 13px 7px 10px;background:var(--gray-900);color:#fff;border:none;border-radius:100px;font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;position:relative;overflow:hidden;transition:all .2s}
+.nav-ai-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);transform:translateX(-100%);animation:shimmer 3s ease-in-out infinite}
+.nav-ai-btn:active{transform:scale(.95)}
+.nav-ai-btn svg{width:14px;height:14px;flex-shrink:0}
+
+/* ── 返回按钮（测评 / AI分析页） ── */
+.nav-back{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--gray-500);background:none;border:none;font-family:inherit;cursor:pointer;transition:color .2s;padding:4px 0}
+.nav-back:active{color:var(--gray-900)}
+.nav-back svg{width:18px;height:18px}
+
+/* ── 居中标题（测评 / AI分析页） ── */
+.nav-title{position:absolute;left:50%;transform:translateX(-50%);font-size:15px;font-weight:600;color:var(--gray-900);letter-spacing:-.01em}
+
+/* ── 步骤文字 ── */
+.nav-step{font-size:12px;color:var(--gray-400);font-weight:500}
+
+/* ── Screen 容器（测评 / AI分析页） ── */
+.screen{display:none;padding:20px;padding-bottom:80px;flex-direction:column}
+.screen.active{display:flex;animation:screenIn .4s cubic-bezier(.22,1,.36,1) both}
+
+/* ── 主按钮 ── */
+.btn-primary{width:100%;padding:13px 24px;background:linear-gradient(145deg,var(--primary),var(--primary-hover));color:#fff;border:none;border-radius:var(--radius-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px rgba(15,118,110,.25);transition:all .2s}
+.btn-primary:active{transform:scale(.97)}
+.btn-primary:disabled{background:var(--gray-300);box-shadow:none;cursor:default}
+
+/* ── 描边按钮 ── */
+.btn-outline{width:100%;padding:13px 24px;background:transparent;color:var(--primary);border:1.5px solid var(--primary);border-radius:var(--radius-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s}
+.btn-outline:active{background:var(--primary-50);transform:scale(.98)}
+
+/* ── 底部操作栏 ── */
+.bottom-bar{position:sticky;bottom:0;padding:12px 20px;padding-bottom:calc(12px + var(--safe-b));background:rgba(248,250,252,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(226,232,240,.4);display:flex;gap:10px;align-items:center;z-index:50}
+
+/* ── 确认弹窗 ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:0 24px;opacity:0;transition:opacity .25s}
+.modal-overlay.show{opacity:1}
+.modal-box{background:#fff;border-radius:var(--radius-lg);padding:24px;max-width:320px;width:100%;box-shadow:0 16px 48px rgba(0,0,0,.15);transform:scale(.92);transition:transform .25s cubic-bezier(.22,1,.36,1)}
+.modal-overlay.show .modal-box{transform:scale(1)}
+.modal-title{font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:8px}
+.modal-desc{font-size:13px;color:var(--gray-500);line-height:1.6;margin-bottom:20px}
+.modal-btns{display:flex;gap:10px}
+.modal-cancel{flex:1;padding:11px;background:var(--gray-100);color:var(--gray-600);border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .2s}
+.modal-cancel:active{background:var(--gray-200)}
+.modal-confirm{flex:1;padding:11px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s}
+.modal-confirm:active{background:var(--primary-hover)}
+
+/* ── Toast 通知 ── */
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--gray-900);color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:200;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── Keyframes ── */
+@keyframes shimmer{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes screenIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pop{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes softPop{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.08)}}
+@keyframes dotBounce{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* ── 响应式：桌面端 ── */
+@media(min-width:431px){body{background:#E2E8F0}.app{box-shadow:0 0 80px rgba(0,0,0,.08)}}
+
+/* ── 无障碍：减少动画 ── */
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+</style>
+    <script>
+/* ============================================================
+   store.js | Career OS — 全局数据存储
+   所有跨页面共享数据统一存放于此，使用 localStorage 持久化
+   ============================================================ */
+
+var Store = (function () {
+    var STORAGE_KEY = 'career_os_store';
+
+    // 默认数据结构
+    var _defaults = {
+        user: null,           // 用户账号信息 { id, name, email, ... }
+        assessment: null,     // 测评结果 { answers, scores, code, codeNames, profile, recommendedCareers }
+        careerGoal: null,     // 用户选定的职业目标数组 [{ name, dim, ... }]
+        timeline: null,       // 中长期目标
+        dailyTasks: null,     // 拆解后的每日任务数组
+        portfolio: null       // 用户上传的成果沉淀列表
+    };
+
+    // 当前内存数据
+    var _data = {};
+
+    // 从 localStorage 读取
+    function _load() {
+        try {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                _data = JSON.parse(raw);
+            } else {
+                _data = _deepClone(_defaults);
+            }
+        } catch (e) {
+            _data = _deepClone(_defaults);
+        }
+        // 确保每个字段都有默认值
+        for (var key in _defaults) {
+            if (_data[key] === undefined) {
+                _data[key] = _defaults[key];
+            }
+        }
+    }
+
+    // 保存到 localStorage
+    function _save() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(_data));
+        } catch (e) {
+            console.warn('[Store] localStorage 写入失败', e);
+        }
+    }
+
+    // 深拷贝
+    function _deepClone(obj) {
+        return JSON.parse(JSON.stringify(obj));
+    }
+
+    // 初始化
+    _load();
+
+    return {
+        /**
+         * 获取指定字段值
+         * @param {string} key - 字段名
+         * @returns {*} 字段值
+         */
+        get: function (key) {
+            if (key) return _data[key];
+            return _deepClone(_data);
+        },
+
+        /**
+         * 设置指定字段值并持久化
+         * @param {string} key - 字段名
+         * @param {*} value - 字段值
+         */
+        set: function (key, value) {
+            _data[key] = value;
+            _save();
+        },
+
+        /**
+         * 批量更新多个字段
+         * @param {Object} updates - { key1: value1, key2: value2, ... }
+         */
+        batch: function (updates) {
+            for (var key in updates) {
+                if (updates.hasOwnProperty(key)) {
+                    _data[key] = updates[key];
+                }
+            }
+            _save();
+        },
+
+        /**
+         * 清空所有数据，恢复默认值
+         */
+        clear: function () {
+            _data = _deepClone(_defaults);
+            _save();
+        },
+
+        /**
+         * 删除指定字段
+         * @param {string} key
+         */
+        remove: function (key) {
+            _data[key] = _defaults[key] !== undefined ? _defaults[key] : null;
+            _save();
+        },
+
+        /**
+         * 检查用户是否已完成测评
+         * @returns {boolean}
+         */
+        hasAssessment: function () {
+            return !!(_data.assessment && _data.assessment.code);
+        },
+
+        /**
+         * 检查用户是否已选定职业目标
+         * @returns {boolean}
+         */
+        hasCareerGoal: function () {
+            return !!(_data.careerGoal && _data.careerGoal.length > 0);
+        }
+    };
+})();
+
+</script>
+    <script>
+/* ============================================================
+   router.js | Career OS — 页面跳转辅助函数
+   所有页面跳转优先使用此模块，统一管理路由
+   ============================================================ */
+
+var Router = (function () {
+    // 基础路径（同目录下的页面）
+    var BASE = '';
+
+    return {
+        /**
+         * 跳转到指定页面
+         * @param {string} page - 页面文件名，如 'index.html'
+         */
+        go: function (page) {
+            window.location.href = BASE + page;
+        },
+
+        /** 跳转到首页 */
+        toIndex: function () {
+            this.go('index.html');
+        },
+
+        /** 跳转到职业测评页 */
+        toAssessment: function () {
+            this.go('assessment.html');
+        },
+
+        /** 跳转到AI深度分析页 */
+        toAiAnalysis: function () {
+            this.go('ai-analysis.html');
+        },
+
+        /** 跳转到AI对话页 */
+        toAiChat: function () {
+            this.go('ai-chat.html');
+        },
+
+        /** 跳转到设置页 */
+        toSettings: function () {
+            this.go('settings.html');
+        },
+
+        /** 跳转到登录页 */
+        toLogin: function () {
+            this.go('login.html');
+        },
+
+        /** 浏览器后退 */
+        back: function () {
+            window.history.back();
+        },
+
+        /**
+         * 获取当前页面名称
+         * @returns {string} 如 'index', 'assessment', 'ai-analysis' 等
+         */
+        currentPage: function () {
+            var path = window.location.pathname;
+            var file = path.substring(path.lastIndexOf('/') + 1);
+            return file.replace('.html', '');
+        }
+    };
+})();
+
+</script>
+    <script>
+/* ============================================================
+   auth.js | Career OS — 认证模块
+   阶段1：纯前端模拟，不接 Supabase
+   阶段2：接入 Supabase 真实认证
+   ============================================================ */
+
+var Auth = (function () {
+    return {
+        /**
+         * 检查用户是否已登录
+         * @returns {boolean}
+         */
+        isLoggedIn: function () {
+            return !!(Store && Store.get('user'));
+        },
+
+        /**
+         * 获取当前登录用户信息
+         * @returns {Object|null}
+         */
+        getUser: function () {
+            return Store ? Store.get('user') : null;
+        },
+
+        /**
+         * 模拟登录（阶段1）
+         * @param {Object} userData - 用户数据 { id, name, email }
+         */
+        login: function (userData) {
+            if (Store) {
+                Store.set('user', userData);
+            }
+        },
+
+        /**
+         * 退出登录
+         */
+        logout: function () {
+            if (Store) {
+                Store.set('user', null);
+            }
+        },
+
+        /**
+         * 需要登录时调用，未登录则跳转登录页
+         * @returns {boolean} 是否已登录
+         */
+        requireLogin: function () {
+            if (!this.isLoggedIn()) {
+                if (typeof Router !== 'undefined') {
+                    Router.toLogin();
+                }
+                return false;
+            }
+            return true;
+        }
+    };
+})();
+
+</script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 页面覆盖：设置页导航栏略深背景 */
+        .top-nav{background:rgba(248,250,252,0.88)}
+
+        /* ── Nav ── */
+        .nav-left{display:flex;align-items:center;gap:10px}
+        .back-btn{width:36px;height:36px;border:none;background:none;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gray-600);transition:all .15s}
+        .back-btn:active{background:var(--gray-100);transform:scale(.92)}
+        .back-btn svg{width:20px;height:20px}
+
+        /* ── Page ── */
+        .page{padding:20px 20px calc(32px + var(--safe-b));animation:fadeUp .4s ease both}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        .page-title{font-size:22px;font-weight:800;color:var(--gray-900);letter-spacing:-0.02em;margin-bottom:24px}
+
+        /* ── Accordion Section ── */
+        .section-group{margin-bottom:10px}
+        .accordion{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-100);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:10px}
+        .accordion-header{width:100%;display:flex;align-items:center;gap:12px;padding:15px 16px;border:none;background:none;font-family:inherit;cursor:pointer;transition:background .15s}
+        .accordion-header:active{background:var(--gray-50)}
+        .accordion-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .accordion-icon svg{width:17px;height:17px}
+        .accordion-title{flex:1;font-size:14.5px;font-weight:600;color:var(--gray-900);text-align:left}
+        .accordion-arrow{width:20px;height:20px;color:var(--gray-300);transition:transform .3s cubic-bezier(.22,1,.36,1);flex-shrink:0}
+        .accordion.open .accordion-arrow{transform:rotate(180deg)}
+
+        /* Smooth expand/collapse via CSS grid */
+        .accordion-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s cubic-bezier(.22,1,.36,1)}
+        .accordion.open .accordion-body{grid-template-rows:1fr}
+        .accordion-inner{overflow:hidden}
+        .accordion-content{padding:0 16px 14px;border-top:1px solid var(--gray-100)}
+
+        /* ── Setting Item ── */
+        .setting-item{display:flex;align-items:center;justify-content:space-between;padding:13px 0;gap:12px}
+        .setting-item:not(:last-child){border-bottom:1px solid var(--gray-100)}
+        .setting-item:last-child{padding-bottom:2px}
+        .setting-label{font-size:13.5px;font-weight:500;color:var(--gray-700)}
+        .setting-extra{font-size:12px;color:var(--gray-400);margin-top:2px}
+        .setting-label-group{display:flex;flex-direction:column}
+
+        /* ── Nav Item (right arrow) ── */
+        .nav-item{width:100%;display:flex;align-items:flex-start;justify-content:space-between;padding:13px 16px;border:none;background:none;font-family:inherit;cursor:pointer;transition:background .15s}
+        .nav-item:active{background:var(--gray-50)}
+        .nav-item-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
+        .nav-item-label{font-size:13.5px;font-weight:500;color:var(--gray-700)}
+        .nav-item-label.danger{color:var(--rose)}
+        .nav-item-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+        .nav-item-hint{font-size:12px;color:var(--gray-400)}
+        .nav-item-arrow{width:16px;height:16px;color:var(--gray-300);flex-shrink:0}
+        .nav-item:not(:last-child){border-bottom:1px solid var(--gray-100)}
+
+        /* ── Toggle Switch ── */
+        .toggle{position:relative;width:48px;height:28px;flex-shrink:0;display:inline-block}
+        .toggle input{opacity:0;width:0;height:0;position:absolute}
+        .toggle-track{position:absolute;inset:0;background:var(--gray-200);border-radius:14px;cursor:pointer;transition:background .3s}
+        .toggle input:checked+.toggle-track{background:var(--primary)}
+        .toggle-thumb{position:absolute;top:2px;left:2px;width:24px;height:24px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.15);transition:transform .3s cubic-bezier(.22,1,.36,1);pointer-events:none}
+        .toggle input:checked~.toggle-thumb{transform:translateX(20px)}
+
+        /* ── Font Size Slider ── */
+        .font-slider{display:flex;align-items:center;gap:10px;width:180px;flex-shrink:0}
+        .font-slider-label{font-size:12px;color:var(--gray-400);width:20px;text-align:center;transition:all .2s}
+        .font-slider-label.active{color:var(--primary);font-weight:700}
+        .font-slider-track{position:relative;flex:1;height:4px;background:var(--gray-200);border-radius:2px}
+        .font-slider-fill{position:absolute;left:0;top:0;height:100%;background:var(--primary);border-radius:2px;transition:width .25s cubic-bezier(.22,1,.36,1)}
+        .font-slider-input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;margin:0}
+        .font-slider-thumb{position:absolute;top:50%;width:20px;height:20px;background:var(--primary);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 2px 6px rgba(15,118,110,.3);transition:left .25s cubic-bezier(.22,1,.36,1);pointer-events:none}
+
+        /* ── Confirm Dialog ── */
+        .dialog-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;display:flex;align-items:center;justify-content:center;padding:40px;opacity:0;pointer-events:none;transition:opacity .25s}
+        .dialog-overlay.open{opacity:1;pointer-events:auto}
+        .dialog{background:var(--white);border-radius:var(--radius-lg);padding:24px 22px 20px;width:100%;max-width:320px;transform:scale(.92);transition:transform .3s cubic-bezier(.22,1,.36,1);box-shadow:0 20px 60px rgba(0,0,0,.15)}
+        .dialog-overlay.open .dialog{transform:scale(1)}
+        .dialog-title{font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:8px}
+        .dialog-desc{font-size:13.5px;color:var(--gray-500);line-height:1.55;margin-bottom:22px}
+        .dialog-actions{display:flex;gap:10px}
+        .dialog-btn{flex:1;padding:11px 0;border-radius:var(--radius-sm);font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:all .15s}
+        .dialog-btn:active{transform:scale(.96)}
+        .dialog-btn.cancel{background:var(--gray-100);color:var(--gray-600)}
+        .dialog-btn.danger{background:var(--rose);color:#fff}
+
+        /* ── Toast ── */
+    </style>
+</head>
+<body>
+<div class="app">
+
+    <!-- ═══ Nav ═══ -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <button class="back-btn" onclick="handleBack()" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <div class="nav-brand"><div class="nav-brand-icon">C</div><span>Career OS</span></div>
+        </div>
+        <button class="nav-ai-btn" onclick="if(typeof Router!=='undefined'){Router.toAiChat();}else{window.location.href='ai-chat.html';}" aria-label="问AI">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+            问 AI
+        </button>
+    </nav>
+
+    <!-- ═══ Page Content ═══ -->
+    <div class="page">
+
+        <h1 class="page-title">设置</h1>
+
+        <!-- ─── 通用设置（默认收起）✅ 改动1 ─── -->
+        <div class="accordion" id="acc-general">
+            <button class="accordion-header" onclick="toggleAccordion('acc-general')" aria-expanded="false">
+                <div class="accordion-icon" style="background:var(--primary-50);color:var(--primary)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+                <span class="accordion-title">通用设置</span>
+                <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <div class="accordion-content">
+                        <div class="setting-item">
+                            <span class="setting-label">字体大小</span>
+                            <div class="font-slider">
+                                <span class="font-slider-label" id="fsLabel0">小</span>
+                                <div class="font-slider-track">
+                                    <div class="font-slider-fill" id="fsFill" style="width:50%"></div>
+                                    <div class="font-slider-thumb" id="fsThumb" style="left:50%"></div>
+                                    <input class="font-slider-input" type="range" min="0" max="2" step="1" value="1" oninput="updateFontSlider(this.value)" aria-label="字体大小">
+                                </div>
+                                <span class="font-slider-label active" id="fsLabel2">大</span>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-label-group">
+                                <span class="setting-label">深色模式</span>
+                                <span class="setting-extra">降低屏幕亮度，保护视力</span>
+                            </div>
+                            <label class="toggle" aria-label="深色模式">
+                                <input type="checkbox" onchange="handleDarkMode(this.checked)">
+                                <div class="toggle-track"></div>
+                                <div class="toggle-thumb"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── 消息通知设置 ─── -->
+        <div class="accordion" id="acc-notify">
+            <button class="accordion-header" onclick="toggleAccordion('acc-notify')" aria-expanded="false">
+                <div class="accordion-icon" style="background:var(--accent-light);color:#B45309">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                </div>
+                <span class="accordion-title">消息通知设置</span>
+                <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <div class="accordion-content">
+                        <div class="setting-item">
+                            <div class="setting-label-group">
+                                <span class="setting-label">系统推送</span>
+                                <span class="setting-extra">产品更新、活动通知等</span>
+                            </div>
+                            <label class="toggle" aria-label="系统推送">
+                                <input type="checkbox" checked onchange="showToast(this.checked?'系统推送已开启':'系统推送已关闭')">
+                                <div class="toggle-track"></div>
+                                <div class="toggle-thumb"></div>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-label-group">
+                                <span class="setting-label">任务提醒</span>
+                                <span class="setting-extra">每日任务、目标截止提醒</span>
+                            </div>
+                            <label class="toggle" aria-label="任务提醒">
+                                <input type="checkbox" checked onchange="showToast(this.checked?'任务提醒已开启':'任务提醒已关闭')">
+                                <div class="toggle-track"></div>
+                                <div class="toggle-thumb"></div>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-label-group">
+                                <span class="setting-label">社区消息提醒</span>
+                                <span class="setting-extra">评论回复、点赞、关注通知</span>
+                            </div>
+                            <label class="toggle" aria-label="社区消息提醒">
+                                <input type="checkbox" onchange="showToast(this.checked?'社区消息提醒已开启':'社区消息提醒已关闭')">
+                                <div class="toggle-track"></div>
+                                <div class="toggle-thumb"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── 账号管理 ─── -->
+        <div class="accordion" id="acc-account">
+            <button class="accordion-header" onclick="toggleAccordion('acc-account')" aria-expanded="false">
+                <div class="accordion-icon" style="background:var(--indigo-light);color:var(--indigo)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <span class="accordion-title">账号管理</span>
+                <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <div class="accordion-content" style="padding:0">
+                        <!-- ✅ 改动2：移除 setting-label-group，label 直接顶格 -->
+                        <button class="nav-item" onclick="showToast('手机号绑定页面开发中')">
+                            <div class="nav-item-left" style="flex-direction:column;align-items:flex-start;gap:0">
+                                <span class="setting-label">手机号绑定/修改</span>
+                                <span class="setting-extra">已绑定 138****6789</span>
+                            </div>
+                            <div class="nav-item-right">
+                                <span class="nav-item-hint">已绑定</span>
+                                <svg class="nav-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </div>
+                        </button>
+                        <button class="nav-item" onclick="showToast('邮箱绑定页面开发中')">
+                            <div class="nav-item-left" style="flex-direction:column;align-items:flex-start;gap:0">
+                                <span class="setting-label">邮箱绑定</span>
+                                <span class="setting-extra">lin@example.com</span>
+                            </div>
+                            <div class="nav-item-right">
+                                <span class="nav-item-hint">已绑定</span>
+                                <svg class="nav-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </div>
+                        </button>
+                        <button class="nav-item" onclick="showToast('密码修改页面开发中')">
+                            <div class="nav-item-left">
+                                <span class="setting-label">登录密码修改</span>
+                            </div>
+                            <div class="nav-item-right">
+                                <svg class="nav-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </div>
+                        </button>
+                        <button class="nav-item" onclick="openDialog()">
+                            <div class="nav-item-left">
+                                <span class="nav-item-label danger">账号注销</span>
+                            </div>
+                            <div class="nav-item-right">
+                                <svg class="nav-item-arrow" style="color:var(--rose-light)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── 隐私与数据安全 ─── -->
+        <div class="accordion" id="acc-privacy">
+            <button class="accordion-header" onclick="toggleAccordion('acc-privacy')" aria-expanded="false">
+                <div class="accordion-icon" style="background:var(--violet-light);color:var(--violet)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <span class="accordion-title">隐私与数据安全</span>
+                <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <div class="accordion-content" style="padding:0">
+                        <button class="nav-item" onclick="showToast('数据授权管理页面开发中')">
+                            <div class="nav-item-left">
+                                <span class="setting-label">个人数据授权管理</span>
+                            </div>
+                            <div class="nav-item-right">
+                                <span class="nav-item-hint">2 项授权</span>
+                                <svg class="nav-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </div>
+                        </button>
+                        <!-- ✅ 改动2：同上，label 直接顶格 -->
+                        <button class="nav-item" onclick="showToast('数据导出功能开发中')">
+                            <div class="nav-item-left" style="flex-direction:column;align-items:flex-start;gap:0">
+                                <span class="setting-label">数据导出功能</span>
+                                <span class="setting-extra">导出你的所有个人数据</span>
+                            </div>
+                            <div class="nav-item-right">
+                                <svg class="nav-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </div>
+                        </button>
+                        <button class="nav-item" onclick="showToast('隐私政策页面开发中')">
+                            <div class="nav-item-left">
+                                <span class="setting-label">隐私政策查看</span>
+                            </div>
+                            <div class="nav-item-right">
+                                <svg class="nav-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── 帮助与客服（独立卡片）✅ 改动3 ─── -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="showToast('帮助与客服页面开发中')">
+                <div class="accordion-icon" style="background:var(--sky-light);color:var(--sky)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <span class="accordion-title">帮助与客服</span>
+                <svg class="nav-item-arrow" style="width:20px;height:20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+        </div>
+
+        <!-- ─── 关于 Career OS（独立卡片）✅ 改动3 ─── -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="showToast('关于 Career OS 页面开发中')">
+                <div class="accordion-icon" style="background:var(--gray-100);color:var(--gray-500)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+                <span class="accordion-title">关于 Career OS</span>
+                <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+                    <span class="nav-item-hint">v1.0.0</span>
+                    <svg class="nav-item-arrow" style="width:20px;height:20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </div>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ═══ 注销确认弹窗 ═══ -->
+    <div class="dialog-overlay" id="dialogOverlay" onclick="closeDialog()">
+        <div class="dialog" onclick="event.stopPropagation()">
+            <div class="dialog-title">确认注销账号？</div>
+            <div class="dialog-desc">注销后，你的所有数据将被永久删除且无法恢复，包括个人资料、任务记录、作品集等内容。请谨慎操作。</div>
+            <div class="dialog-actions">
+                <button class="dialog-btn cancel" onclick="closeDialog()">再想想</button>
+                <button class="dialog-btn danger" onclick="closeDialog();showToast('账号注销功能开发中')">确认注销</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+</div>
+
+<script>
+/* ── Toast ── */
+let toastTimer;
+function showToast(m){
+    const t=document.getElementById('toast');
+    clearTimeout(toastTimer);
+    t.textContent=m;
+    t.classList.add('show');
+    toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ── Accordion ── */
+function toggleAccordion(id){
+    const el=document.getElementById(id);
+    const isOpen=el.classList.contains('open');
+    el.classList.toggle('open');
+    el.querySelector('.accordion-header').setAttribute('aria-expanded',!isOpen);
+}
+
+/* ── Font Size Slider ── */
+function updateFontSlider(val){
+    val=parseInt(val);
+    const pct=val*50;
+    document.getElementById('fsFill').style.width=pct+'%';
+    document.getElementById('fsThumb').style.left=pct+'%';
+    document.getElementById('fsLabel0').classList.toggle('active',val===0);
+    document.getElementById('fsLabel2').classList.toggle('active',val===2);
+    const sizes=['小','中','大'];
+    document.body.style.fontSize=['14px','16px','18px'][val];
+    showToast('字体大小已切换为「'+sizes[val]+'」');
+}
+
+/* ── Dark Mode ── */
+function handleDarkMode(on){
+    showToast(on?'深色模式已开启 🌙':'深色模式已关闭 ☀️');
+}
+
+/* ── Back ── */
+function handleBack(){ if(typeof Router!=='undefined'){Router.back();}else{window.history.back();} }
+
+/* ── Dialog ── */
+function openDialog(){ document.getElementById('dialogOverlay').classList.add('open'); }
+function closeDialog(){ document.getElementById('dialogOverlay').classList.remove('open'); }
+</script>
+
+</body>
+</html>

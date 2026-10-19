@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>发布帖子 · Career OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #0F766E; --primary-hover: #0D6B63; --primary-light: #14B8A6;
+    --primary-50: #F0FDFA; --primary-100: #CCFBF1;
+    --accent: #F59E0B; --accent-light: #FEF3C7;
+    --white: #FFFFFF;
+    --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0; --gray-300: #CBD5E1;
+    --gray-400: #94A3B8; --gray-500: #64748B; --gray-600: #475569; --gray-900: #0F172A;
+    --radius-lg: 16px; --radius-md: 12px; --radius-sm: 10px;
+    --shadow-sm: 0 1px 3px rgba(15,23,42,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--gray-100);color:var(--gray-900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.app{max-width:430px;width:100%;min-height:100vh;background:var(--gray-50);margin:0 auto;position:relative;padding-bottom:40px}
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(248,250,252,.86);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);height:56px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid rgba(226,232,240,.5)}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--gray-500);background:none;border:none;font-family:inherit;cursor:pointer;padding:4px 0}
+.nav-back:active{color:var(--gray-900)}
+.nav-back svg{width:18px;height:18px}
+.nav-title{position:absolute;left:50%;transform:translateX(-50%);font-size:15px;font-weight:600;color:var(--gray-900)}
+.nav-action{position:absolute;right:16px;font-size:14px;font-weight:700;color:var(--primary);background:none;border:none;font-family:inherit;cursor:pointer;padding:4px 0}
+.nav-action:active{color:var(--primary-hover)}
+.page{padding:16px 16px 0}
+.section{margin-bottom:18px}
+.section-title{font-size:13px;font-weight:700;color:var(--gray-900);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.section-title svg{width:15px;height:15px;color:var(--primary)}
+
+/* ── 编辑器 ── */
+.post-editor{background:#fff;border-radius:var(--radius-md);padding:14px;border:1px solid var(--gray-100);box-shadow:var(--shadow-sm)}
+.editor-area{width:100%;border:none;outline:none;resize:none;font-family:inherit;font-size:14px;line-height:1.7;color:var(--gray-900);min-height:140px;background:transparent}
+.editor-area::placeholder{color:var(--gray-300)}
+.char-count{text-align:right;font-size:11px;color:var(--gray-400);margin-top:6px}
+
+/* ── 标签选择 ── */
+.tag-grid{display:flex;flex-wrap:wrap;gap:8px}
+.tag-chip{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;font-size:12.5px;font-weight:500;color:var(--gray-500);background:#fff;border:1.5px solid var(--gray-200);border-radius:99px;cursor:pointer;transition:all .2s;font-family:inherit}
+.tag-chip:active{transform:scale(.96)}
+.tag-chip.sel{background:var(--primary-50);border-color:var(--primary);color:var(--primary);font-weight:600}
+.tag-chip svg{width:13px;height:13px;opacity:0;transition:opacity .2s}
+.tag-chip.sel svg{opacity:1}
+
+/* ── 发布提示条 ── */
+.tip{display:flex;gap:8px;background:var(--primary-50);border:1px solid var(--primary-100);border-radius:var(--radius-sm);padding:10px 12px;font-size:12px;color:var(--gray-600);line-height:1.6}
+.tip svg{width:14px;height:14px;color:var(--primary);flex-shrink:0;margin-top:2px}
+
+/* ── 弹窗 ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:0 24px;opacity:0;transition:opacity .25s;pointer-events:none}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal-box{width:100%;max-width:340px;background:#fff;border-radius:20px;padding:20px;text-align:center;transform:scale(.92);transition:transform .25s cubic-bezier(.22,1,.36,1)}
+.modal-overlay.show .modal-box{transform:scale(1)}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--primary-50);color:var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.modal-icon svg{width:24px;height:24px}
+.modal-title{font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:8px}
+.modal-text{font-size:13px;color:var(--gray-500);line-height:1.7;margin-bottom:16px}
+.modal-actions{display:flex;gap:10px}
+.btn{flex:1;padding:12px;border:none;border-radius:var(--radius-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(145deg,var(--primary),var(--primary-hover));color:#fff;box-shadow:0 4px 16px rgba(15,118,110,.25)}
+.btn-outline{background:#fff;color:var(--gray-500);border:1.5px solid var(--gray-200)}
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--gray-900);color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:400;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(min-width:431px){body{background:#E2E8F0}.app{box-shadow:0 0 80px rgba(0,0,0,.08)}}
+    </style>
+</head>
+<body>
+<div class="app">
+    <nav class="top-nav">
+        <button class="nav-back" onclick="window.location.href='index.html?tab=community'" aria-label="返回">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            <span>返回</span>
+        </button>
+        <span class="nav-title">发布帖子</span>
+        <button class="nav-action" onclick="publish()">发布</button>
+    </nav>
+
+    <div class="page">
+        <div class="section">
+            <div class="post-editor">
+                <textarea class="editor-area" id="postBody" placeholder="分享你的求职经验、面试复盘、实习心得…" maxlength="500"></textarea>
+                <div class="char-count" id="charCount">0 / 500</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 22H8v-4l8.59-8.59a2 2 0 0 1 2.82 0l2 2a2 2 0 0 1 0 2.82z"/></svg>添加标签（可选，最多 2 个）</div>
+            <div class="tag-grid" id="tagGrid">
+                <button type="button" class="tag-chip" onclick="toggleTag(this)">产品经理</button>
+                <button type="button" class="tag-chip" onclick="toggleTag(this)">UX 设计</button>
+                <button type="button" class="tag-chip" onclick="toggleTag(this)">求职经验</button>
+                <button type="button" class="tag-chip" onclick="toggleTag(this)">实习分享</button>
+                <button type="button" class="tag-chip" onclick="toggleTag(this)">简历修改</button>
+                <button type="button" class="tag-chip" onclick="toggleTag(this)">面试技巧</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="tip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span>帖子会发布到「社区」列表顶部，使用你的个人资料身份，其他用户可点赞和收藏。</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 发布成功确认弹窗 -->
+<div class="modal-overlay" id="successModal">
+    <div class="modal-box">
+        <div class="modal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <div class="modal-title">发布成功</div>
+        <div class="modal-text">帖子已发布到社区，正在返回…</div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   community-post.js | Career OS — 社区发帖
+   数据存储：localStorage 'cos_posts'（由 index.html 社区页渲染）
+   作者信息：localStorage 'cos_profile_data'
+   ============================================================ */
+var POSTS_KEY = 'cos_posts';
+var selTags = [];
+
+function getPosts(){ try{ var v=JSON.parse(localStorage.getItem(POSTS_KEY)||'[]'); return Array.isArray(v)?v:[]; }catch(e){ return []; } }
+function getProfile(){
+  try{
+    var v=JSON.parse(localStorage.getItem('cos_profile_data'));
+    if(v && v.name) return v;
+  }catch(e){}
+  return { name:'林雪梨', school:'深圳大学', major:'网络与新媒体', grade:'大二' };
+}
+function showToast(m){ var t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); }, 2200); }
+
+/* ── 标签选择 ── */
+function toggleTag(btn){
+  if(btn.classList.contains('sel')){
+    btn.classList.remove('sel');
+    selTags = selTags.filter(function(t){ return t!==btn.textContent; });
+    return;
+  }
+  if(selTags.length>=2){ showToast('最多选择 2 个标签'); return; }
+  btn.classList.add('sel');
+  selTags.push(btn.textContent);
+}
+
+/* ── 字数统计 ── */
+var bodyEl=document.getElementById('postBody');
+bodyEl.addEventListener('input', function(){
+  document.getElementById('charCount').textContent = bodyEl.value.length + ' / 500';
+});
+
+/* ── 发布 ── */
+function publish(){
+  var body = bodyEl.value.trim();
+  if(!body){ showToast('请先输入帖子内容'); bodyEl.focus(); return; }
+  var profile = getProfile();
+  var list = getPosts();
+  list.unshift({
+    id: 'post-'+Date.now(),
+    author: profile.name,
+    avatarText: profile.avatarText || profile.name.charAt(0),
+    school: profile.school, major: profile.major,
+    body: body,
+    tags: selTags.slice(),
+    createdAt: Date.now()
+  });
+  try{ localStorage.setItem(POSTS_KEY, JSON.stringify(list)); }catch(e){ showToast('保存失败，请重试'); return; }
+  showToast('✅ 发布成功');
+  document.getElementById('successModal').classList.add('show');
+  setTimeout(function(){ window.location.href='index.html?tab=community'; }, 1200);
+}
+</script>
+</body>
+</html>

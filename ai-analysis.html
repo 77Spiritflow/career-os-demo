@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>AI 深度分析 · Career OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <style>
+/* ============================================================
+   global.css | Career OS — 全局公共样式
+   所有页面共用，页面独有样式写在各自style内
+   ============================================================ */
+
+/* ── CSS 变量（全量超集） ── */
+:root {
+    --primary: #0F766E; --primary-hover: #0D6B63; --primary-light: #14B8A6;
+    --primary-50: #F0FDFA; --primary-100: #CCFBF1; --primary-200: #99F6E4;
+    --white: #FFFFFF;
+    --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0;
+    --gray-300: #CBD5E1; --gray-400: #94A3B8; --gray-500: #64748B;
+    --gray-600: #475569; --gray-900: #0F172A;
+    --accent: #F59E0B; --accent-light: #FEF3C7;
+    --indigo: #6366F1; --indigo-light: #EEF2FF;
+    --rose: #F43F5E; --rose-light: #FFF1F2;
+    --violet: #8B5CF6; --violet-light: #F5F3FF;
+    --sky: #0EA5E9; --sky-light: #E0F2FE;
+    --shadow-xs: 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.02);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+    --radius-sm: 12px; --radius-md: 16px; --radius-lg: 22px; --radius-xl: 28px;
+    --nav-h: 56px; --tab-h: 60px;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+/* ── Reset ── */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+/* ── Body ── */
+body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--gray-100);color:var(--gray-900);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── App 容器 ── */
+.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--gray-50);position:relative}
+
+/* ── 顶部导航栏（基础） ── */
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(248,250,252,0.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+
+/* ── 品牌标识（首页 / 设置页） ── */
+.nav-brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:17px;color:var(--gray-900);letter-spacing:-0.03em}
+.nav-brand-icon{width:30px;height:30px;background:linear-gradient(145deg,var(--primary),var(--primary-light));border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800}
+
+/* ── AI 按钮（首页 / 设置页） ── */
+.nav-ai-btn{display:flex;align-items:center;gap:5px;padding:7px 13px 7px 10px;background:var(--gray-900);color:#fff;border:none;border-radius:100px;font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;position:relative;overflow:hidden;transition:all .2s}
+.nav-ai-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);transform:translateX(-100%);animation:shimmer 3s ease-in-out infinite}
+.nav-ai-btn:active{transform:scale(.95)}
+.nav-ai-btn svg{width:14px;height:14px;flex-shrink:0}
+
+/* ── 返回按钮（测评 / AI分析页） ── */
+.nav-back{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--gray-500);background:none;border:none;font-family:inherit;cursor:pointer;transition:color .2s;padding:4px 0}
+.nav-back:active{color:var(--gray-900)}
+.nav-back svg{width:18px;height:18px}
+
+/* ── 居中标题（测评 / AI分析页） ── */
+.nav-title{position:absolute;left:50%;transform:translateX(-50%);font-size:15px;font-weight:600;color:var(--gray-900);letter-spacing:-.01em}
+
+/* ── 步骤文字 ── */
+.nav-step{font-size:12px;color:var(--gray-400);font-weight:500}
+
+/* ── Screen 容器（测评 / AI分析页） ── */
+.screen{display:none;padding:20px;padding-bottom:80px;flex-direction:column}
+.screen.active{display:flex;animation:screenIn .4s cubic-bezier(.22,1,.36,1) both}
+
+/* ── 主按钮 ── */
+.btn-primary{width:100%;padding:13px 24px;background:linear-gradient(145deg,var(--primary),var(--primary-hover));color:#fff;border:none;border-radius:var(--radius-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px rgba(15,118,110,.25);transition:all .2s}
+.btn-primary:active{transform:scale(.97)}
+.btn-primary:disabled{background:var(--gray-300);box-shadow:none;cursor:default}
+
+/* ── 描边按钮 ── */
+.btn-outline{width:100%;padding:13px 24px;background:transparent;color:var(--primary);border:1.5px solid var(--primary);border-radius:var(--radius-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s}
+.btn-outline:active{background:var(--primary-50);transform:scale(.98)}
+
+/* ── 底部操作栏 ── */
+.bottom-bar{position:sticky;bottom:0;padding:12px 20px;padding-bottom:calc(12px + var(--safe-b));background:rgba(248,250,252,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(226,232,240,.4);display:flex;gap:10px;align-items:center;z-index:50}
+
+/* ── 确认弹窗 ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:0 24px;opacity:0;transition:opacity .25s}
+.modal-overlay.show{opacity:1}
+.modal-box{background:#fff;border-radius:var(--radius-lg);padding:24px;max-width:320px;width:100%;box-shadow:0 16px 48px rgba(0,0,0,.15);transform:scale(.92);transition:transform .25s cubic-bezier(.22,1,.36,1)}
+.modal-overlay.show .modal-box{transform:scale(1)}
+.modal-title{font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:8px}
+.modal-desc{font-size:13px;color:var(--gray-500);line-height:1.6;margin-bottom:20px}
+.modal-btns{display:flex;gap:10px}
+.modal-cancel{flex:1;padding:11px;background:var(--gray-100);color:var(--gray-600);border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .2s}
+.modal-cancel:active{background:var(--gray-200)}
+.modal-confirm{flex:1;padding:11px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s}
+.modal-confirm:active{background:var(--primary-hover)}
+
+/* ── Toast 通知 ── */
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--gray-900);color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:200;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── Keyframes ── */
+@keyframes shimmer{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes screenIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pop{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes softPop{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.08)}}
+@keyframes dotBounce{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* ── 响应式：桌面端 ── */
+@media(min-width:431px){body{background:#E2E8F0}.app{box-shadow:0 0 80px rgba(0,0,0,.08)}}
+
+/* ── 无障碍：减少动画 ── */
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+</style>
+    <script>
+/* ============================================================
+   store.js | Career OS — 全局数据存储
+   所有跨页面共享数据统一存放于此，使用 localStorage 持久化
+   ============================================================ */
+
+var Store = (function () {
+    var STORAGE_KEY = 'career_os_store';
+
+    // 默认数据结构
+    var _defaults = {
+        user: null,           // 用户账号信息 { id, name, email, ... }
+        assessment: null,     // 测评结果 { answers, scores, code, codeNames, profile, recommendedCareers }
+        careerGoal: null,     // 用户选定的职业目标数组 [{ name, dim, ... }]
+        timeline: null,       // 中长期目标
+        dailyTasks: null,     // 拆解后的每日任务数组
+        portfolio: null       // 用户上传的成果沉淀列表
+    };
+
+    // 当前内存数据
+    var _data = {};
+
+    // 从 localStorage 读取
+    function _load() {
+        try {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                _data = JSON.parse(raw);
+            } else {
+                _data = _deepClone(_defaults);
+            }
+        } catch (e) {
+            _data = _deepClone(_defaults);
+        }
+        // 确保每个字段都有默认值
+        for (var key in _defaults) {
+            if (_data[key] === undefined) {
+                _data[key] = _defaults[key];
+            }
+        }
+    }
+
+    // 保存到 localStorage
+    function _save() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(_data));
+        } catch (e) {
+            console.warn('[Store] localStorage 写入失败', e);
+        }
+    }
+
+    // 深拷贝
+    function _deepClone(obj) {
+        return JSON.parse(JSON.stringify(obj));
+    }
+
+    // 初始化
+    _load();
+
+    return {
+        /**
+         * 获取指定字段值
+         * @param {string} key - 字段名
+         * @returns {*} 字段值
+         */
+        get: function (key) {
+            if (key) return _data[key];
+            return _deepClone(_data);
+        },
+
+        /**
+         * 设置指定字段值并持久化
+         * @param {string} key - 字段名
+         * @param {*} value - 字段值
+         */
+        set: function (key, value) {
+            _data[key] = value;
+            _save();
+        },
+
+        /**
+         * 批量更新多个字段
+         * @param {Object} updates - { key1: value1, key2: value2, ... }
+         */
+        batch: function (updates) {
+            for (var key in updates) {
+                if (updates.hasOwnProperty(key)) {
+                    _data[key] = updates[key];
+                }
+            }
+            _save();
+        },
+
+        /**
+         * 清空所有数据，恢复默认值
+         */
+        clear: function () {
+            _data = _deepClone(_defaults);
+            _save();
+        },
+
+        /**
+         * 删除指定字段
+         * @param {string} key
+         */
+        remove: function (key) {
+            _data[key] = _defaults[key] !== undefined ? _defaults[key] : null;
+            _save();
+        },
+
+        /**
+         * 检查用户是否已完成测评
+         * @returns {boolean}
+         */
+        hasAssessment: function () {
+            return !!(_data.assessment && _data.assessment.code);
+        },
+
+        /**
+         * 检查用户是否已选定职业目标
+         * @returns {boolean}
+         */
+        hasCareerGoal: function () {
+            return !!(_data.careerGoal && _data.careerGoal.length > 0);
+        }
+    };
+})();
+
+</script>
+    <script>
+/* ============================================================
+   router.js | Career OS — 页面跳转辅助函数
+   所有页面跳转优先使用此模块，统一管理路由
+   ============================================================ */
+
+var Router = (function () {
+    // 基础路径（同目录下的页面）
+    var BASE = '';
+
+    return {
+        /**
+         * 跳转到指定页面
+         * @param {string} page - 页面文件名，如 'index.html'
+         */
+        go: function (page) {
+            window.location.href = BASE + page;
+        },
+
+        /** 跳转到首页 */
+        toIndex: function () {
+            this.go('index.html');
+        },
+
+        /** 跳转到职业测评页 */
+        toAssessment: function () {
+            this.go('assessment.html');
+        },
+
+        /** 跳转到AI深度分析页 */
+        toAiAnalysis: function () {
+            this.go('ai-analysis.html');
+        },
+
+        /** 跳转到AI对话页 */
+        toAiChat: function () {
+            this.go('ai-chat.html');
+        },
+
+        /** 跳转到设置页 */
+        toSettings: function () {
+            this.go('settings.html');
+        },
+
+        /** 跳转到登录页 */
+        toLogin: function () {
+            this.go('login.html');
+        },
+
+        /** 跳转到职业图景页 */
+        toCareerVision: function () {
+            this.go('career-vision.html');
+        },
+
+        /** 浏览器后退 */
+        back: function () {
+            window.history.back();
+        },
+
+        /**
+         * 获取当前页面名称
+         * @returns {string} 如 'index', 'assessment', 'ai-analysis' 等
+         */
+        currentPage: function () {
+            var path = window.location.pathname;
+            var file = path.substring(path.lastIndexOf('/') + 1);
+            return file.replace('.html', '');
+        }
+    };
+})();
+
+</script>
+    <script>
+/* ============================================================
+   auth.js | Career OS — 认证模块
+   阶段1：纯前端模拟，不接 Supabase
+   阶段2：接入 Supabase 真实认证
+   ============================================================ */
+
+var Auth = (function () {
+    return {
+        /**
+         * 检查用户是否已登录
+         * @returns {boolean}
+         */
+        isLoggedIn: function () {
+            return !!(Store && Store.get('user'));
+        },
+
+        /**
+         * 获取当前登录用户信息
+         * @returns {Object|null}
+         */
+        getUser: function () {
+            return Store ? Store.get('user') : null;
+        },
+
+        /**
+         * 模拟登录（阶段1）
+         * @param {Object} userData - 用户数据 { id, name, email }
+         */
+        login: function (userData) {
+            if (Store) {
+                Store.set('user', userData);
+            }
+        },
+
+        /**
+         * 退出登录
+         */
+        logout: function () {
+            if (Store) {
+                Store.set('user', null);
+            }
+        },
+
+        /**
+         * 需要登录时调用，未登录则跳转登录页
+         * @returns {boolean} 是否已登录
+         */
+        requireLogin: function () {
+            if (!this.isLoggedIn()) {
+                if (typeof Router !== 'undefined') {
+                    Router.toLogin();
+                }
+                return false;
+            }
+            return true;
+        }
+    };
+})();
+
+</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* 页面覆盖 */
+.app{overflow:hidden}
+.screen{padding-bottom:100px}
+.modal-overlay{z-index:400}
+
+/* ========== 表单弹窗 ========== */
+.form-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:300;display:none;align-items:flex-end;justify-content:center}
+.form-overlay.show{display:flex;animation:fadeIn .25s ease both}
+.form-sheet{background:#fff;border-radius:var(--radius-xl) var(--radius-xl) 0 0;padding:24px 20px;padding-bottom:calc(24px + var(--safe-b));max-width:430px;width:100%;max-height:88vh;overflow-y:auto;animation:slideUp .35s cubic-bezier(.22,1,.36,1) both}
+.form-handle{width:36px;height:4px;background:var(--gray-300);border-radius:2px;margin:0 auto 18px}
+.form-title{font-size:18px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.form-desc{font-size:13px;color:var(--gray-500);line-height:1.5;margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px;display:block}
+.form-input{width:100%;padding:11px 14px;border:1.5px solid var(--gray-200);border-radius:10px;font-size:14px;font-family:inherit;color:var(--gray-900);background:#fff;transition:border-color .2s;outline:none}
+.form-input:focus{border-color:var(--primary)}
+.form-input::placeholder{color:var(--gray-400)}
+.form-select{width:100%;padding:11px 14px;border:1.5px solid var(--gray-200);border-radius:10px;font-size:14px;font-family:inherit;color:var(--gray-900);background:#fff;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2394A3B8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;outline:none;transition:border-color .2s}
+.form-select:focus{border-color:var(--primary)}
+.form-radio-group{display:flex;gap:8px;flex-wrap:wrap}
+.form-radio{padding:8px 16px;border:1.5px solid var(--gray-200);border-radius:100px;font-size:13px;font-weight:500;color:var(--gray-600);cursor:pointer;transition:all .2s;font-family:inherit;background:#fff}
+.form-radio:active{transform:scale(.97)}
+.form-radio.sel{border-color:var(--primary);background:var(--primary-50);color:var(--primary);font-weight:600}
+.form-chips{display:flex;gap:8px;flex-wrap:wrap}
+.form-chip{padding:7px 14px;border:1.5px solid var(--gray-200);border-radius:100px;font-size:12px;font-weight:500;color:var(--gray-600);cursor:pointer;transition:all .2s;font-family:inherit;background:#fff}
+.form-chip:active{transform:scale(.97)}
+.form-chip.sel{border-color:var(--primary);background:var(--primary-50);color:var(--primary);font-weight:600}
+.form-btn{width:100%;padding:14px 24px;background:linear-gradient(145deg,var(--primary),var(--primary-hover));color:#fff;border:none;border-radius:var(--radius-md);font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px rgba(15,118,110,.25);transition:all .2s;margin-top:8px}
+.form-btn:active{transform:scale(.97)}
+.form-btn:disabled{background:var(--gray-300);box-shadow:none;cursor:default}
+
+/* ========== 加载页 ========== */
+.loading-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.loading-icon{width:72px;height:72px;background:linear-gradient(145deg,var(--primary),var(--primary-light));border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:32px;animation:pulse 2s ease-in-out infinite;box-shadow:0 8px 32px rgba(15,118,110,.2);margin-bottom:24px}
+.loading-title{font-size:17px;font-weight:700;color:var(--gray-900);margin-bottom:8px}
+.loading-desc{font-size:13px;color:var(--gray-500);line-height:1.5}
+.loading-dots{display:flex;gap:6px;margin-top:20px}
+.loading-dots span{width:6px;height:6px;border-radius:50%;background:var(--primary);animation:dotBounce 1.4s ease-in-out infinite}
+.loading-dots span:nth-child(2){animation-delay:.2s}
+.loading-dots span:nth-child(3){animation-delay:.4s}
+
+/* ========== 报告页 ========== */
+.report-header{width:100%;background:linear-gradient(145deg,#0D5F59,var(--primary),var(--primary-light));border-radius:var(--radius-xl);padding:24px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden;animation:fadeUp .5s ease both}
+.report-header::before{content:'';position:absolute;top:-30%;right:-15%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,255,255,.1) 0%,transparent 65%);border-radius:50%}
+.report-code{font-size:22px;font-weight:800;letter-spacing:.04em;margin-bottom:4px}
+.report-sub{font-size:12px;opacity:.8;line-height:1.5}
+
+.report-summary{width:100%;background:#fff;border-radius:var(--radius-md);padding:16px 18px;border:1px solid var(--gray-100);margin-bottom:20px;animation:fadeUp .4s ease .1s both}
+.report-summary-title{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.report-summary-text{font-size:13px;color:var(--gray-600);line-height:1.7}
+
+.career-section{width:100%;margin-bottom:20px;animation:fadeUp .4s ease .2s both}
+.career-section-title{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.career-section-title svg{width:18px;height:18px;color:var(--primary)}
+
+.career-rpt-card{background:#fff;border-radius:var(--radius-md);padding:18px;border:1px solid var(--gray-100);margin-bottom:12px;animation:fadeUp .4s ease both}
+.career-rpt-card:nth-child(2){animation-delay:.08s}
+.career-rpt-card:nth-child(3){animation-delay:.16s}
+.career-rpt-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.career-rpt-rank{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.career-rpt-rank.r1{background:linear-gradient(135deg,#FBBF24,#F59E0B)}
+.career-rpt-rank.r2{background:linear-gradient(135deg,#94A3B8,#64748B)}
+.career-rpt-rank.r3{background:linear-gradient(135deg,#D97706,#B45309)}
+.career-rpt-name{flex:1;font-size:15px;font-weight:700;color:var(--gray-900)}
+.career-rpt-match{font-size:20px;font-weight:800;color:var(--primary);flex-shrink:0}
+.career-rpt-match span{font-size:12px;font-weight:500}
+.career-rpt-bar{width:100%;height:6px;background:var(--gray-100);border-radius:3px;overflow:hidden;margin-bottom:14px}
+.career-rpt-bar-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.22,1,.36,1)}
+.career-rpt-bar-fill.r1{background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+.career-rpt-bar-fill.r2{background:linear-gradient(90deg,var(--indigo),#818CF8)}
+.career-rpt-bar-fill.r3{background:linear-gradient(90deg,var(--sky),#38BDF8)}
+
+.career-rpt-reasons{margin-bottom:12px}
+.career-rpt-reasons-title{font-size:11.5px;font-weight:600;color:var(--gray-500);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.career-rpt-reason{font-size:12.5px;color:var(--gray-600);line-height:1.55;padding-left:12px;margin-bottom:4px;position:relative}
+.career-rpt-reason::before{content:'';position:absolute;left:0;top:8px;width:4px;height:4px;border-radius:50%;background:var(--primary)}
+
+.career-rpt-skills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.career-rpt-skill{font-size:11px;font-weight:500;padding:4px 10px;border-radius:100px;background:var(--primary-50);color:var(--primary)}
+
+.career-rpt-growth{font-size:12px;color:var(--gray-500);line-height:1.5;padding:10px 12px;background:var(--gray-50);border-radius:8px;margin-bottom:14px}
+.career-rpt-growth-label{font-size:11px;font-weight:600;color:var(--gray-400);margin-bottom:2px}
+
+.career-rpt-check{display:flex;align-items:center;gap:8px;cursor:pointer}
+.career-rpt-check input{display:none}
+.career-rpt-check-box{width:20px;height:20px;border-radius:6px;border:2px solid var(--gray-300);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s}
+.career-rpt-check-box.checked{background:var(--primary);border-color:var(--primary)}
+.career-rpt-check-box svg{width:11px;height:11px;color:#fff}
+.career-rpt-check-label{font-size:12.5px;font-weight:500;color:var(--gray-500);user-select:none}
+.career-rpt-check-label.checked{color:var(--primary);font-weight:600}
+
+/* 底部操作栏 */
+
+/* 确认弹窗 */
+
+/* Toast */
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- 导航栏 -->
+<nav class="top-nav">
+<button class="nav-back" id="nav-back" onclick="goBack()" aria-label="返回"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg><span>返回</span></button>
+<span class="nav-title" id="nav-title">AI 深度分析</span>
+<span class="nav-step" id="nav-step"></span>
+</nav>
+
+<!-- 入口页（模拟从结果页点击进入） -->
+<div class="screen active" id="screen-entry">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px">
+<div style="width:72px;height:72px;background:linear-gradient(145deg,var(--primary),var(--primary-light));border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 8px 32px rgba(15,118,110,.2);margin-bottom:24px">🤖</div>
+<div style="font-size:18px;font-weight:700;color:var(--gray-900);margin-bottom:8px">AI 深度职业分析</div>
+<div style="font-size:13px;color:var(--gray-500);line-height:1.6;max-width:280px;margin-bottom:32px">基于你的 RIASEC 测评结果和个人背景，AI 将为你精准推荐 3 个最适合的职业岗位</div>
+<button class="btn-primary" onclick="openFormSheet()" style="max-width:280px">开始填写个人信息 →</button>
+</div>
+</div>
+
+<!-- 加载页 -->
+<div class="screen" id="screen-loading">
+<div class="loading-body">
+<div class="loading-icon">🤖</div>
+<div class="loading-title">AI 正在深度分析中</div>
+<div class="loading-desc">结合你的职业兴趣类型与个人背景<br>为你生成专属职业建议</div>
+<div class="loading-dots"><span></span><span></span><span></span></div>
+</div>
+</div>
+
+<!-- 报告页 -->
+<div class="screen" id="screen-report">
+<div id="report-body"></div>
+<div class="bottom-bar" style="flex-direction:column;gap:10px">
+<button class="btn-primary" id="btn-set-goal" onclick="confirmSetGoal()" disabled>作为当前职业目标</button>
+<button class="btn-outline" onclick="goToCareerVisionFromAI()" style="max-width:100%">查看职业图景</button>
+<button class="btn-outline" onclick="goBackToResult()">返回测评结果</button>
+</div>
+</div>
+
+<!-- 个人信息表单（底部弹出） -->
+<div class="form-overlay" id="form-overlay" onclick="closeFormSheet(event)">
+<div class="form-sheet" onclick="event.stopPropagation()">
+<div class="form-handle"></div>
+<div class="form-title">📝 补充个人信息</div>
+<div class="form-desc">这些信息将帮助 AI 更精准地分析你的职业适配度</div>
+
+<div class="form-group">
+<label class="form-label">学校 / 大学</label>
+<input class="form-input" id="f-school" type="text" placeholder="如：浙江大学">
+</div>
+
+<div class="form-group">
+<label class="form-label">具体专业</label>
+<input class="form-input" id="f-major" type="text" placeholder="如：计算机科学与技术">
+</div>
+
+<div class="form-group">
+<label class="form-label">年级</label>
+<select class="form-select" id="f-grade">
+<option value="" disabled selected>请选择年级</option>
+<option value="大一">大一</option>
+<option value="大二">大二</option>
+<option value="大三">大三</option>
+<option value="大四">大四</option>
+<option value="研一">研一</option>
+<option value="研二">研二</option>
+<option value="研三">研三</option>
+</select>
+</div>
+
+<div class="form-group">
+<label class="form-label">是否考研</label>
+<div class="form-radio-group" id="f-grad">
+<div class="form-radio" onclick="pickRadio(this,'f-grad')">是</div>
+<div class="form-radio" onclick="pickRadio(this,'f-grad')">否</div>
+<div class="form-radio" onclick="pickRadio(this,'f-grad')">未确定</div>
+</div>
+</div>
+
+<div class="form-group">
+<label class="form-label">实习 / 项目经历</label>
+<select class="form-select" id="f-intern">
+<option value="" disabled selected>请选择</option>
+<option value="无">无</option>
+<option value="1段">1 段</option>
+<option value="2段">2 段</option>
+<option value="3段及以上">3 段及以上</option>
+</select>
+</div>
+
+<div class="form-group">
+<label class="form-label">期望行业方向 <span style="color:var(--gray-400);font-weight:400">（可多选）</span></label>
+<div class="form-chips" id="f-industry">
+<div class="form-chip" onclick="toggleChip(this)">互联网</div>
+<div class="form-chip" onclick="toggleChip(this)">金融</div>
+<div class="form-chip" onclick="toggleChip(this)">教育</div>
+<div class="form-chip" onclick="toggleChip(this)">医疗</div>
+<div class="form-chip" onclick="toggleChip(this)">咨询</div>
+<div class="form-chip" onclick="toggleChip(this)">制造</div>
+<div class="form-chip" onclick="toggleChip(this)">媒体</div>
+<div class="form-chip" onclick="toggleChip(this)">政府/事业单位</div>
+</div>
+</div>
+
+<button class="form-btn" id="form-submit" onclick="submitForm()" disabled>开始 AI 分析 →</button>
+</div>
+</div>
+
+<!-- 确认弹窗 -->
+<div class="modal-overlay" id="modal-overlay" style="display:none">
+<div class="modal-box">
+<div class="modal-title" id="modal-title"></div>
+<div class="modal-desc" id="modal-desc"></div>
+<div class="modal-btns">
+<button class="modal-cancel" onclick="closeModal()">取消</button>
+<button class="modal-confirm" id="modal-confirm" onclick="confirmModal()">确定</button>
+</div>
+</div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+/* ===== 全局状态 ===== */
+/* 从 store 读取测评结果 */
+var riasecCode = 'RIA'; /* 默认值 */
+if(typeof Store!=='undefined' && Store.hasAssessment()){
+  riasecCode = Store.get('assessment').code || 'RIA';
+}
+var userProfile = {};
+var aiReport = null;
+var selectedGoals = [];
+var toastTimer;
+var modalCallback = null;
+
+/* ===== 通用工具 ===== */
+function showToast(m){var t=document.getElementById('toast');clearTimeout(toastTimer);t.textContent=m;t.classList.add('show');toastTimer=setTimeout(function(){t.classList.remove('show');},2200);}
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+
+/* ===== 弹窗 ===== */
+function showModal(title,desc,onConfirm){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-desc').textContent=desc;
+  modalCallback=onConfirm;
+  var o=document.getElementById('modal-overlay');o.style.display='flex';
+  requestAnimationFrame(function(){o.classList.add('show');});
+}
+function closeModal(){
+  var o=document.getElementById('modal-overlay');o.classList.remove('show');
+  setTimeout(function(){o.style.display='none';},250);
+}
+function confirmModal(){if(modalCallback)modalCallback();closeModal();}
+
+/* ===== 表单逻辑 ===== */
+function openFormSheet(){
+  var o=document.getElementById('form-overlay');
+  o.style.display='flex';
+  requestAnimationFrame(function(){o.classList.add('show');});
+}
+function closeFormSheet(e){
+  if(e&&e.target!==document.getElementById('form-overlay'))return;
+  var o=document.getElementById('form-overlay');o.classList.remove('show');
+  setTimeout(function(){o.style.display='none';},300);
+}
+
+function pickRadio(el,groupId){
+  document.querySelectorAll('#'+groupId+' .form-radio').forEach(function(r){r.classList.remove('sel');});
+  el.classList.add('sel');
+  checkFormValid();
+}
+function toggleChip(el){
+  el.classList.toggle('sel');
+  checkFormValid();
+}
+
+function checkFormValid(){
+  var school=document.getElementById('f-school').value.trim();
+  var major=document.getElementById('f-major').value.trim();
+  var grade=document.getElementById('f-grade').value;
+  var grad=document.querySelector('#f-grad .form-radio.sel');
+  var intern=document.getElementById('f-intern').value;
+  var industries=document.querySelectorAll('#f-industry .form-chip.sel');
+  var ok=school&&major&&grade&&grad&&intern&&industries.length>0;
+  document.getElementById('form-submit').disabled=!ok;
+}
+
+/* 监听输入变化 */
+document.getElementById('f-school').addEventListener('input',checkFormValid);
+document.getElementById('f-major').addEventListener('input',checkFormValid);
+document.getElementById('f-grade').addEventListener('change',checkFormValid);
+document.getElementById('f-intern').addEventListener('change',checkFormValid);
+
+function submitForm(){
+  /* 收集表单数据 */
+  userProfile={
+    school:document.getElementById('f-school').value.trim(),
+    major:document.getElementById('f-major').value.trim(),
+    grade:document.getElementById('f-grade').value,
+    gradSchool:document.querySelector('#f-grad .form-radio.sel').textContent,
+    internship:document.getElementById('f-intern').value,
+    industries:Array.from(document.querySelectorAll('#f-industry .form-chip.sel')).map(function(c){return c.textContent;})
+  };
+
+  /* 关闭表单，显示加载 */
+  var o=document.getElementById('form-overlay');o.classList.remove('show');
+  setTimeout(function(){o.style.display='none';},300);
+
+  showScreen('screen-loading');
+
+  /* 模拟AI分析延迟 */
+  setTimeout(function(){
+    aiReport=generateMockReport(riasecCode,userProfile);
+    renderReport();
+    showScreen('screen-report');
+  },2800);
+}
+
+/* ===== AI 报告生成（模拟，结构与未来 API 返回一致） ===== */
+function generateMockReport(code,profile){
+  /* 
+   * 未来替换为真实 API 调用：
+   * const response = await fetch('/api/ai-analyze', {
+   *   method: 'POST',
+   *   headers: {'Content-Type':'application/json'},
+   *   body: JSON.stringify({ riasecCode: code, profile: profile })
+   * });
+   * return await response.json();
+   */
+
+  var topDims=code.split('');
+  var dimNames=topDims.map(function(d){
+    return {R:'实际型',I:'研究型',A:'艺术型',S:'社会型',E:'企业型',C:'传统型'}[d];
+  });
+
+  var summary='基于你的「'+code+'」型职业兴趣（'+dimNames.join('、')+'），结合你在'+profile.school+profile.major+'专业的学习背景，'+(profile.internship==='无'?'虽然目前尚无实习经历，':'已有'+profile.internship+'实习/项目经验，')+'AI 为你筛选出以下 3 个高适配岗位。建议重点关注第 1 推荐，同时也结合自身实际情况综合考量。';
+
+  /* 根据首维度推荐（简化示例，真实场景由 AI 生成） */
+  var CAREER_DB={
+    R:[
+      {name:'产品运维工程师',match:92,reasons:['你的 R 型核心特质与运维岗位"动手排查、实际解决问题"的工作模式高度契合','扎实的专业基础使你能快速理解系统架构和技术细节','运维岗位的实操导向与你的"先动手再总结"行为模式一致'],skills:['系统监控','故障排查','自动化运维','Shell/Python'],growth:'运维工程师 → 高级运维/SRE → 运维架构师 → 技术总监'},
+      {name:'嵌入式开发工程师',match:87,reasons:['嵌入式开发需要持续动手调试硬件与固件，完美匹配 R 型的实操偏好','你的专业背景为理解底层系统提供了知识基础','从"做出看得见的成果"中获得的成就感正是嵌入式工作的核心驱动力'],skills:['C/C++','硬件调试','RTOS','嵌入式Linux'],growth:'嵌入式开发 → 高级嵌入式工程师 → 系统架构师 → 硬件技术负责人'},
+      {name:'测试开发工程师',match:81,reasons:['测试开发融合了 R 型的"动手验证"和 I 型的"分析找规律"','自动化测试编写既有实操又有逻辑推理，适合你的混合特质','测试岗位对条理性和可靠性的要求与 C 型倾向形成互补'],skills:['自动化测试','Python/Java','CI/CD','性能测试'],growth:'测试开发 → 高级测开 → 测试架构师 → 质量保障负责人'}
+    ],
+    I:[
+      {name:'数据分析师',match:92,reasons:['你的 I 型核心特质天然适合"从数据中找规律、用分析驱动决策"的工作方式','研究型人格在处理复杂问题时最有耐心和深度，这是数据工作的关键能力','你的专业背景为数据处理和建模提供了扎实的方法论基础'],skills:['SQL/Python','统计建模','数据可视化','业务洞察'],growth:'数据分析师 → 高级分析师 → 数据科学家 → 首席数据官'},
+      {name:'算法研究员',match:87,reasons:['算法研究是 I 型人格的典型归宿——持续探索前沿、攻克未知问题','你的理性思维和深度思考能力是算法创新的核心驱动力','研究岗位的自由探索空间能满足你对"搞懂原理"的内在渴望'],skills:['机器学习','论文复现','PyTorch','数学建模'],growth:'算法研究员 → 高级研究员 → 算法架构师 → AI Lab 负责人'},
+      {name:'产品策略分析师',match:81,reasons:['策略分析需要 I 型的分析力同时调用 E 型的影响力和说服力','你的"逻辑+证据"表达方式非常适合策略汇报和决策支持','这个岗位让你在研究型工作中拓展企业型能力，拓宽职业路径'],skills:['竞品分析','AB测试','商业模型','决策框架'],growth:'策略分析师 → 高级策略师 → 策略总监 → CSO'}
+    ],
+    A:[
+      {name:'交互设计师',match:92,reasons:['你的 A 型核心特质——对美感、创意和独特表达的追求——是交互设计的灵魂','交互设计同时调用 R 型的落地能力，将创意转化为可交互的原型','你的"用想象力表达"倾向让你能跳出常规，创造让人惊喜的体验'],skills:['Figma','用户研究','交互原型','设计系统'],growth:'交互设计师 → 高级设计师 → 设计专家 → 设计总监'},
+      {name:'内容创意策划',match:87,reasons:['内容策划是 A 型"创造独特作品"愿望的直接实现通道','你的表达欲和创意敏感度让你能持续产出有记忆点的内容','结合 I 型的洞察力，你的内容不仅有创意还有深度'],skills:['文案创作','视觉叙事','品牌调性','社交媒体'],growth:'创意策划 → 高级策划 → 创意总监 → 首席创意官'},
+      {name:'UI/UX 设计师',match:81,reasons:['UI/UX 设计完美融合 A 型的审美追求和 S 型的"满足他人需求"导向','你的视觉敏感度加上对用户感受的关注，能做出既美又好用的界面','设计岗位的创作空间能满足你对"个人表达"的持续需求'],skills:['UI设计','设计规范','用户测试','动效设计'],growth:'UI/UX 设计师 → 高级设计师 → 设计系统负责人 → 设计VP'}
+    ],
+    S:[
+      {name:'人力资源业务伙伴（HRBP）',match:92,reasons:['你的 S 型核心特质——关心他人、善于倾听和沟通——是 HRBP 岗位的基石','HRBP 需要深度理解员工需求并提供支持，与你的助人本能完全一致','你的温暖和共情能力让你在组织发展中天然具有信任感'],skills:['组织诊断','员工关系','人才发展','沟通辅导'],growth:'HRBP → 高级 HRBP → HRD → CHRO'},
+      {name:'教育产品经理',match:87,reasons:['教育产品融合了 S 型的"帮助他人成长"使命和 E 型的"推动结果"动力','你的教学敏感度和同理心让你能深刻理解学习者痛点','在"服务他人"的同时获得产品影响力，满足你多维度的价值感'],skills:['课程设计','用户洞察','产品规划','教学评估'],growth:'教育产品经理 → 高级产品经理 → 产品总监 → 教育VP'},
+      {name:'用户成功经理',match:81,reasons:['用户成功岗位的核心是"确保客户获得价值"，这是 S 型人格的舒适区','你的耐心和沟通能力在处理客户问题时是稀缺优势','这个岗位也锻炼 E 型的说服力，帮助你拓展能力边界'],skills:['客户沟通','问题诊断','留存策略','数据追踪'],growth:'用户成功经理 → 高级CSM → 用户成功总监 → 客户VP'}
+    ],
+    E:[
+      {name:'产品经理',match:92,reasons:['你的 E 型核心特质——影响他人、推动决策、带领团队拿结果——是产品经理的灵魂','产品管理需要持续在不确定性中做判断并推动执行，与你的行为模式高度一致','你的说服力和组织力让你天然擅长跨部门协调和推动落地'],skills:['需求分析','项目推进','数据决策','跨部门协作'],growth:'产品经理 → 高级产品经理 → 产品总监 → CPO'},
+      {name:'增长运营负责人',match:87,reasons:['增长运营是 E 型人格的竞技场——用数据驱动、用策略影响、用执行力拿结果','你的"快速判断+推动前进"模式在增长领域极具优势','这个岗位同时调用 I 型的数据分析力，形成强大的复合竞争力'],skills:['增长模型','实验设计','渠道策略','团队管理'],growth:'增长运营 → 增长总监 → COO → 联合创始人'},
+      {name:'管理咨询顾问',match:81,reasons:['咨询行业需要 E 型的"说服+影响"同时调用 I 型的"分析+研究"','你的果断决策力在咨询项目中能快速推动客户行动','咨询的高压环境与你的"带动团队完成目标"成就感高度匹配'],skills:['问题拆解','方案设计','客户沟通','演讲呈现'],growth:'咨询顾问 → 高级顾问 → 项目经理 → 合伙人'}
+    ],
+    C:[
+      {name:'财务分析师',match:92,reasons:['你的 C 型核心特质——重视规则、追求精确、条理分明——是财务分析的生命线','财务工作需要在规范框架内严谨操作，与你的"按流程做事"偏好完全一致','你对细节的把控力让复杂的财务数据在你手中变得清晰有序'],skills:['财务建模','Excel/SQL','合规审查','预算管理'],growth:'财务分析师 → 高级分析师 → 财务经理 → CFO'},
+      {name:'合规管理专员',match:87,reasons:['合规岗位是 C 型人格的典型归属——在制度框架内确保组织安全运转','你的"符合流程+细节完整"价值取向让你天然适合合规审查工作','在合规领域，可靠和严谨不是加分项而是必修课，这正是你的底色'],skills:['法规解读','风险评估','合规审查','制度设计'],growth:'合规专员 → 合规经理 → 合规总监 → 首席合规官'},
+      {name:'项目管理专员（PMO）',match:81,reasons:['PMO 岗位需要 C 型的"流程+秩序"来确保项目按计划推进','你的条理性和靠谱度让团队在复杂项目中有了"定海神针"','PMO 同时需要沟通协调，帮你拓展 S 型和 E 型能力'],skills:['项目排期','进度追踪','风险预警','流程优化'],growth:'PMO 专员 → PMO 经理 → PMO 总监 → COO'}
+    ]
+  };
+
+  var primaryDim=topDims[0];
+  var careers=CAREER_DB[primaryDim]||CAREER_DB['R'];
+
+  return{
+    code:code,
+    profile:profile,
+    summary:summary,
+    careers:careers
+  };
+}
+
+/* ===== 渲染报告 ===== */
+function renderReport(){
+  var r=aiReport;
+  var h='';
+
+  /* 头部 */
+  h+='<div class="report-header"><div class="report-code">🤖 AI 深度分析报告</div><div class="report-sub">基于 '+r.code+' 型 · '+r.profile.school+' · '+r.profile.major+'</div></div>';
+
+  /* 摘要 */
+  h+='<div class="report-summary"><div class="report-summary-title">📋 综合分析</div><div class="report-summary-text">'+r.summary+'</div></div>';
+
+  /* 职位推荐 */
+  var medals=['🥇','🥈','🥉'];
+  var rankCls=['r1','r2','r3'];
+  h+='<div class="career-section"><div class="career-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>职业岗位推荐</div>';
+
+  r.careers.forEach(function(c,idx){
+    h+='<div class="career-rpt-card">';
+    h+='<div class="career-rpt-top"><div class="career-rpt-rank '+rankCls[idx]+'">'+medals[idx]+'</div><div class="career-rpt-name">'+c.name+'</div><div class="career-rpt-match">'+c.match+'<span>%</span></div></div>';
+    h+='<div class="career-rpt-bar"><div class="career-rpt-bar-fill '+rankCls[idx]+'" data-p="'+c.match+'" style="width:0%"></div></div>';
+
+    /* 匹配原因 */
+    h+='<div class="career-rpt-reasons"><div class="career-rpt-reasons-title">📝 匹配原因</div>';
+    c.reasons.forEach(function(reason){
+      h+='<div class="career-rpt-reason">'+reason+'</div>';
+    });
+    h+='</div>';
+
+    /* 核心技能 */
+    h+='<div class="career-rpt-skills">';
+    c.skills.forEach(function(sk){h+='<span class="career-rpt-skill">'+sk+'</span>';});
+    h+='</div>';
+
+    /* 成长路径 */
+    h+='<div class="career-rpt-growth"><div class="career-rpt-growth-label">📈 成长路径</div>'+c.growth+'</div>';
+
+    /* 勾选 */
+    h+='<div class="career-rpt-check" onclick="toggleGoalCheck(this,'+idx+')"><div class="career-rpt-check-box" id="goal-chk-'+idx+'"></div><div class="career-rpt-check-label" id="goal-lbl-'+idx+'">选择此岗位作为目标</div></div>';
+
+    h+='</div>';
+  });
+  h+='</div>';
+
+  document.getElementById('report-body').innerHTML=h;
+  selectedGoals=[];
+
+  /* 进度条动画 */
+  setTimeout(function(){
+    document.querySelectorAll('.career-rpt-bar-fill[data-p]').forEach(function(el){el.style.width=el.dataset.p+'%';});
+  },200);
+}
+
+/* ===== 勾选目标 ===== */
+function toggleGoalCheck(el,idx){
+  var box=document.getElementById('goal-chk-'+idx);
+  var label=document.getElementById('goal-lbl-'+idx);
+  var isChecked=box.classList.contains('checked');
+
+  if(isChecked){
+    box.classList.remove('checked');box.innerHTML='';
+    label.classList.remove('checked');label.textContent='选择此岗位作为目标';
+    selectedGoals=selectedGoals.filter(function(i){return i!==idx;});
+  }else{
+    box.classList.add('checked');
+    box.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    label.classList.add('checked');label.textContent='已选择';
+    selectedGoals.push(idx);
+  }
+
+  document.getElementById('btn-set-goal').disabled=selectedGoals.length===0;
+}
+
+/* ===== 设置目标确认 ===== */
+function confirmSetGoal(){
+  if(selectedGoals.length===0)return;
+  var names=selectedGoals.map(function(idx){return aiReport.careers[idx].name;});
+  showModal('设为职业目标','确定将「'+names.join('」「')+'」设为你的职业目标？',function(){
+    /* 保存到全局 store */
+    if(typeof Store!=='undefined'){
+      Store.batch({
+        careerGoal: names.map(function(n){return{name:n};}),
+        assessment: Object.assign({}, Store.get('assessment')||{}, {aiReport:aiReport})
+      });
+    }
+    showToast('已设置 '+names.length+' 个职业目标');
+    /* 跳转首页 */
+    setTimeout(function(){
+      if(typeof Router!=='undefined'){Router.toIndex();}
+      else{window.location.href='index.html';}
+    },1200);
+  });
+}
+
+/* ===== 返回 ===== */
+function goBackToResult(){
+  /* 返回测评结果页 */
+  if(typeof Router!=='undefined'){Router.go('assessment.html?view=result');}
+  else{window.location.href='assessment.html?view=result';}
+}
+
+/* ===== 跳转职业图景 ===== */
+function goToCareerVisionFromAI(){
+  /* 保存 AI 报告到 store */
+  if(typeof Store!=='undefined'&&aiReport){
+    var assessment=Store.get('assessment')||{};
+    assessment.aiReport=aiReport;
+    Store.set('assessment',assessment);
+  }
+  if(typeof Router!=='undefined'){Router.toCareerVision();}
+  else{window.location.href='career-vision.html';}
+}
+
+function goBack(){
+  var active=document.querySelector('.screen.active');
+  if(active.id==='screen-report'){
+    showModal('确认返回','返回后当前分析结果不会保存，确认返回？',function(){
+      showScreen('screen-entry');
+    });
+  }else if(active.id==='screen-entry'){
+    /* 填写个人信息前：返回职业测评结果页 */
+    if(typeof Router!=='undefined'){Router.go('assessment.html?view=result');}
+    else{window.location.href='assessment.html?view=result';}
+  }else{
+    showScreen('screen-entry');
+  }
+}
+</script>
+
+</body>
+</html>

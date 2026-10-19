@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>面试题库整理 · Career OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #0F766E; --primary-hover: #0D6B63; --primary-light: #14B8A6;
+    --primary-50: #F0FDFA; --primary-100: #CCFBF1;
+    --indigo: #4F46E5; --indigo-light: #EEF2FF;
+    --accent: #F59E0B; --accent-light: #FEF3C7;
+    --white: #FFFFFF;
+    --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0; --gray-300: #CBD5E1;
+    --gray-400: #94A3B8; --gray-500: #64748B; --gray-600: #475569; --gray-900: #0F172A;
+    --rose: #E11D48; --rose-light: #FFE4E6;
+    --radius-lg: 16px; --radius-md: 12px; --radius-sm: 10px;
+    --shadow-sm: 0 1px 3px rgba(15,23,42,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--gray-100);color:var(--gray-900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.app{max-width:430px;width:100%;min-height:100vh;background:var(--gray-50);margin:0 auto;position:relative;padding-bottom:40px}
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(248,250,252,.86);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);height:56px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid rgba(226,232,240,.5)}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--gray-500);background:none;border:none;font-family:inherit;cursor:pointer;padding:4px 0}
+.nav-back:active{color:var(--gray-900)}
+.nav-back svg{width:18px;height:18px}
+.nav-title{position:absolute;left:50%;transform:translateX(-50%);font-size:15px;font-weight:600;color:var(--gray-900)}
+.nav-count{position:absolute;right:16px;font-size:12px;color:var(--gray-400);font-weight:500}
+.page{padding:16px 16px 0}
+.section{margin-bottom:18px}
+.section-title{font-size:13px;font-weight:700;color:var(--gray-900);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.section-title svg{width:15px;height:15px;color:var(--primary)}
+
+/* ── 功能入口卡片 ── */
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tool-card{background:#fff;border-radius:var(--radius-md);padding:14px 12px;border:1px solid var(--gray-100);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow-sm)}
+.tool-card:active{transform:scale(.97);border-color:var(--gray-200)}
+.tool-card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.tool-card-icon svg{width:17px;height:17px}
+.tool-card-title{font-size:13px;font-weight:600;color:var(--gray-900)}
+.tool-card-desc{font-size:11px;color:var(--gray-400);line-height:1.4}
+
+/* ── 统计 ── */
+.stat-row{display:flex;gap:10px;margin-bottom:14px}
+.stat-card{flex:1;background:#fff;border-radius:var(--radius-md);padding:12px;text-align:center;border:1px solid var(--gray-100);box-shadow:var(--shadow-sm)}
+.stat-num{font-size:20px;font-weight:800;color:var(--primary)}
+.stat-label{font-size:11px;color:var(--gray-400);margin-top:2px}
+
+/* ── 搜索与筛选 ── */
+.search-wrap{display:flex;gap:8px;margin-bottom:12px}
+.search-box{flex:1;display:flex;align-items:center;gap:7px;background:#fff;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);padding:9px 12px}
+.search-box:focus-within{border-color:var(--primary)}
+.search-box svg{width:15px;height:15px;color:var(--gray-400);flex-shrink:0}
+.search-box input{flex:1;border:none;outline:none;font-size:13px;font-family:inherit;color:var(--gray-900);background:transparent}
+.filter-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-chip{flex-shrink:0;padding:6px 14px;font-size:12px;font-weight:500;color:var(--gray-500);background:#fff;border:1px solid var(--gray-200);border-radius:99px;cursor:pointer;transition:all .2s;font-family:inherit}
+.filter-chip.active{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:600}
+
+/* ── 题目卡片 ── */
+.q-list{display:flex;flex-direction:column;gap:10px}
+.q-card{background:#fff;border-radius:var(--radius-md);padding:14px;border:1px solid var(--gray-100);box-shadow:var(--shadow-sm);transition:all .2s}
+.q-card-head{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
+.q-card-badge{width:28px;height:28px;border-radius:9px;background:var(--primary-50);color:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:800}
+.q-card-body{flex:1;min-width:0}
+.q-question{font-size:13.5px;font-weight:600;color:var(--gray-900);line-height:1.5}
+.q-meta{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
+.q-tag{font-size:10.5px;padding:2px 8px;border-radius:99px;font-weight:500}
+.q-tag.manual{background:var(--primary-50);color:var(--primary)}
+.q-tag.ai{background:var(--indigo-light);color:var(--indigo)}
+.q-tag.custom{background:var(--accent-light);color:#B45309}
+.q-source{font-size:11px;color:var(--gray-400)}
+.q-answer{display:none;margin-top:10px;padding:10px 12px;background:var(--gray-50);border-radius:var(--radius-sm);font-size:12.5px;color:var(--gray-600);line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.q-card.open .q-answer{display:block}
+.q-card-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--gray-100)}
+.q-act{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--gray-500);background:none;border:none;font-family:inherit;cursor:pointer;padding:5px 8px;border-radius:8px;transition:all .2s}
+.q-act:active{background:var(--gray-100)}
+.q-act svg{width:14px;height:14px}
+.q-act.edit{color:var(--primary)}
+.q-act.del{color:var(--rose)}
+.empty{display:flex;flex-direction:column;align-items:center;gap:12px;padding:56px 20px;color:var(--gray-300)}
+.empty svg{width:42px;height:42px}
+.empty p{font-size:13px;color:var(--gray-400);text-align:center;line-height:1.7}
+
+/* ── 弹窗 ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:0 24px;opacity:0;transition:opacity .25s;pointer-events:none}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal-box{width:100%;max-width:380px;background:#fff;border-radius:20px;padding:20px;transform:scale(.92);transition:transform .25s cubic-bezier(.22,1,.36,1)}
+.modal-overlay.show .modal-box{transform:scale(1)}
+.modal-title{font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:16px}
+.form-group{margin-bottom:12px}
+.form-label{display:block;font-size:12px;font-weight:500;color:var(--gray-500);margin-bottom:6px}
+.form-input{width:100%;padding:11px 13px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-size:13.5px;font-family:inherit;background:var(--white);color:var(--gray-900);transition:border-color .2s;outline:none}
+.form-input:focus{border-color:var(--primary)}
+textarea.form-input{resize:none;min-height:88px;line-height:1.6}
+.form-hint{font-size:11px;color:var(--gray-400);margin-top:4px;line-height:1.5}
+.modal-actions{display:flex;gap:10px;margin-top:16px}
+.btn{flex:1;padding:12px;border:none;border-radius:var(--radius-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(145deg,var(--primary),var(--primary-hover));color:#fff;box-shadow:0 4px 16px rgba(15,118,110,.25)}
+.btn-outline{background:#fff;color:var(--gray-500);border:1.5px solid var(--gray-200)}
+.btn-danger{background:var(--rose-light);color:var(--rose)}
+
+/* ── 导入结果提示 ── */
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--gray-900);color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:400;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.q-card,.stat-card,.tool-card{animation:fadeUp .4s cubic-bezier(.22,1,.36,1) both}
+@media(min-width:431px){body{background:#E2E8F0}.app{box-shadow:0 0 80px rgba(0,0,0,.08)}}
+    </style>
+</head>
+<body>
+<div class="app">
+    <nav class="top-nav">
+        <button class="nav-back" onclick="window.location.href='index.html?tab=prepare'" aria-label="返回">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            <span>返回</span>
+        </button>
+        <span class="nav-title">面试题库整理</span>
+        <span class="nav-count" id="navCount">0 题</span>
+    </nav>
+
+    <div class="page">
+        <!-- 功能入口 -->
+        <div class="section">
+            <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>功能</div>
+            <div class="tool-grid">
+                <div class="tool-card" onclick="openAdd()" aria-label="添加题目">
+                    <div class="tool-card-icon" style="background:var(--primary-50);color:var(--primary)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></div>
+                    <div class="tool-card-title">添加题目</div>
+                    <div class="tool-card-desc">手动录入高频面试题</div>
+                </div>
+                <div class="tool-card" onclick="goAiInterview()" aria-label="AI模拟面试">
+                    <div class="tool-card-icon" style="background:var(--indigo-light);color:var(--indigo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                    <div class="tool-card-title">AI 模拟面试</div>
+                    <div class="tool-card-desc">进入 AI 对话进行面试演练</div>
+                </div>
+                <div class="tool-card" onclick="importFromChat()" aria-label="AI对话页面试题库导入">
+                    <div class="tool-card-icon" style="background:var(--accent-light);color:#B45309"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><polyline points="9 10 12 13 15 10"/></svg></div>
+                    <div class="tool-card-title">AI 对话导入</div>
+                    <div class="tool-card-desc" id="importDesc">导入 AI 对话中的面试题</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 统计 -->
+        <div class="section">
+            <div class="stat-row">
+                <div class="stat-card"><div class="stat-num" id="statTotal">0</div><div class="stat-label">题目总数</div></div>
+                <div class="stat-card"><div class="stat-num" id="statManual">0</div><div class="stat-label">手动整理</div></div>
+                <div class="stat-card"><div class="stat-num" id="statAi">0</div><div class="stat-label">AI 对话导入</div></div>
+            </div>
+        </div>
+
+        <!-- 搜索与筛选 -->
+        <div class="section">
+            <div class="search-wrap">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    <input id="searchInput" type="search" placeholder="搜索题目、答案或标签" oninput="renderList()">
+                </div>
+            </div>
+            <div class="filter-row">
+                <button class="filter-chip active" data-src="all" onclick="setFilter(this)">全部</button>
+                <button class="filter-chip" data-src="manual" onclick="setFilter(this)">手动整理</button>
+                <button class="filter-chip" data-src="ai-chat" onclick="setFilter(this)">AI 对话导入</button>
+            </div>
+            <div class="q-list" id="qList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加/编辑弹窗 -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-box">
+        <div class="modal-title" id="modalTitle">添加题目</div>
+        <div class="form-group">
+            <label class="form-label">面试题目 *</label>
+            <input class="form-input" id="fQuestion" placeholder="如：请做一个自我介绍" maxlength="120">
+        </div>
+        <div class="form-group">
+            <label class="form-label">参考答案 / 要点</label>
+            <textarea class="form-input" id="fAnswer" placeholder="记录回答思路、要点或 AI 提示（可留空）"></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-label">标签（逗号分隔）</label>
+            <input class="form-input" id="fTags" placeholder="如：自我介绍, 行为面试" maxlength="60">
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeModal()">取消</button>
+            <button class="btn btn-primary" onclick="saveQuestion()">保存</button>
+        </div>
+    </div>
+</div>
+
+<!-- 删除确认弹窗 -->
+<div class="modal-overlay" id="delModal">
+    <div class="modal-box">
+        <div class="modal-title">删除题目</div>
+        <p style="font-size:13.5px;color:var(--gray-500);line-height:1.7" id="delQuestionText"></p>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeDelModal()">取消</button>
+            <button class="btn btn-danger" onclick="confirmDel()">删除</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   interview-bank.js | Career OS — 面试题库整理
+   数据存储：localStorage 'cos_interview_bank'
+   ============================================================ */
+var BANK_KEY = 'cos_interview_bank';
+var POOL_KEY = 'cos_interview_chat_pool';
+
+/* ── 数据读写 ── */
+function getBank(){ try{ var v=JSON.parse(localStorage.getItem(BANK_KEY)||'[]'); return Array.isArray(v)?v:[]; }catch(e){ return []; } }
+function saveBank(list){ try{ localStorage.setItem(BANK_KEY, JSON.stringify(list)); }catch(e){ console.warn('[interview-bank] 写入失败', e); } }
+
+/* ── 种子示例数据（首次打开时预置，可编辑/删除） ── */
+var SEED = [
+    { id:'q-1001', question:'请做一个 1-2 分钟的自我介绍', answer:'黄金结构：①我是谁（姓名+学校+专业+目标岗位）②核心能力（最强的 2 个能力+简短证据）③项目亮点（1 个最有代表性的项目+关键成果）④为什么是你（你能为团队带来什么独特价值）', tags:['自我介绍','行为面试'], source:'manual', createdAt:Date.now()-86400000*2 },
+    { id:'q-1002', question:'请用 STAR 法则讲一个你做过的项目', answer:'S（情境）：项目背景与要解决的问题；T（任务）：你的职责与目标；A（行动）：关键决策与执行过程（可量化）；R（结果）：可量化的成果+复盘。注意数字：加载速度、停留时长、转化率等。', tags:['项目深挖','STAR'], source:'manual', createdAt:Date.now()-86400000 },
+    { id:'q-1003', question:'你了解我们公司吗？为什么想来？', answer:'提前调研：公司产品线/最新动态/岗位 JD 关键词。结构：认可公司（具体业务/产品）+ 岗位匹配（JD 里的技能点）+ 我能带来的价值。', tags:['动机类'], source:'manual', createdAt:Date.now()-3600000 }
+];
+
+/* ── 状态 ── */
+var curFilter = 'all';
+var curSearch = '';
+var editingId = null;
+var delId = null;
+
+/* ── 工具 ── */
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function showToast(m){ var t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); }, 2200); }
+
+/* ── 初始化 ── */
+function init(){
+    var list = getBank();
+    if(list.length===0){ saveBank(SEED.slice()); }
+    renderStats(); renderList(); renderImportDesc();
+}
+function renderStats(){
+    var list = getBank();
+    var ai = list.filter(function(x){ return x.source==='ai-chat'; }).length;
+    document.getElementById('statTotal').textContent = list.length;
+    document.getElementById('statManual').textContent = list.length - ai;
+    document.getElementById('statAi').textContent = ai;
+    document.getElementById('navCount').textContent = list.length + ' 题';
+}
+function renderImportDesc(){
+    var pool = getPool();
+    document.getElementById('importDesc').textContent = pool.length ? ('AI 对话有 ' + pool.length + ' 条待导入') : '导入 AI 对话中的面试题';
+}
+function setFilter(btn){
+    document.querySelectorAll('.filter-chip').forEach(function(c){ c.classList.remove('active'); });
+    btn.classList.add('active');
+    curFilter = btn.dataset.src;
+    renderList();
+}
+function renderList(){
+    var kw = (document.getElementById('searchInput').value||'').trim().toLowerCase();
+    var list = getBank();
+    var html = '';
+    var shown = 0;
+    list.forEach(function(q){
+        if(curFilter!=='all' && q.source!==curFilter) return;
+        if(kw && (q.question+' '+q.answer+' '+(q.tags||[]).join(' ')).toLowerCase().indexOf(kw)<0) return;
+        shown++;
+        var tagsHtml = '';
+        (q.tags||[]).forEach(function(t){ tagsHtml += '<span class="q-tag custom">'+esc(t)+'</span>'; });
+        if(q.source==='ai-chat') tagsHtml += '<span class="q-tag ai">AI 对话</span>';
+        else tagsHtml += '<span class="q-tag manual">手动</span>';
+        var num = String(shown).padStart(2,'0');
+        html += '<div class="q-card'+(q.open?' open':'')+'" data-id="'+q.id+'" onclick="toggleOpen(this)">'+
+            '<div class="q-card-head">'+
+                '<div class="q-card-badge">'+num+'</div>'+
+                '<div class="q-card-body">'+
+                    '<div class="q-question">'+esc(q.question)+'</div>'+
+                    '<div class="q-meta">'+tagsHtml+(q.answer?'<span class="q-source">点击查看答案</span>':'')+'</div>'+
+                '</div>'+
+            '</div>'+
+            (q.answer?'<div class="q-answer">'+esc(q.answer)+'</div>':'')+
+            '<div class="q-card-actions" onclick="event.stopPropagation()">'+
+                '<button class="q-act edit" onclick="openEdit(\''+q.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>编辑</button>'+
+                '<button class="q-act del" onclick="openDel(\''+q.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>删除</button>'+
+            '</div>'+
+        '</div>';
+    });
+    if(shown===0){
+        html = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="8" y="2" rx="1"/><path d="m9 14 2 2 4-4"/></svg><p>'+(curFilter!=='all'||kw?'没有符合条件的题目':'题库还是空的，点击「添加题目」录入第一道题')+'</p></div>';
+    }
+    document.getElementById('qList').innerHTML = html;
+}
+function toggleOpen(card){
+    card.classList.toggle('open');
+}
+
+/* ── 添加 / 编辑 ── */
+function openAdd(){
+    editingId = null;
+    document.getElementById('modalTitle').textContent = '添加题目';
+    document.getElementById('fQuestion').value = '';
+    document.getElementById('fAnswer').value = '';
+    document.getElementById('fTags').value = '';
+    document.getElementById('modal').classList.add('show');
+    setTimeout(function(){ document.getElementById('fQuestion').focus(); }, 150);
+}
+function openEdit(id){
+    var list = getBank();
+    var q = list.find(function(x){ return x.id===id; });
+    if(!q) return;
+    editingId = id;
+    document.getElementById('modalTitle').textContent = '编辑题目';
+    document.getElementById('fQuestion').value = q.question;
+    document.getElementById('fAnswer').value = q.answer||'';
+    document.getElementById('fTags').value = (q.tags||[]).join(', ');
+    document.getElementById('modal').classList.add('show');
+}
+function closeModal(){ document.getElementById('modal').classList.remove('show'); }
+function saveQuestion(){
+    var question = document.getElementById('fQuestion').value.trim();
+    if(!question){ showToast('请输入面试题目'); return; }
+    var answer = document.getElementById('fAnswer').value.trim();
+    var tags = document.getElementById('fTags').value.split(/[,，]/).map(function(s){ return s.trim(); }).filter(Boolean).slice(0,6);
+    var list = getBank();
+    if(editingId){
+        var q = list.find(function(x){ return x.id===editingId; });
+        if(q){ q.question = question; q.answer = answer; q.tags = tags; }
+        saveBank(list);
+        showToast('✅ 已更新');
+    } else {
+        list.unshift({ id:'q-'+Date.now(), question:question, answer:answer, tags:tags, source:'manual', createdAt:Date.now() });
+        saveBank(list);
+        showToast('✅ 已添加');
+    }
+    closeModal();
+    renderStats(); renderList();
+}
+
+/* ── 删除 ── */
+function openDel(id){
+    var list = getBank();
+    var q = list.find(function(x){ return x.id===id; });
+    if(!q) return;
+    delId = id;
+    document.getElementById('delQuestionText').textContent = '确定删除「'+q.question+'」吗？';
+    document.getElementById('delModal').classList.add('show');
+}
+function closeDelModal(){ document.getElementById('delModal').classList.remove('show'); }
+function confirmDel(){
+    var list = getBank().filter(function(x){ return x.id!==delId; });
+    saveBank(list);
+    delId = null;
+    closeDelModal();
+    showToast('已删除');
+    renderStats(); renderList();
+}
+
+/* ── AI 模拟面试 ── */
+function goAiInterview(){
+    showToast('正在进入 AI 模拟面试…');
+    setTimeout(function(){ window.location.href = 'ai-chat.html?scene=interview'; }, 500);
+}
+
+/* ── AI 对话导入 ── */
+function getPool(){ try{ var v=JSON.parse(localStorage.getItem(POOL_KEY)||'[]'); return Array.isArray(v)?v:[]; }catch(e){ return []; } }
+function importFromChat(){
+    var pool = getPool();
+    if(!pool.length){ showToast('AI 对话中暂无待导入的面试题'); return; }
+    var list = getBank();
+    var added = 0, skip = 0;
+    pool.forEach(function(p){
+        var parsed = parseInterviewContent(p.content || '');
+        if(!parsed) return;
+        parsed.forEach(function(item){
+            var dup = list.some(function(x){ return x.question === item.question; });
+            if(dup){ skip++; return; }
+            list.unshift({ id:'q-'+Date.now()+'-'+Math.floor(Math.random()*999), question:item.question, answer:item.answer, tags:['AI 对话'], source:'ai-chat', createdAt:Date.now() });
+            added++;
+        });
+    });
+    saveBank(list);
+    /* 导入后清空对话池，避免重复导入 */
+    try{ localStorage.removeItem(POOL_KEY); }catch(e){}
+    showToast(added ? ('✅ 已导入 '+added+' 道题'+(skip?'，跳过重复 '+skip+' 道':'')) : ('没有新题可导入'+(skip?'（重复 '+skip+' 道）':'')));
+    renderStats(); renderList(); renderImportDesc();
+}
+/* 解析 AI 对话中的面试题：匹配“第 N 题：xxx”格式；无匹配时整段作为一道题 */
+function parseInterviewContent(content){
+    var re = /第\s*\d+\s*题[：:]\s*([^\n\r]+)/g;
+    var m, questions = [];
+    while((m = re.exec(content))){
+        var q = m[1].replace(/^["“”'\s]+|["“”'\s]+$/g, '').trim();
+        if(q) questions.push(q);
+    }
+    if(!questions.length){
+        var firstLine = (content||'').split('\n').filter(function(l){ return l.trim(); })[0] || '';
+        var title = firstLine.replace(/^[#*\s>🎭]+/g, '').slice(0,40);
+        if(title) questions.push(title);
+    }
+    /* 答案提示：取题目行之后的非空文本，限制长度 */
+    var answer = '';
+    var lines = (content||'').split('\n');
+    var start = -1;
+    lines.forEach(function(l, i){ if(/第\s*\d+\s*题/.test(l) && start<0) start = i+1; });
+    if(start>=0){
+        var parts = lines.slice(start).filter(function(l){ return l.trim() && !/^[─█░]/.test(l); });
+        answer = parts.slice(0,12).join('\n').slice(0,400);
+    }
+    var items = questions.map(function(q){ return { question:q, answer:answer }; });
+    return items;
+}
+
+/* ── 初始化 ── */
+init();
+</script>
+</body>
+</html>

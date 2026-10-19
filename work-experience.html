@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>工作经验 · Career OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #0F766E; --primary-hover: #0D6B63; --primary-light: #14B8A6;
+    --primary-50: #F0FDFA; --primary-100: #CCFBF1;
+    --indigo: #4F46E5; --indigo-light: #EEF2FF;
+    --accent: #F59E0B; --accent-light: #FEF3C7;
+    --sky: #0284C7; --sky-light: #E0F2FE;
+    --violet: #7C3AED; --violet-light: #EDE9FE;
+    --rose: #E11D48; --rose-light: #FFE4E6;
+    --green: #059669; --green-light: #D1FAE5;
+    --white: #FFFFFF;
+    --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0; --gray-300: #CBD5E1;
+    --gray-400: #94A3B8; --gray-500: #64748B; --gray-600: #475569; --gray-900: #0F172A;
+    --radius-lg: 16px; --radius-md: 12px; --radius-sm: 10px;
+    --shadow-sm: 0 1px 3px rgba(15,23,42,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--gray-100);color:var(--gray-900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.app{max-width:430px;width:100%;min-height:100vh;background:var(--gray-50);margin:0 auto;position:relative;padding-bottom:40px}
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(248,250,252,.86);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);height:56px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid rgba(226,232,240,.5)}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--gray-500);background:none;border:none;font-family:inherit;cursor:pointer;padding:4px 0}
+.nav-back:active{color:var(--gray-900)}
+.nav-back svg{width:18px;height:18px}
+.nav-title{position:absolute;left:50%;transform:translateX(-50%);font-size:15px;font-weight:600;color:var(--gray-900)}
+.nav-count{position:absolute;right:16px;font-size:12px;color:var(--gray-400);font-weight:500}
+.page{padding:16px 16px 0}
+.section{margin-bottom:18px}
+
+/* ── 添加按钮 ── */
+.add-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(145deg,var(--primary),var(--primary-hover));color:#fff;border:none;border-radius:var(--radius-md);padding:13px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px rgba(15,118,110,.25);transition:all .2s;margin-bottom:14px}
+.add-btn:active{transform:scale(.97)}
+.add-btn svg{width:17px;height:17px}
+
+/* ── 类型筛选 ── */
+.filter-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-chip{flex-shrink:0;padding:6px 14px;font-size:12px;font-weight:500;color:var(--gray-500);background:#fff;border:1px solid var(--gray-200);border-radius:99px;cursor:pointer;transition:all .2s;font-family:inherit}
+.filter-chip.active{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:600}
+
+/* ── 经历卡片 ── */
+.exp-list{display:flex;flex-direction:column;gap:10px}
+.exp-card{background:#fff;border-radius:var(--radius-md);padding:14px;border:1px solid var(--gray-100);box-shadow:var(--shadow-sm);animation:fadeUp .4s cubic-bezier(.22,1,.36,1) both}
+.exp-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.exp-type{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.exp-type svg{width:14px;height:14px}
+.exp-type.work{background:var(--sky-light);color:var(--sky)}
+.exp-type.project{background:var(--indigo-light);color:var(--indigo)}
+.exp-type.insight{background:var(--accent-light);color:#B45309}
+.exp-title{font-size:14px;font-weight:700;color:var(--gray-900);flex:1;min-width:0}
+.exp-meta{font-size:11.5px;color:var(--gray-400);display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
+.exp-meta svg{width:12px;height:12px}
+.exp-org{font-size:12px;color:var(--gray-500);margin-top:4px}
+.exp-desc{display:none;margin-top:10px;padding:10px 12px;background:var(--gray-50);border-radius:var(--radius-sm);font-size:12.5px;color:var(--gray-600);line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.exp-card.show-desc .exp-desc{display:block}
+.exp-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--gray-100)}
+.exp-act{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--gray-500);background:none;border:none;font-family:inherit;cursor:pointer;padding:5px 8px;border-radius:8px;transition:all .2s}
+.exp-act:active{background:var(--gray-100)}
+.exp-act svg{width:14px;height:14px}
+.exp-act.view{color:var(--primary)}
+.exp-act.edit{color:var(--primary)}
+.exp-act.del{color:var(--rose)}
+.empty{display:flex;flex-direction:column;align-items:center;gap:12px;padding:56px 20px;color:var(--gray-300)}
+.empty svg{width:42px;height:42px}
+.empty p{font-size:13px;color:var(--gray-400);text-align:center;line-height:1.7}
+
+/* ── 弹窗 ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:0 24px;opacity:0;transition:opacity .25s;pointer-events:none}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal-box{width:100%;max-width:380px;background:#fff;border-radius:20px;padding:20px;max-height:86vh;overflow-y:auto;transform:scale(.92);transition:transform .25s cubic-bezier(.22,1,.36,1)}
+.modal-overlay.show .modal-box{transform:scale(1)}
+.modal-title{font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:16px}
+.form-group{margin-bottom:12px}
+.form-label{display:block;font-size:12px;font-weight:500;color:var(--gray-500);margin-bottom:6px}
+.form-input{width:100%;padding:11px 13px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-size:13.5px;font-family:inherit;background:var(--white);color:var(--gray-900);transition:border-color .2s;outline:none}
+.form-input:focus{border-color:var(--primary)}
+textarea.form-input{resize:none;min-height:90px;line-height:1.6}
+.type-chips{display:flex;gap:6px;flex-wrap:wrap}
+.type-chip{flex-shrink:0;padding:6px 12px;font-size:12px;font-weight:500;color:var(--gray-500);background:var(--gray-100);border:none;border-radius:99px;cursor:pointer;font-family:inherit;transition:all .2s}
+.type-chip.active{background:var(--primary);color:#fff;font-weight:600}
+.form-hint{font-size:11px;color:var(--gray-400);margin-top:4px;line-height:1.5}
+.modal-actions{display:flex;gap:10px;margin-top:16px}
+.btn{flex:1;padding:12px;border:none;border-radius:var(--radius-md);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(145deg,var(--primary),var(--primary-hover));color:#fff;box-shadow:0 4px 16px rgba(15,118,110,.25)}
+.btn-outline{background:#fff;color:var(--gray-500);border:1.5px solid var(--gray-200)}
+.btn-danger{background:var(--rose-light);color:var(--rose)}
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--gray-900);color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:400;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(min-width:431px){body{background:#E2E8F0}.app{box-shadow:0 0 80px rgba(0,0,0,.08)}}
+    </style>
+</head>
+<body>
+<div class="app">
+    <nav class="top-nav">
+        <button class="nav-back" onclick="window.location.href='index.html?tab=prepare'" aria-label="返回">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            <span>返回</span>
+        </button>
+        <span class="nav-title">工作经验</span>
+        <span class="nav-count" id="navCount">0 条</span>
+    </nav>
+
+    <div class="page">
+        <div class="section">
+            <button class="add-btn" onclick="openAdd()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                <span>添加经历</span>
+            </button>
+
+            <div class="filter-row">
+                <button class="filter-chip active" data-ft="all" onclick="setFilter(this)">全部</button>
+                <button class="filter-chip" data-ft="work" onclick="setFilter(this)">工作经历</button>
+                <button class="filter-chip" data-ft="project" onclick="setFilter(this)">项目经历</button>
+                <button class="filter-chip" data-ft="insight" onclick="setFilter(this)">经验收获</button>
+            </div>
+            <div class="exp-list" id="expList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加/编辑弹窗 -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-box">
+        <div class="modal-title" id="modalTitle">添加经历</div>
+        <div class="form-group">
+            <label class="form-label">类型 *</label>
+            <div class="type-chips" id="typeChips">
+                <button type="button" class="type-chip active" data-tp="work" onclick="selectType(this)">工作经历</button>
+                <button type="button" class="type-chip" data-tp="project" onclick="selectType(this)">项目经历</button>
+                <button type="button" class="type-chip" data-tp="insight" onclick="selectType(this)">经验收获</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">名称 / 标题 *</label>
+            <input class="form-input" id="fTitle" placeholder="如：UX 设计实习生 / 职业操作系统 Demo" maxlength="50">
+        </div>
+        <div class="form-group" id="orgGroup">
+            <label class="form-label">公司 / 组织</label>
+            <input class="form-input" id="fOrg" placeholder="如：XX 科技有限公司" maxlength="40">
+        </div>
+        <div class="form-group">
+            <label class="form-label">时间 / 周期</label>
+            <input class="form-input" id="fPeriod" placeholder="如：2026.07 - 2026.09 / 持续进行" maxlength="30">
+        </div>
+        <div class="form-group">
+            <label class="form-label">详细描述 / 收获</label>
+            <textarea class="form-input" id="fDesc" placeholder="职责、成果、量化数据、真正学到的东西…"></textarea>
+        </div>
+        <div class="form-group" id="orgGroup2" style="display:none"></div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeModal()">取消</button>
+            <button class="btn btn-primary" onclick="saveExp()">保存</button>
+        </div>
+    </div>
+</div>
+
+<!-- 删除确认弹窗 -->
+<div class="modal-overlay" id="delModal">
+    <div class="modal-box">
+        <div class="modal-title">删除记录</div>
+        <p style="font-size:13.5px;color:var(--gray-500);line-height:1.7" id="delExpText"></p>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeDelModal()">取消</button>
+            <button class="btn btn-danger" onclick="confirmDel()">删除</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   work-experience.js | Career OS — 工作经验
+   数据存储：localStorage 'cos_experiences'
+   ============================================================ */
+var EXP_KEY = 'cos_experiences';
+var TYPE_META = {
+    work:    { label:'工作经历', cls:'work' },
+    project: { label:'项目经历', cls:'project' },
+    insight: { label:'经验收获', cls:'insight' }
+};
+
+function getExps(){ try{ var v=JSON.parse(localStorage.getItem(EXP_KEY)||'[]'); return Array.isArray(v)?v:[]; }catch(e){ return []; } }
+function saveExps(list){ try{ localStorage.setItem(EXP_KEY, JSON.stringify(list)); }catch(e){ console.warn('[work-experience] 写入失败', e); } }
+
+/* 种子示例（首次打开预置，可编辑/删除） */
+var SEED = [
+    { id:'exp-1001', type:'project', title:'Career OS 职业操作系统 Demo', org:'个人项目', period:'持续进行', desc:'独立完成的求职管理产品 Demo：梳理职业规划 → AI 拆解每日任务 → 追踪求职进度。收获：学会了把大目标拆成可执行小任务的 PM 方法，以及移动端产品从原型到上线的完整闭环。', createdAt:Date.now()-86400000*2 },
+    { id:'exp-1002', type:'insight', title:'面试复盘：自我介绍要准备两版', org:'', period:'2026.09', desc:'1 分钟版用于开场，2 分钟版用于深挖。提前量化项目成果（加载速度、转化率），比空泛描述有效得多。', createdAt:Date.now()-86400000 }
+];
+
+var curFilter = 'all';
+var editingId = null;
+var selType = 'work';
+var delId = null;
+
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function showToast(m){ var t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('show'); }, 2200); }
+
+function init(){
+    var list = getExps();
+    if(list.length===0){ saveExps(SEED.slice()); }
+    renderList();
+}
+function setFilter(btn){
+    document.querySelectorAll('.filter-chip').forEach(function(c){ c.classList.remove('active'); });
+    btn.classList.add('active');
+    curFilter = btn.dataset.ft;
+    renderList();
+}
+function renderList(){
+    var list = getExps();
+    var html = '';
+    var shown = 0;
+    list.forEach(function(e){
+        if(curFilter!=='all' && e.type!==curFilter) return;
+        shown++;
+        var tm = TYPE_META[e.type] || TYPE_META.work;
+        html += '<div class="exp-card'+(e.showDesc?' show-desc':'')+'" data-id="'+e.id+'">'+
+            '<div class="exp-head">'+
+                '<div class="exp-type '+tm.cls+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>'+
+                '<div class="exp-title">'+esc(e.title)+'</div>'+
+            '</div>'+
+            (e.org?'<div class="exp-org">'+esc(e.org)+'</div>':'')+
+            '<div class="exp-meta">'+
+                '<span>'+tm.label+'</span>'+
+                (e.period?'<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'+esc(e.period)+'</span>':'')+
+            '</div>'+
+            (e.desc?'<div class="exp-desc">'+esc(e.desc)+'</div>':'')+
+            '<div class="exp-actions">'+
+                (e.desc?'<button class="exp-act view" onclick="toggleDesc(\''+e.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>详情</button>':'')+
+                '<button class="exp-act edit" onclick="openEdit(\''+e.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>编辑</button>'+
+                '<button class="exp-act del" onclick="openDel(\''+e.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>删除</button>'+
+            '</div>'+
+        '</div>';
+    });
+    if(shown===0){
+        html = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 13.255A23.931 23.931 0 0 1 12 15c-3.183 0-6.22-.62-9-1.745A16 16 0 0 0 3 13"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="8" y="2" rx="1"/><path d="m9 14 2 2 4-4"/></svg><p>'+(curFilter!=='all'?'没有符合条件的记录':'还没有记录，点击「添加经历」开始记录你的第一段经历')+'</p></div>';
+    }
+    document.getElementById('expList').innerHTML = html;
+    document.getElementById('navCount').textContent = getExps().length + ' 条';
+}
+function toggleDesc(id){
+    var card = document.querySelector('.exp-card[data-id="'+id+'"]');
+    if(card) card.classList.toggle('show-desc');
+}
+
+/* ── 添加 / 编辑 ── */
+function openAdd(){
+    editingId = null;
+    document.getElementById('modalTitle').textContent = '添加经历';
+    selType = 'work';
+    syncTypeChips();
+    document.getElementById('fTitle').value = '';
+    document.getElementById('fOrg').value = '';
+    document.getElementById('fPeriod').value = '';
+    document.getElementById('fDesc').value = '';
+    document.getElementById('modal').classList.add('show');
+    setTimeout(function(){ document.getElementById('fTitle').focus(); }, 150);
+}
+function openEdit(id){
+    var list = getExps();
+    var e = list.find(function(x){ return x.id===id; });
+    if(!e) return;
+    editingId = id;
+    document.getElementById('modalTitle').textContent = '编辑经历';
+    selType = e.type || 'work';
+    syncTypeChips();
+    document.getElementById('fTitle').value = e.title||'';
+    document.getElementById('fOrg').value = e.org||'';
+    document.getElementById('fPeriod').value = e.period||'';
+    document.getElementById('fDesc').value = e.desc||'';
+    document.getElementById('modal').classList.add('show');
+}
+function closeModal(){ document.getElementById('modal').classList.remove('show'); }
+function selectType(btn){
+    document.querySelectorAll('#typeChips .type-chip').forEach(function(c){ c.classList.remove('active'); });
+    btn.classList.add('active');
+    selType = btn.dataset.tp;
+}
+function syncTypeChips(){
+    document.querySelectorAll('#typeChips .type-chip').forEach(function(c){ c.classList.toggle('active', c.dataset.tp===selType); });
+}
+function saveExp(){
+    var title = document.getElementById('fTitle').value.trim();
+    if(!title){ showToast('请输入名称或标题'); return; }
+    var org = document.getElementById('fOrg').value.trim();
+    var period = document.getElementById('fPeriod').value.trim();
+    var desc = document.getElementById('fDesc').value.trim();
+    var list = getExps();
+    if(editingId){
+        var e = list.find(function(x){ return x.id===editingId; });
+        if(e){ e.type=selType; e.title=title; e.org=org; e.period=period; e.desc=desc; }
+        saveExps(list);
+        showToast('✅ 已更新');
+    } else {
+        list.unshift({ id:'exp-'+Date.now(), type:selType, title:title, org:org, period:period, desc:desc, createdAt:Date.now() });
+        saveExps(list);
+        showToast('✅ 已添加');
+    }
+    closeModal();
+    renderList();
+}
+
+/* ── 删除 ── */
+function openDel(id){
+    var list = getExps();
+    var e = list.find(function(x){ return x.id===id; });
+    if(!e) return;
+    delId = id;
+    document.getElementById('delExpText').textContent = '确定删除「'+esc(e.title)+'」吗？';
+    document.getElementById('delModal').classList.add('show');
+}
+function closeDelModal(){ document.getElementById('delModal').classList.remove('show'); }
+function confirmDel(){
+    var list = getExps().filter(function(x){ return x.id!==delId; });
+    saveExps(list);
+    delId = null;
+    closeDelModal();
+    showToast('已删除');
+    renderList();
+}
+
+init();
+</script>
+</body>
+</html>
