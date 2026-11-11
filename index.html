@@ -96,7 +96,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-se
 .modal-confirm:active{background:var(--primary-hover)}
 
 /* ── Toast 通知 ── */
-.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--gray-900);color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:200;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--gray-900);color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.12)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* ── Keyframes ── */
@@ -647,6 +647,215 @@ var Auth = (function () {
         .pe-field input::placeholder{color:var(--gray-300)}
         .pe-field select{color:var(--gray-700);cursor:pointer}
 
+        /* ═══════ 用户个人主页 ═══════ */
+        .up-body{flex:1;overflow-y:auto;padding-bottom:calc(28px + var(--safe-b))}
+        .up-banner{height:148px;background:linear-gradient(135deg,#0D5F59,var(--primary-light));background-size:cover;background-position:center;position:relative}
+        .up-head{padding:0 20px;position:relative}
+        .up-avatar-wrap{position:absolute;top:-40px;left:20px;z-index:2}
+        .up-avatar{width:78px;height:78px;border-radius:50%;border:4px solid #fff;display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:700;color:#fff;overflow:hidden;box-shadow:0 4px 16px rgba(15,23,42,.14);background:linear-gradient(145deg,#0F766E,#2FA37F)}
+        .up-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+        .up-name{font-size:19px;font-weight:800;color:var(--gray-900);padding-top:50px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+        .up-identity{font-size:11px;font-weight:600;color:var(--primary);background:var(--primary-50);border-radius:99px;padding:3px 10px;flex-shrink:0}
+        .up-bio{font-size:12.5px;color:var(--gray-500);line-height:1.7;margin:10px 0 0;padding:0 20px}
+        .up-divider{margin:16px 20px 0;border:none;border-top:1px solid var(--gray-100)}
+        .up-posts{padding:14px 16px}
+        .up-posts-title{font-size:13px;font-weight:700;color:var(--gray-900);padding:0 4px 10px;display:flex;align-items:center;gap:6px}
+        .up-posts-title svg{width:15px;height:15px;color:var(--primary)}
+        .up-empty{text-align:center;color:var(--gray-400);font-size:13px;padding:46px 0;line-height:1.7}
+        .up-posts .post-card{animation:none}
+
+        /* ═══════ 学习记录日历 ═══════ */
+        .sl-body{flex:1;overflow-y:auto;padding:16px 16px calc(28px + var(--safe-b))}
+        .sl-card{background:#fff;border:1px solid var(--gray-100);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow-xs)}
+        .sl-cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+        .sl-cal-title{font-size:15px;font-weight:800;color:var(--gray-900)}
+        .sl-cal-nav{display:flex;gap:4px}
+        .sl-cal-nav button{width:30px;height:30px;border-radius:50%;border:none;background:var(--gray-100);color:var(--gray-600);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit}
+        .sl-cal-nav button:active{background:var(--gray-200)}
+        .sl-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
+        .sl-week span{text-align:center;font-size:10.5px;font-weight:600;color:var(--gray-400);padding:4px 0}
+        .sl-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+        .sl-cell{aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--gray-500);background:var(--gray-50);position:relative}
+        .sl-cell.blank{background:transparent}
+        .sl-cell.today{border:1.5px solid var(--primary);color:var(--primary)}
+        .sl-cell.done{background:var(--primary);color:#fff}
+        .sl-cell.today.done{border:2px solid var(--gray-900)}
+        .sl-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+        .sl-stat{background:var(--gray-50);border-radius:12px;padding:12px 6px;text-align:center}
+        .sl-stat-val{font-size:17px;font-weight:800;color:var(--gray-900)}
+        .sl-stat-val small{font-size:10.5px;font-weight:600;color:var(--gray-400)}
+        .sl-stat-lb{font-size:10.5px;color:var(--gray-400);margin-top:3px;font-weight:500}
+        .sl-rec{display:flex;flex-direction:column}
+        .sl-rec-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
+        .sl-rec-item:last-child{border-bottom:none}
+        .sl-rec-dot{width:7px;height:7px;border-radius:50%;background:var(--primary);flex-shrink:0}
+        .sl-rec-name{flex:1;font-size:12.5px;font-weight:600;color:var(--gray-700);line-height:1.4}
+        .sl-rec-time{font-size:11px;color:var(--gray-400);flex-shrink:0}
+        .sl-empty{text-align:center;color:var(--gray-400);font-size:12.5px;padding:26px 0;line-height:1.7}
+
+        /* ═══════ 职业推荐库（探索页「更多」） ═══════ */
+        .cl-body{flex:1;overflow-y:auto;padding:16px 20px calc(28px + var(--safe-b))}
+        .cl-search{position:relative;margin-bottom:12px}
+        .cl-search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--gray-400);pointer-events:none}
+        .cl-search input{width:100%;height:44px;border-radius:12px;border:1.5px solid var(--gray-200);background:#fff;padding:0 14px 0 40px;font-size:13.5px;font-family:inherit;color:var(--gray-900);outline:none;transition:border-color .2s}
+        .cl-search input:focus{border-color:var(--primary)}
+        .cl-note{font-size:10.5px;color:var(--gray-400);line-height:1.6;background:var(--gray-100);border-radius:10px;padding:9px 11px;margin-bottom:14px}
+        .cl-cats{display:flex;gap:8px;overflow-x:auto;padding:0 0 6px;margin-bottom:12px;scrollbar-width:none}
+        .cl-cats::-webkit-scrollbar{display:none}
+        .cl-count{font-size:11.5px;color:var(--gray-400);margin-bottom:10px}
+        .cl-card{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);padding:14px 15px;margin-bottom:10px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow-xs)}
+        .cl-card:active{transform:scale(.985);border-color:var(--primary-200)}
+        .cl-card-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .cl-card-icon svg{width:19px;height:19px}
+        .cl-card-main{flex:1;min-width:0}
+        .cl-card-title{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:14px;font-weight:700;color:var(--gray-900);line-height:1.35}
+        .cl-card-en{font-size:10.5px;color:var(--gray-400);margin-top:2px}
+        .cl-card-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+        .cl-card-meta span{font-size:10px;color:var(--gray-500);background:var(--gray-100);border-radius:5px;padding:2px 7px;font-weight:500}
+        .cl-card-meta span.pay{color:var(--primary);background:var(--primary-50);font-weight:700}
+        .cl-fit{font-size:9.5px;font-weight:700;color:var(--primary);background:var(--primary-50);border-radius:99px;padding:2px 7px;flex-shrink:0}
+        .cl-arrow{color:var(--gray-300);flex-shrink:0;padding-top:3px}
+        .cl-arrow svg{width:16px;height:16px}
+        .cl-empty{display:none;flex-direction:column;align-items:center;gap:10px;padding:56px 20px;color:var(--gray-400)}
+        .cl-empty.show{display:flex}
+        .cl-empty-icon{font-size:34px;opacity:.5}
+        .cl-empty-text{font-size:12.5px;line-height:1.7;text-align:center}
+        /* ═══ 岗位详情 Sheet ═══ */
+        .jd-hero{background:linear-gradient(135deg,var(--primary-50),#fff);border-radius:16px;padding:16px;margin-bottom:16px}
+        .jd-title{font-size:19px;font-weight:800;color:var(--gray-900);letter-spacing:-.01em}
+        .jd-en{font-size:11px;color:var(--gray-400);margin-top:3px}
+        .jd-meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:11.5px;color:var(--gray-600)}
+        .jd-meta b{font-size:12.5px;color:var(--primary)}
+        .jd-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+        .jd-chips span{font-size:10.5px;background:#fff;border:1px solid var(--gray-200);color:var(--gray-500);border-radius:6px;padding:2px 8px;font-weight:500}
+        .jd-block{margin-bottom:16px}
+        .jd-block-title{font-size:13px;font-weight:800;color:var(--gray-900);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+        .jd-block-title::before{content:'';width:3px;height:12px;border-radius:2px;background:var(--primary)}
+        .jd-intro{font-size:12.5px;color:var(--gray-600);line-height:1.75}
+        .jd-list{margin:0;padding-left:0;list-style:none}
+        .jd-list li{font-size:12.5px;color:var(--gray-600);line-height:1.75;padding-left:14px;position:relative;margin-bottom:6px}
+        .jd-list li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--primary-200)}
+        .jd-path{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--gray-600);flex-wrap:wrap}
+        .jd-path span{background:var(--gray-50);border-radius:8px;padding:5px 9px;font-weight:600;color:var(--gray-700)}
+        .jd-path i{color:var(--gray-300);font-style:normal}
+        .jd-foot{display:flex;gap:10px;margin-top:4px}
+        .jd-btn{flex:1;height:46px;border-radius:13px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:none}
+        .jd-btn.primary{background:var(--primary);color:#fff;box-shadow:0 4px 14px rgba(15,118,110,.24)}
+        .jd-btn.ghost{background:var(--gray-100);color:var(--gray-600)}
+        .jd-btn:active{transform:scale(.98)}
+
+        /* 岗位详情：头部（标题+关闭）固定，内容区独立滚动 */
+        #job-detail-sheet .sheet-box{display:flex;flex-direction:column;overflow:hidden;padding:0;max-height:88vh}
+        #job-detail-sheet .sheet-header{flex-shrink:0;padding:22px 22px 10px;margin-bottom:0;background:#fff;border-radius:24px 24px 0 0;position:relative;z-index:3}
+        #job-detail-sheet #job-detail-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 22px calc(22px + var(--safe-b))}
+
+        /* 职业档案：头部（标题+关闭）固定，内容区独立滚动 */
+        #career-profile-sheet .sheet-box{display:flex;flex-direction:column;overflow:hidden;padding:0;max-height:88vh}
+        #career-profile-sheet .sheet-header{flex-shrink:0;padding:22px 22px 10px;margin-bottom:0;background:#fff;border-radius:24px 24px 0 0;position:relative;z-index:3}
+        #career-profile-sheet #career-profile-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 22px calc(22px + var(--safe-b))}
+        .cp-hero{background:linear-gradient(135deg,var(--primary-50),#fff);border-radius:16px;padding:16px;margin-bottom:16px}
+        .cp-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+        .cp-name{font-size:19px;font-weight:800;color:var(--gray-900);letter-spacing:-.01em}
+        .cp-en{font-size:11px;color:var(--gray-400);margin-top:3px}
+        .cp-match{flex-shrink:0;text-align:right}
+        .cp-match b{font-size:17px;font-weight:800;color:var(--primary);line-height:1}
+        .cp-match span{display:block;font-size:9.5px;color:var(--gray-400);margin-top:4px}
+        .cp-goal-btn{font-size:10.5px;font-weight:700;color:var(--primary);background:#fff;border:1px solid var(--primary-100);border-radius:99px;padding:4px 10px;cursor:pointer;font-family:inherit;margin-top:12px}
+        .cp-goal-btn.on{color:var(--gray-400);border-color:var(--gray-200);background:var(--gray-50);cursor:default}
+        .cp-stat{display:flex;gap:8px;margin-bottom:16px}
+        .cp-stat-item{flex:1;background:var(--gray-50);border-radius:11px;padding:9px 6px;text-align:center}
+        .cp-stat-item b{font-size:15px;font-weight:800;color:var(--gray-900)}
+        .cp-stat-item span{display:block;font-size:9.5px;color:var(--gray-400);margin-top:2px}
+        .cp-skill{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--gray-100);border-radius:12px;margin-bottom:8px}
+        .cp-skill-main{flex:1;min-width:0}
+        .cp-skill-name{font-size:12.5px;font-weight:700;color:var(--gray-900)}
+        .cp-skill-course{font-size:10.5px;color:var(--gray-400);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .cp-badge{font-size:10px;font-weight:700;border-radius:99px;padding:3px 8px;flex-shrink:0}
+        .cp-badge.ok{background:#E7F5EF;color:#0F766E}
+        .cp-badge.doing{background:#FEF3C7;color:#B45309}
+        .cp-badge.todo{background:var(--gray-100);color:var(--gray-400)}
+        .cp-go{font-size:10.5px;font-weight:700;color:var(--primary);background:none;border:none;cursor:pointer;font-family:inherit;flex-shrink:0;padding:4px}
+        .cp-note{font-size:10.5px;color:var(--gray-400);line-height:1.6;margin-top:10px}
+
+        /* 能力行可点开「补足路径」 */
+        .cp-skill.hit{cursor:pointer;transition:border-color .15s,background .15s}
+        .cp-skill.hit:active{background:var(--gray-50);border-color:var(--gray-200)}
+        .cp-arrow{flex-shrink:0;width:14px;height:14px;stroke:var(--gray-300);stroke-width:2.4}
+
+        /* 补足路径：能力差距 → 课 / 资源 / 导师 */
+        #skill-path-sheet .sheet-box{display:flex;flex-direction:column;overflow:hidden;padding:0;max-height:88vh}
+        #skill-path-sheet .sheet-header{flex-shrink:0;padding:22px 22px 10px;margin-bottom:0;background:#fff;border-radius:24px 24px 0 0;position:relative;z-index:3}
+        #skill-path-sheet #skill-path-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:4px 22px calc(22px + var(--safe-b))}
+        .sp-hero{margin-bottom:14px}
+        .sp-name{font-size:17px;font-weight:800;color:var(--gray-900);letter-spacing:-.01em}
+        .sp-sub{display:flex;align-items:center;gap:7px;margin-top:6px;font-size:11px;color:var(--gray-400)}
+        .sp-why{background:var(--primary-50);border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.7;color:var(--gray-600);margin-bottom:16px}
+        .sp-why b{color:var(--primary);font-weight:700}
+        .sp-item{display:flex;gap:9px;padding:13px 14px;border:1px solid var(--gray-100);border-radius:13px;margin-bottom:9px;position:relative;background:#fff}
+        .sp-tag{flex-shrink:0;font-size:9.5px;font-weight:800;border-radius:6px;padding:2px 6px;height:17px;line-height:13px;letter-spacing:.02em}
+        .sp-tag.course{background:var(--primary-50);color:var(--primary)}
+        .sp-tag.res{background:#E0F2FE;color:#0369A1}
+        .sp-tag.mentor{background:var(--accent-light);color:var(--accent-deep)}
+        .sp-bd{flex:1;min-width:0}
+        .sp-t{font-size:12.5px;font-weight:700;color:var(--gray-900);line-height:1.45;padding-right:44px}
+        .sp-m{font-size:10.5px;color:var(--gray-400);margin-top:3px}
+        .sp-r{font-size:11px;color:var(--gray-500);line-height:1.6;margin-top:6px}
+        .sp-see{font-size:11px;line-height:1.65;color:var(--gray-600);margin-top:8px}
+        .sp-see i{display:block;font-style:normal;font-size:9.5px;font-weight:800;color:var(--gray-400);letter-spacing:.05em;margin-bottom:2px}
+        .sp-btn{margin-top:10px;font-size:11px;font-weight:700;color:#fff;background:var(--primary);border:none;border-radius:8px;padding:7px 14px;cursor:pointer;font-family:inherit}
+        .sp-btn:active{opacity:.85}
+        .sp-btn.ghost{background:var(--gray-100);color:var(--gray-600)}
+        .sp-lock{position:absolute;right:12px;top:12px;font-size:9px;font-weight:800;color:var(--accent-deep);background:var(--accent-light);border-radius:99px;padding:2px 7px}
+        .sp-tip{font-size:10.5px;color:var(--gray-400);line-height:1.6;margin-top:14px;padding-left:2px}
+
+        /* ═══════ 社区帖子详情 ═══════ */
+        .pd-body{flex:1;overflow-y:auto;padding:16px 16px 18px}
+        .pd-body .post-card{margin-bottom:16px}
+        .pd-comments-title{font-size:13px;font-weight:800;color:var(--gray-900);padding:2px 4px 8px;display:flex;align-items:center;gap:6px}
+        .pd-comments-title span{font-size:11.5px;font-weight:600;color:var(--gray-400);margin-left:2px}
+        .pd-comment{display:flex;gap:10px;padding:12px 4px;border-bottom:1px solid var(--gray-100)}
+        .pd-comment:last-child{border-bottom:none}
+        .pd-c-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+        .pd-c-main{flex:1;min-width:0}
+        .pd-c-top{display:flex;align-items:center;gap:8px}
+        .pd-c-name{font-size:12.5px;font-weight:700;color:var(--gray-900)}
+        .pd-c-time{font-size:10.5px;color:var(--gray-400)}
+        .pd-c-tag{font-size:9.5px;font-weight:700;color:var(--primary);background:var(--primary-50);border-radius:99px;padding:1px 6px}
+        .pd-c-text{font-size:12.5px;color:var(--gray-600);line-height:1.7;margin-top:5px;word-break:break-word}
+        .pd-empty{text-align:center;font-size:12.5px;color:var(--gray-400);padding:30px 0;line-height:1.8}
+        .pd-inputbar{display:flex;gap:8px;padding:10px 16px calc(10px + var(--safe-b));background:rgba(248,250,252,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--gray-100);flex-shrink:0}
+        .pd-input{flex:1;height:42px;border-radius:21px;border:1.5px solid var(--gray-200);background:#fff;padding:0 15px;font-size:13px;font-family:inherit;outline:none;color:var(--gray-900);transition:border-color .2s}
+        .pd-input:focus{border-color:var(--primary)}
+        .pd-send{height:42px;padding:0 16px;border-radius:21px;border:none;background:var(--primary);color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;flex-shrink:0}
+        .pd-send:active{transform:scale(.96)}
+
+        /* ═══════ 收藏夹 ═══════ */
+        .fv-body{flex:1;overflow-y:auto;padding:14px 16px 24px}
+        .fv-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;scrollbar-width:none}
+        .fv-tabs::-webkit-scrollbar{display:none}
+        .fv-tab{flex-shrink:0;padding:7px 14px;border-radius:99px;border:1.5px solid var(--gray-200);background:#fff;font-size:12px;font-weight:700;color:var(--gray-500);font-family:inherit;cursor:pointer;transition:all .2s}
+        .fv-tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+        .fv-tab-num{font-size:10.5px;font-weight:600;opacity:.75;margin-left:3px}
+        .fv-card{background:#fff;border-radius:14px;padding:14px;border:1px solid var(--gray-100);margin-bottom:10px;cursor:pointer;transition:transform .15s}
+        .fv-card:active{transform:scale(.99)}
+        .fv-top{display:flex;align-items:center;gap:8px}
+        .fv-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#fff;flex-shrink:0}
+        .fv-name{font-size:12px;font-weight:700;color:var(--gray-900)}
+        .fv-meta{font-size:10.5px;color:var(--gray-400)}
+        .fv-badge{font-size:9.5px;font-weight:700;border-radius:99px;padding:2px 7px;flex-shrink:0;margin-left:auto}
+        .fv-title{font-size:13.5px;font-weight:800;color:var(--gray-900);margin-top:8px}
+        .fv-text{font-size:12.5px;color:var(--gray-600);line-height:1.7;margin-top:7px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+        .fv-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+        .fv-tags span{font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px}
+        .fv-foot{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--gray-100)}
+        .fv-time{font-size:10.5px;color:var(--gray-400)}
+        .fv-act{margin-left:auto;font-size:11.5px;font-weight:700;border:none;background:var(--rose-light);color:var(--rose);border-radius:99px;padding:6px 12px;font-family:inherit;cursor:pointer;flex-shrink:0}
+        .fv-act:active{transform:scale(.96)}
+        .fv-empty{text-align:center;padding:56px 24px}
+        .fv-empty-icon{font-size:34px;margin-bottom:10px}
+        .fv-empty-text{font-size:12.5px;color:var(--gray-400);line-height:1.9}
+        .fv-tip{font-size:10.5px;color:var(--gray-400);text-align:center;padding:14px 0 0;line-height:1.7}
+
         /* ═══════ 简历 / 证书 / 作品集 ═══════ */
         .build-page-body{flex:1;overflow-y:auto;padding:18px 20px calc(28px + var(--safe-b))}
         .build-empty{display:flex;flex-direction:column;align-items:center;gap:14px;padding:70px 20px;color:var(--gray-300)}
@@ -817,6 +1026,10 @@ var Auth = (function () {
 .task-add-btn span{font-size:13px;font-weight:500;color:var(--primary)}
 .task-add-btn svg{width:16px;height:16px;color:var(--primary)}
 </style>
+<script>
+/* 全局字体大小：设置页「小/中/大」三档全局生效 */
+(function(){try{var v=parseInt(localStorage.getItem('cos_fontsize'),10);if(isNaN(v)||v<0||v>2)v=1;var z=[0.92,1,1.12][v];document.documentElement.style.zoom=(z===1?'':String(z));}catch(e){}})();
+</script>
 </head>
 <body>
 <div class="app">
@@ -895,7 +1108,7 @@ var Auth = (function () {
     <div class="search-bar">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         <!-- ✏️ Kilo: 搜索框回车反馈 -->
-        <input type="text" placeholder="搜索职业、技能、行业…" onkeydown="if(event.key==='Enter')showToast('搜索功能开发中')" aria-label="搜索职业技能行业">
+        <input type="text" placeholder="搜索职业、技能、行业…" oninput="searchCareers(this.value)" onkeydown="if(event.key==='Enter')searchCareers(this.value)" aria-label="搜索职业技能行业">
     </div>
 
     <!-- Shortcuts -->
@@ -909,7 +1122,7 @@ var Auth = (function () {
             <div class="shortcut-icon teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></div>
             <span class="shortcut-label">职业测评</span>
         </div>
-        <div class="shortcut-item" aria-label="课程">
+        <div class="shortcut-item" onclick="window.location.href='courses.html'" aria-label="课程">
             <div class="shortcut-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></div>
             <span class="shortcut-label">课程</span>
         </div>
@@ -920,7 +1133,7 @@ var Auth = (function () {
     </div>
 
     <div class="section">
-        <div class="section-header"><h2 class="section-title">为你推荐</h2><button class="section-action">更多 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button></div>
+        <div class="section-header"><h2 class="section-title">为你推荐</h2><button class="section-action" onclick="openCareerLib()">更多 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button></div>
          <div class="tag-scroll" id="explore-tags">
             <button class="tag-pill active" onclick="filterTag(this)">全部</button>
             <button class="tag-pill" onclick="filterTag(this)">互联网</button>
@@ -957,7 +1170,7 @@ var Auth = (function () {
         </div>
         <div class="readiness-info">
             <h3>职业准备度</h3>
-            <p>你已完成 3/6 项核心准备，<br>继续加油离目标更近一步 ✨</p>
+            <p>你已完成 0/6 项核心准备，<br>继续加油离目标更近一步 ✨</p>
         </div>
     </div>
 
@@ -1001,7 +1214,7 @@ var Auth = (function () {
                 </div>
                 <div class="build-card-desc">你的核心职业技能提升追踪</div>
             </div>
-            <div class="build-card" data-build-id="build-5" onclick="showToast('课程模块开发中')" aria-label="在线课程">
+            <div class="build-card" data-build-id="build-5" onclick="window.location.href='courses.html'" aria-label="在线课程">
                 <div class="build-card-top">
                     <div class="build-card-icon" style="background:var(--violet-light);color:var(--violet)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></div>
                     <div class="build-card-title">在线课程</div>
@@ -1015,7 +1228,7 @@ var Auth = (function () {
                 </div>
                 <div class="build-card-desc">追踪投递进度与面试日程</div>
             </div>
-            <div class="build-card" data-build-id="build-7" onclick="showToast('1v1 导师模块开发中')" aria-label="1v1导师">
+            <div class="build-card" data-build-id="build-7" onclick="window.location.href='mentors.html'" aria-label="1v1导师">
                 <div class="build-card-top">
                     <div class="build-card-icon" style="background:var(--rose-light);color:var(--rose)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
                     <div class="build-card-title">1v1 导师</div>
@@ -1061,9 +1274,9 @@ var Auth = (function () {
     </div>
 
     <!-- ✏️ Kilo: 点赞改为 toggle 逻辑，收藏也加上了交互 -->
-    <div class="post-card" data-post-id="post-0" aria-label="陈思远的帖子">
+    <div class="post-card" data-post-id="post-0" onclick="openPostFromCard(event,this)" aria-label="陈思远的帖子">
         <div class="post-header">
-            <div class="post-avatar" style="background:var(--primary)">陈</div>
+            <div class="post-avatar" style="background:var(--primary)" onclick="openUserHome('陈思远')">陈</div>
             <div class="post-meta">
                 <div class="post-author">陈思远</div>
                 <div class="post-time">3 小时前</div>
@@ -1077,14 +1290,14 @@ var Auth = (function () {
         </div>
         <div class="post-footer">
             <button class="post-action" onclick="toggleLike(this)" aria-label="点赞"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg><span>128</span></button>
-            <button class="post-action" aria-label="评论"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>42</span></button>
+            <button class="post-action" onclick="openPostComments(event,this)" aria-label="评论"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>14</span></button>
             <button class="post-action" onclick="toggleBookmark(this)" aria-label="收藏"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg><span>收藏</span></button>
         </div>
     </div>
 
-    <div class="post-card" data-post-id="post-1" aria-label="周雨桐的帖子">
+    <div class="post-card" data-post-id="post-1" onclick="openPostFromCard(event,this)" aria-label="周雨桐的帖子">
         <div class="post-header">
-            <div class="post-avatar" style="background:var(--indigo)">周</div>
+            <div class="post-avatar" style="background:var(--indigo)" onclick="openUserHome('周雨桐')">周</div>
             <div class="post-meta">
                 <div class="post-author">周雨桐</div>
                 <div class="post-time">5 小时前</div>
@@ -1097,14 +1310,14 @@ var Auth = (function () {
         </div>
         <div class="post-footer">
             <button class="post-action" onclick="toggleLike(this)" aria-label="点赞"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg><span>67</span></button>
-            <button class="post-action" aria-label="评论"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>31</span></button>
+            <button class="post-action" onclick="openPostComments(event,this)" aria-label="评论"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>10</span></button>
             <button class="post-action" onclick="toggleBookmark(this)" aria-label="收藏"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg><span>收藏</span></button>
         </div>
     </div>
 
-    <div class="post-card" data-post-id="post-2" aria-label="李佳琪的帖子">
+    <div class="post-card" data-post-id="post-2" onclick="openPostFromCard(event,this)" aria-label="李佳琪的帖子">
         <div class="post-header">
-            <div class="post-avatar" style="background:var(--accent)">李</div>
+            <div class="post-avatar" style="background:var(--accent)" onclick="openUserHome('李佳琪')">李</div>
             <div class="post-meta">
                 <div class="post-author">李佳琪</div>
                 <div class="post-time">昨天</div>
@@ -1118,7 +1331,7 @@ var Auth = (function () {
         </div>
         <div class="post-footer">
             <button class="post-action" onclick="toggleLike(this)" aria-label="点赞"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg><span>256</span></button>
-            <button class="post-action" aria-label="评论"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>89</span></button>
+            <button class="post-action" onclick="openPostComments(event,this)" aria-label="评论"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>9</span></button>
             <button class="post-action" onclick="toggleBookmark(this)" aria-label="收藏"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg><span>收藏</span></button>
         </div>
     </div>
@@ -1142,6 +1355,7 @@ var Auth = (function () {
                 <div>
                     <div class="profile-name">林雪梨</div>
                     <div class="profile-school">深圳大学 · 网络与新媒体 · 大二</div>
+                    <div class="profile-bio" id="profile-bio" style="font-size:12px;color:var(--gray-400);margin-top:5px;line-height:1.6"></div>
                 </div>
                 <div class="profile-badge">PRO ✨</div>
             </div>
@@ -1169,20 +1383,20 @@ var Auth = (function () {
             <span class="menu-text">编辑个人资料</span>
             <div class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
         </button>
-        <button class="menu-item" onclick="showToast('会员中心开发中')">
+        <button class="menu-item" onclick="window.location.href='membership.html'">
             <div class="menu-icon" style="background:linear-gradient(135deg,var(--accent),#FBBF24);color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
             <span class="menu-text">会员中心</span>
             <span class="menu-extra" style="color:var(--accent);font-weight:600">PRO</span>
             <div class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
         </button>
-        <button class="menu-item" onclick="showToast('学习记录开发中')">
+        <button class="menu-item" onclick="openStudyLog()">
             <div class="menu-icon" style="background:var(--accent-light);color:#B45309"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
             <span class="menu-text">学习记录</span>
             <span class="menu-extra">本周 12h</span>
             <div class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
         </button>
         <!-- ✏️ Kilo: 收藏夹图标替换为书签 -->
-        <button class="menu-item" onclick="showToast('收藏夹开发中')">
+        <button class="menu-item" onclick="openFavBox()">
             <div class="menu-icon" style="background:var(--primary-50);color:var(--primary)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>
             <span class="menu-text">收藏夹</span>
             <div class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
@@ -1281,6 +1495,149 @@ var Auth = (function () {
                     <option>大一</option><option>大二</option><option>大三</option><option>大四</option><option>研究生</option><option>已毕业</option>
                 </select>
             </div>
+            <div class="pe-field"><label>签名</label><input id="pe-bio" type="text" maxlength="40" placeholder="一句话介绍自己"></div>
+            <div class="pe-field"><label>身份</label>
+                <select id="pe-identity" onchange="toggleIdentityField()">
+                    <option value="student">大学生</option>
+                    <option value="worker">职场人</option>
+                </select>
+            </div>
+            <div class="pe-field" id="pe-company-field" style="display:none"><label>公司</label><input id="pe-company" type="text" maxlength="30" placeholder="所在公司（可写岗位）"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ 用户个人主页（社区点头像进入） ═══ -->
+<div class="overlay-page" id="user-home-overlay">
+    <nav class="overlay-nav">
+        <button class="overlay-back" onclick="closeUserHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>返回</button>
+        <div class="overlay-title" id="uh-title">个人主页</div>
+    </nav>
+    <div class="up-body">
+        <div class="up-banner" id="uh-banner"></div>
+        <div class="up-head">
+            <div class="up-avatar-wrap"><div class="up-avatar" id="uh-avatar"></div></div>
+            <div class="up-name" id="uh-name"></div>
+            <div class="up-identity" id="uh-identity" style="display:none"></div>
+        </div>
+        <div class="up-bio" id="uh-bio" style="display:none"></div>
+        <hr class="up-divider">
+        <div class="up-posts">
+            <div class="up-posts-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span id="uh-posts-label">TA 的帖子</span></div>
+            <div id="uh-posts"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ 职业推荐库（探索页「更多」） ═══ -->
+<div class="overlay-page" id="career-lib-overlay">
+    <nav class="overlay-nav">
+        <button class="overlay-back" onclick="closeCareerLib()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>返回</button>
+        <div class="overlay-title">职业推荐</div>
+    </nav>
+    <div class="cl-body">
+        <div class="cl-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="cl-search" placeholder="搜索岗位、公司、技能或行业…" oninput="filterCareerLib()" aria-label="搜索岗位">
+        </div>
+        <div class="cl-note">💡 岗位 JD 与薪资为行业通用参考，帮你快速了解一个岗位做什么、需要什么能力，不代表具体企业招聘要求。</div>
+        <div class="cl-cats" id="cl-cats"></div>
+        <div class="cl-count" id="cl-count"></div>
+        <div id="cl-list"></div>
+        <div class="cl-empty" id="cl-empty">
+            <div class="cl-empty-icon">🔍</div>
+            <div class="cl-empty-text">没有找到相关岗位<br>换个关键词或分类试试</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ 岗位详情 ═══ -->
+<div class="sheet-overlay" id="job-detail-sheet" style="z-index:250" onclick="if(event.target===this)closeJobDetail()">
+    <div class="sheet-box">
+        <div class="sheet-header">
+            <div class="sheet-title">岗位详情</div>
+            <button class="sheet-close" onclick="closeJobDetail()" aria-label="关闭">✕</button>
+        </div>
+        <div id="job-detail-body"></div>
+    </div>
+</div>
+
+<!-- ═══ 职业档案（探索页自选职业） ═══ -->
+<div class="sheet-overlay" id="career-profile-sheet" style="z-index:240" onclick="if(event.target===this)closeCareerProfile()">
+    <div class="sheet-box">
+        <div class="sheet-header">
+            <div class="sheet-title">职业档案</div>
+            <button class="sheet-close" onclick="closeCareerProfile()" aria-label="关闭">✕</button>
+        </div>
+        <div id="career-profile-body"></div>
+    </div>
+</div>
+
+<!-- ═══ 补足路径（职业档案里的待补能力 → 课 / 资源 / 导师） ═══ -->
+<div class="sheet-overlay" id="skill-path-sheet" style="z-index:260" onclick="if(event.target===this)closeSkillPath()">
+    <div class="sheet-box">
+        <div class="sheet-header">
+            <div class="sheet-title" id="skill-path-title">补足路径</div>
+            <button class="sheet-close" onclick="closeSkillPath()" aria-label="关闭">✕</button>
+        </div>
+        <div id="skill-path-body"></div>
+    </div>
+</div>
+
+<!-- ═══ 收藏夹（我的页聚合收藏） ═══ -->
+<div class="overlay-page" id="fav-overlay">
+    <nav class="overlay-nav">
+        <button class="overlay-back" onclick="closeFavBox()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>返回</button>
+        <div class="overlay-title">收藏夹</div>
+    </nav>
+    <div class="fv-body">
+        <div class="fv-tabs" id="fv-tabs"></div>
+        <div id="fv-list"></div>
+    </div>
+</div>
+
+<!-- ═══ 社区帖子详情（含评论） ═══ -->
+<div class="overlay-page" id="post-detail-overlay">
+    <nav class="overlay-nav">
+        <button class="overlay-back" onclick="closePostDetail()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>返回</button>
+        <div class="overlay-title">帖子详情</div>
+    </nav>
+    <div class="pd-body" id="pd-body"></div>
+    <div class="pd-inputbar">
+        <input class="pd-input" id="pd-comment-input" placeholder="写下你的评论…" maxlength="200" onkeydown="if(event.key==='Enter')submitComment()" aria-label="评论输入">
+        <button class="pd-send" onclick="submitComment()">发送</button>
+    </div>
+</div>
+
+<!-- ═══ 学习记录（我的页日历） ═══ -->
+<div class="overlay-page" id="study-log-overlay">
+    <nav class="overlay-nav">
+        <button class="overlay-back" onclick="closeStudyLog()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>返回</button>
+        <div class="overlay-title">学习记录</div>
+    </nav>
+    <div class="sl-body">
+        <div class="sl-card">
+            <div class="sl-cal-head">
+                <div class="sl-cal-title" id="sl-month"></div>
+                <div class="sl-cal-nav">
+                    <button onclick="shiftMonth(-1)" aria-label="上个月">‹</button>
+                    <button onclick="shiftMonth(1)" aria-label="下个月">›</button>
+                </div>
+            </div>
+            <div class="sl-week"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+            <div class="sl-grid" id="sl-grid"></div>
+        </div>
+        <div class="sl-card">
+            <div class="sl-cal-title" style="font-size:14px;margin-bottom:12px">本月概览</div>
+            <div class="sl-stats">
+                <div class="sl-stat"><div class="sl-stat-val" id="sl-days">0<small> 天</small></div><div class="sl-stat-lb">本月完成天数</div></div>
+                <div class="sl-stat"><div class="sl-stat-val" id="sl-tasks">0<small> 个</small></div><div class="sl-stat-lb">本月完成任务</div></div>
+                <div class="sl-stat"><div class="sl-stat-val" id="sl-streak">0<small> 天</small></div><div class="sl-stat-lb">累计打卡天数</div></div>
+            </div>
+        </div>
+        <div class="sl-card">
+            <div class="sl-cal-title" style="font-size:14px;margin-bottom:6px">最近完成</div>
+            <div class="sl-rec" id="sl-recent"></div>
         </div>
     </div>
 </div>
@@ -1406,6 +1763,31 @@ var Auth = (function () {
     </div>
 </div>
 
+<!-- ═══ 编辑目标 Sheet（z-index 高于目标详情浮层 300） ═══ -->
+<div class="sheet-overlay" id="goal-edit-sheet" style="z-index:400">
+    <div class="sheet-box">
+        <div class="sheet-header">
+            <div class="sheet-title">编辑目标</div>
+            <button class="sheet-close" onclick="closeGoalEdit()" aria-label="关闭">×</button>
+        </div>
+        <div class="field-label">目标名称</div>
+        <input class="field-input" id="goal-edit-name" type="text" placeholder="如：个人作品集网页" maxlength="30">
+        <div class="field-label">目标描述</div>
+        <input class="field-input" id="goal-edit-desc" type="text" placeholder="如：设计 + 代码 + 部署上线" maxlength="60">
+        <div class="field-row">
+            <div>
+                <div class="field-label">开始时间</div>
+                <input class="field-input" id="goal-edit-start" type="date">
+            </div>
+            <div>
+                <div class="field-label">结束时间</div>
+                <input class="field-input" id="goal-edit-end" type="date">
+            </div>
+        </div>
+        <button class="btn-primary" style="margin-top:18px" onclick="updateGoal()">保存修改</button>
+    </div>
+</div>
+
 <!-- ═══ 创建任务 Sheet（底部抽屉） ═══ -->
 <div class="task-sheet-backdrop" id="task-sheet-backdrop" onclick="closeTaskCreate()"></div>
 <div class="task-sheet" id="task-sheet">
@@ -1465,7 +1847,7 @@ var Auth = (function () {
             返回
         </button>
         <span class="gd-nav-title">目标详情</span>
-        <button class="gd-nav-action" onclick="showToast('编辑目标功能开发中')">编辑</button>
+        <button class="gd-nav-action" onclick="openGoalEdit()">编辑</button>
     </div>
     <div class="gd-body" id="gd-body"></div>
 </div>
@@ -1618,7 +2000,7 @@ function renderExploreCareers(){
     const bg=styles[i%styles.length][0],cc=styles[i%styles.length][1];
     const tagsHtml=meta.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('');
     const matchHtml=typeof meta.match==='number'?meta.match+'%':esc(meta.match);
-    return '<div class="career-item" data-tags="目标职业" onclick="showToast(\'职业详情开发中\')" aria-label="'+name+'">'+
+    return '<div class="career-item" data-tags="目标职业" data-career="'+name+'" onclick="openCareerProfile(this.dataset.career)" aria-label="'+name+'">'+
       '<div class="career-item-icon" style="background:'+bg+';color:'+cc+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(ICON_MAP[name]||'<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>')+'</svg></div>'+
       '<div class="career-item-info"><div class="career-item-title">'+name+'</div><div class="career-item-en">'+esc(meta.en)+'</div><div class="career-item-tags">'+tagsHtml+'</div></div>'+
       '<div class="career-item-match">'+matchHtml+'</div>'+
@@ -1632,17 +2014,10 @@ function filterTag(btn){
   btn.parentElement.querySelectorAll('.tag-pill').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
   const tag=btn.textContent.trim();
-  // 探索页职业筛选
+  // 探索页职业筛选（与搜索框过滤叠加生效）
   const careerList=document.querySelector('#page-explore .career-list');
   if(careerList){
-    const items=careerList.querySelectorAll('.career-item');
-    const emptyEl=document.getElementById('career-empty');
-    let visible=0;
-    items.forEach(item=>{
-      if(tag==='全部'||item.dataset.tags.split(',').includes(tag)){item.style.display='';visible++;}
-      else{item.style.display='none';}
-    });
-    if(emptyEl) emptyEl.classList.toggle('show', visible===0);
+    applyExploreFilter();
   }
   // 社区页帖子筛选
   const communityPage=document.getElementById('page-community');
@@ -1657,6 +2032,41 @@ function filterTag(btn){
     });
     if(emptyEl) emptyEl.classList.toggle('show', visible===0);
   }
+}
+
+// ── Explore 搜索（本地过滤，与标签筛选叠加） ──
+let exploreSearch='';
+function applyExploreFilter(){
+  const tagEl=document.querySelector('#page-explore .tag-pill.active');
+  const tagName=tagEl?tagEl.textContent.trim():'全部';
+  const list=document.getElementById('career-list');
+  if(!list)return;
+  const items=list.querySelectorAll('.career-item');
+  const emptyEl=document.getElementById('career-empty');
+  let visible=0;
+  items.forEach(item=>{
+    const tagHit=(tagName==='全部')||(item.dataset.tags||'').split(',').includes(tagName);
+    const text=((item.getAttribute('aria-label')||'')+' '+(item.textContent||'')).toLowerCase();
+    const searchHit=!exploreSearch||text.indexOf(exploreSearch)>-1;
+    const hit=tagHit&&searchHit;
+    item.style.display=hit?'':'none';
+    if(hit)visible++;
+  });
+  if(emptyEl){
+    if(visible===0){
+      emptyEl.classList.add('show');
+      emptyEl.innerHTML=exploreSearch
+        ?'<div class="empty-state-icon">🔍</div><div class="empty-state-text">未找到与「'+esc(exploreSearch)+'」匹配的职业<br>换个关键词试试</div>'
+        :'<div class="empty-state-icon">🔍</div><div class="empty-state-text">该分类暂无推荐职业<br>试试其他标签吧</div>';
+    }else{
+      emptyEl.classList.remove('show');
+      emptyEl.innerHTML='<div class="empty-state-icon">🔍</div><div class="empty-state-text">该分类暂无推荐职业<br>试试其他标签吧</div>';
+    }
+  }
+}
+function searchCareers(q){
+  exploreSearch=(q||'').trim().toLowerCase();
+  applyExploreFilter();
 }
 
 // ── Task Tab ──
@@ -1775,12 +2185,16 @@ function moduleUsed(id){
   if(id==='build-0')return (LS.get('resume_data',[]).length>0);        // 简历：上传过内容
   if(id==='build-1')return LS.get('portfolio_data',[]).some(p=>p.works&&p.works.length>0); // 作品集：有项目且传过作品
   if(id==='build-2')return (LS.get('cert_data',[]).length>0);          // 证书：上传过内容
-  return false; // 其余模块待开发，暂无使用入口
+  if(id==='build-3')return (LS.get('experiences',[]).length>0);        // 工作经验：已填写经历（work-experience.html 的 cos_experiences）
+  if(id==='build-4'){var _sk=LS.get('skills',[]);return Array.isArray(_sk)&&_sk.some(function(s){return s&&s.mastered;});} // 技能学习：有已掌握技能（skill-learning.html 的 cos_skills）
+  if(id==='build-6')return (LS.get('job_manage',[]).length>0);         // 求职管理：有投递/面试记录（job-management.html 的 cos_job_manage）
+  return false; // build-5 在线课程 / build-7 1v1导师：模块开发中，暂无数据入口，不参与准备度统计（卡片保留）
 }
 
 // ── 更新准备度环形图 ──
 function updateReadiness(){
-  const ids=['build-0','build-1','build-2','build-3','build-4','build-5','build-6','build-7'];
+  // 统计 6 个有真实功能的数据模块；8 张卡片全部保留，在线课程/1v1导师为开发中模块不参与统计
+  const ids=['build-0','build-1','build-2','build-3','build-4','build-6'];
   const total=ids.length;
   const done=ids.filter(id=>moduleUsed(id)).length;
   const pct=total?Math.round(done/total*100):0;
@@ -1838,18 +2252,45 @@ function toggleLike(btn){
   btn.dataset.liked=isLiked?'false':'true';
 }
 
-// ── 收藏 toggle (localStorage 持久化) ──
+// ── 帖子快照（收藏夹展示用） ──
+function postSnapshot(post,postId){
+  const q=function(sel){const el=post.querySelector(sel);return el?el.textContent.trim():'';};
+  const avEl=post.querySelector('.post-avatar');
+  return {
+    id:postId,
+    author:q('.post-author'),
+    avatarText:avEl?avEl.textContent.trim():'',
+    avatarColor:avEl&&avEl.style?avEl.style.background:'',
+    school:q('.post-school'),
+    time:q('.post-time'),
+    body:q('.post-body'),
+    tags:[].slice.call(post.querySelectorAll('.post-tags span')).map(function(s){return {text:s.textContent,style:s.getAttribute('style')||''};}),
+    savedAt:Date.now()
+  };
+}
+
+// ── 收藏 toggle (localStorage 持久化 + 收藏快照) ──
 function toggleBookmark(btn){
   const post=btn.closest('.post-card');
   const postId=post?post.dataset.postId:'';
+  if(!postId)return;
   const bookmarks=LS.get('bookmarks',{});
   const isSaved=bookmarks[postId]===true;
   const span=btn.querySelector('span');
-  span.textContent=isSaved?'收藏':'已收藏';
   bookmarks[postId]=!isSaved;
   LS.set('bookmarks',bookmarks);
+  // 同时保存帖子快照：供「我的-收藏夹」直接列出被收藏的帖子内容
+  const items=LS.get('bookmark_items',{});
+  if(!isSaved){
+    items[postId]=postSnapshot(post,postId);
+  }else{
+    delete items[postId];
+  }
+  LS.set('bookmark_items',items);
+  span.textContent=isSaved?'收藏':'已收藏';
   btn.style.color=isSaved?'':'var(--accent)';
   btn.dataset.saved=isSaved?'false':'true';
+  showToast(isSaved?'已取消收藏':'⭐ 已收藏');
 }
 
 // ── 初始化：从 localStorage 恢复状态 ──
@@ -1906,6 +2347,436 @@ function initFromStorage(){
   loadProfile();
   renderProfile();
   renderStats();
+  syncCommentCounts();
+}
+
+// ══════ 社区：帖子详情 + 评论 ══════
+const PD_SEED_COMMENTS={
+  'post-0':[
+    {name:'周雨桐',avatar:'周',color:'var(--indigo)',text:'恭喜上岸！想问下产品 Sense 具体是怎么积累的？有推荐的方法吗',time:'2 小时前'},
+    {name:'李佳琪',avatar:'李',color:'var(--accent)',text:'同问，秋招前半年应该先补项目还是先找实习？',time:'1 小时前'},
+    {name:'张一帆',avatar:'张',color:'var(--sky)',text:'同浙大，现在大二，看完感觉自己差得有点远…请问你当时是先做竞品拆解还是直接做原型？',time:'48 分钟前'},
+    {name:'王思睿',avatar:'王',color:'var(--primary)',text:'产品 Sense 我个人是靠每天看 1 个产品的核心流程，坚持 3 个月，面试真的能聊出东西。',time:'45 分钟前'},
+    {name:'刘晓',avatar:'刘',color:'var(--gray-500)',text:'零实习能拿到字节，作品集应该占很大比重吧？方便说下几个项目吗？',time:'40 分钟前'},
+    {name:'林清',avatar:'林',color:'var(--indigo)',text:'恭喜！请问简历上没有实习经历，那段空白你是怎么处理的？',time:'36 分钟前'},
+    {name:'何佳',avatar:'何',color:'var(--accent)',text:'同问，投递时是先投小厂练手还是直接冲大厂？',time:'30 分钟前'},
+    {name:'陈思远',avatar:'陈',color:'var(--primary)',text:'统一回复一下：产品 Sense 我是靠拆解 + 自己写复盘，每周 1 个产品；简历上没实习就重点写项目和数据。',time:'26 分钟前'},
+    {name:'苏晓',avatar:'苏',color:'var(--rose)',text:'这条回复太实用了，已截图保存 ✅',time:'20 分钟前'},
+    {name:'赵敏',avatar:'赵',color:'var(--sky)',text:'请问拆解产品一般写成什么形式？飞书文档还是 Notion？面试官会看吗',time:'16 分钟前'},
+    {name:'陈思远',avatar:'陈',color:'var(--primary)',text:'我用的是飞书文档，一页一个产品：目标用户 → 核心流程 → 我的判断。面试时确实被追问过。',time:'12 分钟前'},
+    {name:'郭静',avatar:'郭',color:'var(--indigo)',text:'大三日语专业想转 PM，来得及吗…',time:'9 分钟前'},
+    {name:'郑宇',avatar:'郑',color:'var(--accent)',text:'来得及，我也是跨专业的，关键是有没有能讲清楚的项目。',time:'7 分钟前'},
+    {name:'吴迪',avatar:'吴',color:'var(--gray-500)',text:'收藏了，秋招前照着做一遍 🙏',time:'3 分钟前'}
+  ],
+  'post-1':[
+    {name:'陈思远',avatar:'陈',color:'var(--primary)',text:'质量比数量重要。2 个讲透的项目，比 5 个只写了流程的强得多。',time:'4 小时前'},
+    {name:'周雨桐',avatar:'周',color:'var(--indigo)',text:'谢谢！那我先把现有的 2 个补成完整闭环',time:'3 小时前'},
+    {name:'李佳琪',avatar:'李',color:'var(--accent)',text:'我也是 2 个，面试官更在意你怎么讲，而不是有几个',time:'3 小时前'},
+    {name:'冯雪',avatar:'冯',color:'var(--sky)',text:'我们组招实习时，简历上 3 个项目以内最舒服，太多了会显得都很浅',time:'2 小时前'},
+    {name:'罗嘉',avatar:'罗',color:'var(--primary)',text:'建议留 1 个能体现 PM 能力的（需求/数据），2 个 UX 的，结构上就够',time:'2 小时前'},
+    {name:'周雨桐',avatar:'周',color:'var(--indigo)',text:'明白了，那我加一个偏产品的项目进去',time:'1 小时前'},
+    {name:'邓雨',avatar:'邓',color:'var(--rose)',text:'请问项目里没有真实数据怎么办？学生项目很难拿到',time:'55 分钟前'},
+    {name:'陈思远',avatar:'陈',color:'var(--primary)',text:'可以用可用性测试的小样本数据，哪怕 5 个人，也能说明你验证过',time:'40 分钟前'},
+    {name:'唐诗',avatar:'唐',color:'var(--accent)',text:'同问，我一直卡在没有数据这一步',time:'25 分钟前'},
+    {name:'冯雪',avatar:'冯',color:'var(--sky)',text:'用前后对比 + 测试记录，比编一个数据好',time:'12 分钟前'}
+  ],
+  'post-2':[
+    {name:'周雨桐',avatar:'周',color:'var(--indigo)',text:'举手！想要设计和运营方向的 🙋',time:'昨天'},
+    {name:'陈思远',avatar:'陈',color:'var(--primary)',text:'蹲一个产品方向的，尤其是群面题',time:'昨天'},
+    {name:'苏晓',avatar:'苏',color:'var(--rose)',text:'求题库 +1，顺便问下有没有八股整理？',time:'昨天'},
+    {name:'李佳琪',avatar:'李',color:'var(--accent)',text:'产品方向的整理好了，晚点发一份长图 👌',time:'昨天'},
+    {name:'王思睿',avatar:'王',color:'var(--primary)',text:'设计方向的想看看作品集追问那部分',time:'20 小时前'},
+    {name:'何佳',avatar:'何',color:'var(--rose)',text:'运营的也想要，尤其是活动复盘题',time:'18 小时前'},
+    {name:'郑宇',avatar:'郑',color:'var(--sky)',text:'已举手，等大佬更新 🙌',time:'15 小时前'},
+    {name:'李佳琪',avatar:'李',color:'var(--accent)',text:'今天先发产品的，设计和运营的明后天排上',time:'10 小时前'},
+    {name:'吴迪',avatar:'吴',color:'var(--gray-500)',text:'谢谢！这个题库比我买的课还全',time:'3 小时前'}
+  ]
+};
+let pdPostId='';
+
+function pdCard(id){
+  return document.querySelector('#page-community .post-card[data-post-id="'+id+'"]');
+}
+function pdUserComments(id){
+  const store=LS.get('post_comments',{});
+  return Array.isArray(store[id])?store[id]:[];
+}
+/* 显示数量 = 详情页真实评论条数（内置种子 + 用户新增），不再用虚高基数 */
+function getCommentBase(id,card){
+  return (PD_SEED_COMMENTS[id]||[]).length;
+}
+function syncCommentCounts(){
+  document.querySelectorAll('#page-community .post-card[data-post-id]').forEach(function(card){
+    const id=card.dataset.postId;
+    const span=card.querySelector('.post-action[aria-label="评论"] span');
+    if(!span)return;
+    span.textContent=getCommentBase(id,card)+pdUserComments(id).length;
+  });
+}
+function openPostFromCard(ev,card){
+  if(!card)return;
+  if(ev&&ev.target&&(ev.target.closest('.post-action')||ev.target.closest('.post-avatar')))return;
+  openPostDetail(card.dataset.postId,false);
+}
+function openPostComments(ev,btn){
+  if(ev)ev.stopPropagation();
+  const card=btn.closest('.post-card');
+  if(card)openPostDetail(card.dataset.postId,true);
+}
+function openPostDetail(id,focusInput){
+  const card=pdCard(id);
+  if(!card)return;
+  pdPostId=id;
+  renderPostDetail(false,false);
+  const ov=document.getElementById('post-detail-overlay');
+  if(ov)ov.classList.add('show');
+  const body=document.getElementById('pd-body');
+  if(body)body.scrollTop=0;
+  if(focusInput)setTimeout(function(){pdFocusInput();},260);
+}
+function closePostDetail(){
+  const ov=document.getElementById('post-detail-overlay');
+  if(ov)ov.classList.remove('show');
+  const input=document.getElementById('pd-comment-input');
+  if(input){input.value='';input.blur();}
+  pdPostId='';
+}
+function pdFocusInput(){
+  const input=document.getElementById('pd-comment-input');
+  if(input)input.focus();
+}
+function pdOpenAuthor(){
+  const id=pdPostId;
+  const card=pdCard(id);
+  const author=card&&card.querySelector('.post-author')?card.querySelector('.post-author').textContent.trim():'';
+  closePostDetail();
+  if(id.indexOf('user-')===0){openUserHome('me');}
+  else if(author){openUserHome(author);}
+}
+function buildDetailCard(card){
+  const c=card.cloneNode(true);
+  c.removeAttribute('onclick');
+  c.style.animation='none';
+  const av=c.querySelector('.post-avatar');
+  if(av){av.removeAttribute('onclick');av.onclick=function(e){e.stopPropagation();pdOpenAuthor();};}
+  const like=c.querySelector('.post-action[onclick*="toggleLike"]');
+  if(like){like.removeAttribute('onclick');like.onclick=function(e){e.stopPropagation();pdToggleLike();};}
+  const cmt=c.querySelector('.post-action[aria-label="评论"]');
+  if(cmt){cmt.removeAttribute('onclick');cmt.onclick=function(e){e.stopPropagation();pdFocusInput();};}
+  const bm=c.querySelector('.post-action[onclick*="toggleBookmark"]');
+  if(bm){bm.removeAttribute('onclick');bm.onclick=function(e){e.stopPropagation();pdToggleBookmark();};}
+  return c;
+}
+function pdToggleLike(){
+  const card=pdCard(pdPostId);
+  if(!card)return;
+  const btn=card.querySelector('.post-action[onclick*="toggleLike"]');
+  if(btn){toggleLike(btn);renderPostDetail(true,false);}
+}
+function pdToggleBookmark(){
+  const card=pdCard(pdPostId);
+  if(!card)return;
+  const btn=card.querySelector('.post-action[onclick*="toggleBookmark"]');
+  if(btn){toggleBookmark(btn);renderPostDetail(true,false);}
+}
+function renderPostDetail(keepScroll,toBottom){
+  const card=pdCard(pdPostId);
+  const body=document.getElementById('pd-body');
+  if(!card||!body)return;
+  const prevTop=body.scrollTop;
+  body.innerHTML='';
+  body.appendChild(buildDetailCard(card));
+
+  const seeds=PD_SEED_COMMENTS[pdPostId]||[];
+  const mine=pdUserComments(pdPostId);
+  const total=getCommentBase(pdPostId,card)+mine.length;
+
+  const title=document.createElement('div');
+  title.className='pd-comments-title';
+  title.innerHTML='评论 <span>'+total+' 条</span>';
+  body.appendChild(title);
+
+  const all=seeds.concat(mine);
+  if(!all.length){
+    const empty=document.createElement('div');
+    empty.className='pd-empty';
+    empty.innerHTML='还没有评论<br>来抢第一个沙发吧 💬';
+    body.appendChild(empty);
+  }else{
+    all.forEach(function(cm){
+      const el=document.createElement('div');
+      el.className='pd-comment';
+      el.innerHTML='<div class="pd-c-avatar" style="background:'+(cm.color||'var(--primary)')+'">'+esc(cm.avatar||'')+'</div>'+
+        '<div class="pd-c-main">'+
+          '<div class="pd-c-top"><span class="pd-c-name">'+esc(cm.name||'匿名')+'</span>'+
+          (cm.self?'<span class="pd-c-tag">我</span>':'')+
+          '<span class="pd-c-time">'+esc(cm.createdAt?fmtPostTime(cm.createdAt):(cm.time||''))+'</span></div>'+
+          '<div class="pd-c-text">'+esc(cm.text||'')+'</div>'+
+        '</div>';
+      body.appendChild(el);
+    });
+  }
+  if(toBottom){
+    setTimeout(function(){body.scrollTop=body.scrollHeight;},80);
+  }else if(keepScroll){
+    body.scrollTop=prevTop;
+  }
+}
+function submitComment(){
+  if(!pdPostId){showToast('请先打开一条帖子');return;}
+  const input=document.getElementById('pd-comment-input');
+  if(!input)return;
+  const text=(input.value||'').trim();
+  if(!text){showToast('请输入评论内容');return;}
+  if(text.length>200){showToast('评论最多 200 字');return;}
+  if(!PROFILE)loadProfile();
+  const name=(PROFILE&&PROFILE.name)||'我';
+  const store=LS.get('post_comments',{});
+  if(!Array.isArray(store[pdPostId]))store[pdPostId]=[];
+  store[pdPostId].push({
+    name:name,
+    avatar:(PROFILE&&PROFILE.avatarText)||name.charAt(0),
+    color:'var(--primary)',
+    text:text,
+    createdAt:Date.now(),
+    self:true
+  });
+  LS.set('post_comments',store);
+  input.value='';
+  syncCommentCounts();
+  renderPostDetail(true,true);
+  showToast('✅ 评论已发布');
+}
+
+// ══════ 收藏夹（帖子 / 岗位 / AI 回答） ══════
+const FV_JOB_STATUS={
+  watching:{label:'关注中',bg:'var(--sky-light)',fg:'var(--sky)'},
+  applied:{label:'已投递',bg:'var(--accent-light)',fg:'#B45309'},
+  interview:{label:'面试中',bg:'var(--indigo-light)',fg:'var(--indigo)'}
+};
+let fvTab='all';
+
+function readAiFavs(){
+  try{
+    const v=JSON.parse(localStorage.getItem('cos_ai_bookmarks')||'[]');
+    return Array.isArray(v)?v:[];
+  }catch(e){return [];}
+}
+function hydrateBookmarkItems(){
+  const bookmarks=LS.get('bookmarks',{});
+  const items=LS.get('bookmark_items',{});
+  let changed=false;
+  document.querySelectorAll('#page-community .post-card[data-post-id]').forEach(function(card){
+    const id=card.dataset.postId;
+    if(bookmarks[id]!==true)return;
+    if(!items[id]){items[id]=postSnapshot(card,id);changed=true;}
+  });
+  if(changed)LS.set('bookmark_items',items);
+  return items;
+}
+function getFavData(){
+  const bookmarks=LS.get('bookmarks',{});
+  const items=hydrateBookmarkItems();
+  const posts=Object.keys(items)
+    .filter(function(id){return bookmarks[id]===true;})
+    .map(function(id){return items[id];})
+    .sort(function(a,b){return (b.savedAt||0)-(a.savedAt||0);});
+  let jobs=[];
+  try{
+    const raw=JSON.parse(localStorage.getItem('cos_job_favs')||'[]');
+    if(Array.isArray(raw))jobs=raw;
+  }catch(e){}
+  jobs=jobs.slice().sort(function(a,b){return (b.createdAt||0)-(a.createdAt||0);});
+  const ai=readAiFavs().slice().sort(function(a,b){return (b.savedAt||0)-(a.savedAt||0);});
+  let courses=[];
+  try{
+    const raw=JSON.parse(localStorage.getItem('cos_course_favs')||'[]');
+    if(Array.isArray(raw))courses=raw;
+  }catch(e){}
+  courses=courses.slice().sort(function(a,b){return (b.savedAt||0)-(a.savedAt||0);});
+  return {posts:posts,jobs:jobs,ai:ai,courses:courses};
+}
+function openFavBox(){
+  fvTab='all';
+  renderFavBox();
+  document.getElementById('fav-overlay').classList.add('show');
+}
+function closeFavBox(){
+  document.getElementById('fav-overlay').classList.remove('show');
+}
+function setFvTab(t){
+  fvTab=t;
+  renderFavBox();
+}
+function cleanAiText(s){
+  return String(s||'').replace(/\*\*/g,'').replace(/[─█░]/g,'').replace(/#{1,6}\s?/g,'').replace(/\n+/g,' ').trim();
+}
+function fvEmptyText(tab){
+  if(tab==='post')return '还没有收藏帖子<br>在社区帖子的书签按钮收藏';
+  if(tab==='job')return '还没有收藏岗位<br>在「探索-职业推荐」的岗位详情收藏';
+  if(tab==='course')return '还没有收藏课程<br>在「探索-课程」的课程详情点收藏';
+  if(tab==='ai')return '还没有收藏 AI 回答<br>在 AI 对话里点回答下方的书签';
+  return '收藏夹还是空的<br>帖子、岗位、课程、AI 回答都会汇总到这里';
+}
+function renderFavItem(type,d){
+  if(type==='post'){
+    const tags=(d.tags||[]).map(function(t){return '<span style="'+(t.style||'')+'">'+esc(t.text)+'</span>';}).join('');
+    return '<div class="fv-card" onclick="openFavPost(\''+esc(d.id)+'\')">'+
+      '<div class="fv-top">'+
+        '<div class="fv-avatar" style="background:'+(d.avatarColor||'var(--primary)')+'">'+esc(d.avatarText||'')+'</div>'+
+        '<div><div class="fv-name">'+esc(d.author||'')+'</div><div class="fv-meta">'+esc(d.school||'社区帖子')+'</div></div>'+
+        '<span class="fv-badge" style="background:var(--primary-50);color:var(--primary)">社区帖子</span>'+
+      '</div>'+
+      '<div class="fv-text">'+esc(d.body||'')+'</div>'+
+      (tags?'<div class="fv-tags">'+tags+'</div>':'')+
+      '<div class="fv-foot">'+
+        '<span class="fv-time">'+fmtPostTime(d.savedAt)+' 收藏</span>'+
+        '<button class="fv-act" onclick="event.stopPropagation();removeFavPost(\''+esc(d.id)+'\')">取消收藏</button>'+
+      '</div>'+
+    '</div>';
+  }
+  if(type==='job'){
+    const st=FV_JOB_STATUS[d.status]||FV_JOB_STATUS.watching;
+    return '<div class="fv-card" onclick="gotoJobFavs()">'+
+      '<div class="fv-top">'+
+        '<div class="fv-avatar" style="background:var(--sky)">'+esc((d.company||'岗').charAt(0))+'</div>'+
+        '<div><div class="fv-name">'+esc(d.company||'未填公司')+'</div><div class="fv-meta">'+esc(d.location||'未填城市')+'</div></div>'+
+        '<span class="fv-badge" style="background:'+st.bg+';color:'+st.fg+'">'+st.label+'</span>'+
+      '</div>'+
+      '<div class="fv-title">'+esc(d.title||'')+'</div>'+
+      (d.note?'<div class="fv-text">'+esc(d.note)+'</div>':'')+
+      '<div class="fv-foot">'+
+        '<span class="fv-time">'+(d.createdAt?fmtPostTime(d.createdAt)+' 收藏':'岗位收藏')+' · 点卡片去岗位收藏夹管理</span>'+
+        '<button class="fv-act" onclick="event.stopPropagation();removeFavJob(\''+esc(d.id)+'\')">取消收藏</button>'+
+      '</div>'+
+    '</div>';
+  }
+  if(type==='course'){
+    return '<div class="fv-card" onclick="gotoCourses()">'+
+      '<div class="fv-top">'+
+        '<div class="fv-avatar" style="background:var(--primary)">课</div>'+
+        '<div><div class="fv-name">'+esc(d.title||'课程')+'</div><div class="fv-meta">'+esc(d.platform||'外部课程')+(d.level?' · '+esc(d.level):'')+'</div></div>'+
+        '<span class="fv-badge" style="background:var(--primary-50);color:var(--primary)">课程</span>'+
+      '</div>'+
+      (d.outcome?'<div class="fv-text">'+esc(d.outcome)+'</div>':'')+
+      '<div class="fv-foot">'+
+        '<span class="fv-time">'+(d.savedAt?fmtPostTime(d.savedAt)+' 收藏':'已收藏')+' · 点卡片去课程页</span>'+
+        '<button class="fv-act" onclick="event.stopPropagation();removeFavCourse(\''+esc(d.id)+'\')">取消收藏</button>'+
+      '</div>'+
+    '</div>';
+  }
+  const isAsk=d.role==='user';
+  return '<div class="fv-card" onclick="gotoAiChat(\''+esc(d.chatId)+'\','+esc(d.msgIdx)+')">'+
+    '<div class="fv-top">'+
+      '<div class="fv-avatar" style="background:var(--indigo)">✨</div>'+
+      '<div><div class="fv-name">'+esc(d.chatTitle||'AI 对话')+'</div><div class="fv-meta">'+(d.time?esc(d.time)+' · ':'')+(isAsk?'我的提问':'来自 AI 对话')+'</div></div>'+
+      '<span class="fv-badge" style="background:var(--indigo-light);color:var(--indigo)">'+(isAsk?'提问':'AI 回答')+'</span>'+
+    '</div>'+
+    '<div class="fv-text">'+esc(cleanAiText(d.text||''))+'</div>'+
+    '<div class="fv-foot">'+
+      '<span class="fv-time">'+(d.savedAt?fmtPostTime(d.savedAt)+' 收藏':'已收藏')+'</span>'+
+      '<button class="fv-act" onclick="event.stopPropagation();removeFavAi('+d.chatId+','+d.msgIdx+')">取消收藏</button>'+
+    '</div>'+
+  '</div>';
+}
+function renderFavBox(){
+  const d=getFavData();
+  const tabs=[
+    ['all','全部',d.posts.length+d.jobs.length+d.courses.length+d.ai.length],
+    ['post','帖子',d.posts.length],
+    ['job','岗位',d.jobs.length],
+    ['course','课程',d.courses.length],
+    ['ai','AI 回答',d.ai.length]
+  ];
+  const tabsEl=document.getElementById('fv-tabs');
+  if(tabsEl){
+    tabsEl.innerHTML=tabs.map(function(t){
+      return '<button class="fv-tab'+(fvTab===t[0]?' active':'')+'" onclick="setFvTab(\''+t[0]+'\')">'+t[1]+'<span class="fv-tab-num">'+t[2]+'</span></button>';
+    }).join('');
+  }
+  const listEl=document.getElementById('fv-list');
+  if(!listEl)return;
+  let html='';
+  if(fvTab==='all'){
+    const mix=[];
+    d.posts.forEach(function(p){mix.push({type:'post',t:p.savedAt||0,data:p});});
+    d.jobs.forEach(function(j){mix.push({type:'job',t:j.createdAt||0,data:j});});
+    d.ai.forEach(function(a){mix.push({type:'ai',t:a.savedAt||0,data:a});});
+    d.courses.forEach(function(c){mix.push({type:'course',t:c.savedAt||0,data:c});});
+    mix.sort(function(a,b){return b.t-a.t;});
+    html=mix.map(function(x){return renderFavItem(x.type,x.data);}).join('');
+  }else if(fvTab==='post'){
+    html=d.posts.map(function(p){return renderFavItem('post',p);}).join('');
+  }else if(fvTab==='job'){
+    html=d.jobs.map(function(j){return renderFavItem('job',j);}).join('');
+  }else if(fvTab==='course'){
+    html=d.courses.map(function(c){return renderFavItem('course',c);}).join('');
+  }else{
+    html=d.ai.map(function(a){return renderFavItem('ai',a);}).join('');
+  }
+  if(!html){
+    html='<div class="fv-empty"><div class="fv-empty-icon">🔖</div><div class="fv-empty-text">'+fvEmptyText(fvTab)+'</div></div>';
+  }
+  listEl.innerHTML=html;
+}
+function gotoCourses(){window.location.href='courses.html';}
+function removeFavCourse(id){
+  let list=[];
+  try{
+    const raw=JSON.parse(localStorage.getItem('cos_course_favs')||'[]');
+    if(Array.isArray(raw))list=raw;
+  }catch(e){}
+  list=list.filter(function(c){return c&&c.id!==id;});
+  try{localStorage.setItem('cos_course_favs',JSON.stringify(list));}catch(e){}
+  renderFavBox();
+  showToast('已取消收藏');
+}
+function removeFavPost(id){
+  const bookmarks=LS.get('bookmarks',{});
+  const items=LS.get('bookmark_items',{});
+  bookmarks[id]=false;
+  LS.set('bookmarks',bookmarks);
+  delete items[id];
+  LS.set('bookmark_items',items);
+  const card=pdCard(id);
+  if(card){
+    const btn=card.querySelector('.post-action[onclick*="toggleBookmark"]');
+    if(btn){
+      btn.querySelector('span').textContent='收藏';
+      btn.style.color='';
+      btn.dataset.saved='false';
+    }
+  }
+  renderFavBox();
+  showToast('已取消收藏');
+}
+function removeFavJob(id){
+  let list=[];
+  try{list=JSON.parse(localStorage.getItem('cos_job_favs')||'[]');}catch(e){list=[];}
+  const next=(Array.isArray(list)?list:[]).filter(function(j){return j.id!==id;});
+  try{localStorage.setItem('cos_job_favs',JSON.stringify(next));}catch(e){}
+  renderFavBox();
+  showToast('已取消收藏');
+}
+function removeFavAi(chatId,msgIdx){
+  const next=readAiFavs().filter(function(b){return !(b.chatId===chatId&&b.msgIdx===msgIdx);});
+  try{localStorage.setItem('cos_ai_bookmarks',JSON.stringify(next));}catch(e){}
+  renderFavBox();
+  showToast('已取消收藏');
+}
+function gotoJobFavs(){window.location.href='job-favorites.html';}
+function gotoAiChat(chatId,msgIdx){
+  let url='ai-chat.html';
+  if(chatId!==undefined&&chatId!==null&&chatId!==''){
+    url+='?chat='+encodeURIComponent(chatId);
+    if(msgIdx!==undefined&&msgIdx!==null&&msgIdx!=='')url+='&msg='+encodeURIComponent(msgIdx);
+  }
+  window.location.href=url;
+}
+function openFavPost(id){
+  const card=pdCard(id);
+  if(card){openPostDetail(id,false);}
+  else{showToast('原帖已不在社区列表中');}
 }
 
 // ── 目标进度可编辑（点击百分比可调整） ──
@@ -2025,6 +2896,33 @@ function saveGoal(){
   saveGoals();renderGoals();
   closeGoalCreate();
   showToast('目标创建成功 🎉');
+}
+
+// ═══════════ 编辑目标 ═══════════
+let currentGoalId=null;
+function openGoalEdit(){
+  const g=currentGoalId?findGoal(currentGoalId):null;
+  if(!g){showToast('未找到目标');return;}
+  document.getElementById('goal-edit-name').value=g.title||'';
+  document.getElementById('goal-edit-desc').value=g.desc||'';
+  document.getElementById('goal-edit-start').value=g.start||'';
+  document.getElementById('goal-edit-end').value=g.end||'';
+  document.getElementById('goal-edit-sheet').classList.add('show');
+}
+function closeGoalEdit(){document.getElementById('goal-edit-sheet').classList.remove('show');}
+function updateGoal(){
+  const g=currentGoalId?findGoal(currentGoalId):null;
+  if(!g){showToast('未找到目标');return;}
+  const name=document.getElementById('goal-edit-name').value.trim();
+  if(!name){showToast('请填写目标名称');return;}
+  g.title=name;
+  g.desc=document.getElementById('goal-edit-desc').value.trim();
+  g.start=document.getElementById('goal-edit-start').value;
+  g.end=document.getElementById('goal-edit-end').value;
+  saveGoals();renderGoals();
+  closeGoalEdit();
+  openGoalDetail(g.id);
+  showToast('目标已更新 ✏️');
 }
 
 // ═══════════ 今日任务数据 ═══════════
@@ -2148,6 +3046,7 @@ function daysLeft(dateStr){
 }
 function openGoalDetail(id){
   var g=findGoal(id);if(!g)return;
+  currentGoalId=id;
   var ms=getMilestones(g);
   ms.forEach(function(m){m.current=false;});
   ms.forEach(function(m){m.done=(m.subtasks||[]).length>0&&m.subtasks.every(function(s){return s.done;})?true:!!m.done;});
@@ -2157,7 +3056,7 @@ function openGoalDetail(id){
   var pct=r.total?r.pct:g.progress;
   var dashoffset=251-(251*pct/100);
   var icon=(g.title.split(' ')[0]||'🎯');
-  var plainTitle=g.title.replace(/^\S+\s/,'');
+  var plainTitle=g.title.replace(/^[^\u4e00-\u9fa5a-zA-Z0-9]+\s?/,'');
   var html='<div class="gd-hero">'+
     '<div class="gd-hero-icon">'+icon+'</div>'+
     '<div class="gd-hero-title">'+esc(plainTitle)+'</div>'+
@@ -2527,7 +3426,7 @@ function applyHeroBanner(){
   else{hero.style.background=PROFILE_BANNERS[PROFILE.banner]||PROFILE_BANNERS.default;}
 }
 function loadProfile(){
-  PROFILE=LS.get('profile_data',null)||{name:'林雪梨',school:'深圳大学',major:'网络与新媒体',grade:'大二',banner:'default',avatar:'letter',avatarColor:'#0F766E',avatarColor2:'#2FA37F'};
+  PROFILE=LS.get('profile_data',null)||{name:'林雪梨',school:'深圳大学',major:'网络与新媒体',grade:'大二',banner:'default',avatar:'letter',avatarColor:'#0F766E',avatarColor2:'#2FA37F',bio:'',identity:'student',company:''};
 }
 function renderProfile(){
   if(!PROFILE)loadProfile();
@@ -2547,6 +3446,8 @@ function renderProfile(){
   }
   if(nameEl)nameEl.textContent=PROFILE.name;
   if(schoolEl)schoolEl.textContent=(PROFILE.school?PROFILE.school+' · ':'')+(PROFILE.major?PROFILE.major+' · ':'')+PROFILE.grade;
+  const bioEl=document.getElementById('profile-bio');
+  if(bioEl)bioEl.textContent=PROFILE.bio||'';
   // 首页 hero 头像同步
   const heroAva=document.querySelector('.hero-avatar');
   if(heroAva){
@@ -2563,9 +3464,18 @@ function openProfileEdit(){
   document.getElementById('pe-school').value=PROFILE.school||'';
   document.getElementById('pe-major').value=PROFILE.major||'';
   document.getElementById('pe-grade').value=PROFILE.grade||'大二';
+  document.getElementById('pe-bio').value=PROFILE.bio||'';
+  document.getElementById('pe-identity').value=PROFILE.identity||'student';
+  document.getElementById('pe-company').value=PROFILE.company||'';
+  toggleIdentityField();
   renderPeAvatar();
   renderPeBanner();
   document.getElementById('profile-edit-overlay').classList.add('show');
+}
+function toggleIdentityField(){
+  const sel=document.getElementById('pe-identity');
+  const f=document.getElementById('pe-company-field');
+  if(f)f.style.display=(sel&&sel.value==='worker')?'flex':'none';
 }
 function closeProfileEdit(){document.getElementById('profile-edit-overlay').classList.remove('show');}
 function renderPeAvatar(){
@@ -2626,11 +3536,1042 @@ function saveProfile(){
   PROFILE.school=document.getElementById('pe-school').value.trim();
   PROFILE.major=document.getElementById('pe-major').value.trim();
   PROFILE.grade=document.getElementById('pe-grade').value;
+  PROFILE.bio=document.getElementById('pe-bio').value.trim();
+  PROFILE.identity=document.getElementById('pe-identity').value;
+  PROFILE.company=document.getElementById('pe-company').value.trim();
   if(String(PROFILE.avatar).indexOf('img:')!==0){PROFILE.avatarText=name.charAt(0);PROFILE.avatar='letter';}
   LS.set('profile_data',PROFILE);
   renderProfile();
   closeProfileEdit();
   showToast('资料已更新 ✨');
+}
+
+// ── 社区用户档案（静态帖子用户：点击头像进入个人主页） ──
+const USER_PROFILES={
+  '陈思远':{
+    avatarText:'陈',color:'var(--primary)',banner:'linear-gradient(135deg,#0F766E,#14B8A6)',
+    school:'浙江大学',major:'计算机科学',grade:'大四',
+    bio:'大三零实习起步，秋招拿下字节 PM offer。分享我的踩坑与复盘 🎯',
+    posts:[{body:'分享一下我从大三零实习到拿到字节 PM offer 的经历 🎉 最关键的一步是提前半年开始积累产品 Sense，不是等到秋招才准备…',tags:['产品经理','求职经验'],time:'3 小时前'}]
+  },
+  '周雨桐':{
+    avatarText:'周',color:'var(--indigo)',banner:'linear-gradient(135deg,#4F46E5,#818CF8)',
+    school:'深圳大学',major:'网络与新媒体',grade:'大二',
+    bio:'UX 学习中，作品集进度 60% 🖌️ 欢迎交流～',
+    posts:[{body:'请问 UX 设计师的作品集一般放几个项目比较合适呀？目前有 2 个完整的但是感觉不够丰富…还是说质量比数量更重要？🤔',tags:['UX 设计'],time:'5 小时前'}]
+  },
+  '李佳琪':{
+    avatarText:'李',color:'var(--accent)',banner:'linear-gradient(135deg,#D97706,#FBBF24)',
+    school:'暨南大学',major:'传播学',grade:'大三',
+    bio:'整理面经小能手，资料无偿分享 📚',
+    posts:[{body:'整理了一份超全的「互联网大厂面试高频题库」涵盖产品、设计、运营方向，需要的同学评论区举手 🙋‍♀️',tags:['面试技巧','求职经验'],time:'昨天'}]
+  }
+};
+
+// ── 用户个人主页（社区点头像进入） ──
+function openUserHome(name){
+  let u,posts=[];
+  if(name==='me'){
+    if(!PROFILE)loadProfile();
+    u={name:PROFILE.name,avatarText:PROFILE.avatarText||PROFILE.name.charAt(0),avatar:PROFILE.avatar,avatarColor:PROFILE.avatarColor||'#0F766E',avatarColor2:PROFILE.avatarColor2||'#2FA37F',banner:PROFILE.banner||'default',bio:PROFILE.bio||'',identity:PROFILE.identity||'student',school:PROFILE.school,major:PROFILE.major,grade:PROFILE.grade,company:PROFILE.company};
+    posts=(LS.get('posts',[])||[]).filter(function(p){return p&&p.showOnProfile!==false;});
+  }else{
+    u=USER_PROFILES[name];
+    if(!u){showToast('用户信息暂未收录');return;}
+    if(!u.name)u.name=name;
+    posts=u.posts||[];
+  }
+  // 背景
+  const banner=document.getElementById('uh-banner');
+  banner.style.backgroundImage='';
+  if(String(u.banner).indexOf('img:')===0){banner.style.background='';banner.style.backgroundImage='url("'+u.banner.slice(4)+'")';banner.style.backgroundSize='cover';banner.style.backgroundPosition='center';}
+  else{banner.style.background=u.banner||'linear-gradient(135deg,#0D5F59,var(--primary-light))';}
+  // 头像
+  const ava=document.getElementById('uh-avatar');
+  ava.style.background='';ava.innerHTML='';
+  if(u.avatar&&String(u.avatar).indexOf('img:')===0){ava.innerHTML='<img src="'+u.avatar.slice(4)+'" alt="">';}
+  else{ava.style.background='linear-gradient(145deg,'+(u.avatarColor||'#0F766E')+','+(u.avatarColor2||'#2FA37F')+')';ava.innerHTML=esc(u.avatarText||u.name.charAt(0));}
+  // 昵称 / 身份 / 签名
+  document.getElementById('uh-name').textContent=u.name;
+  const idEl=document.getElementById('uh-identity');
+  const idText=u.identity==='worker'?(u.company||'职场人'):(((u.school||'')+' · '+(u.major||'')+' · '+(u.grade||'')).replace(/^ · | · $/g,''));
+  if(idText){idEl.textContent=idText;idEl.style.display='inline-block';}else{idEl.style.display='none';}
+  const bioEl=document.getElementById('uh-bio');
+  if(u.bio){bioEl.textContent=u.bio;bioEl.style.display='block';}else{bioEl.style.display='none';}
+  document.getElementById('uh-posts-label').textContent=name==='me'?'我的帖子':'TA 的帖子';
+  // 帖子列表
+  const box=document.getElementById('uh-posts');
+  if(!posts.length){box.innerHTML='<div class="up-empty">还没有发布过帖子</div>';}
+  else{
+    box.innerHTML=posts.map(function(p){
+      const tags=(p.tags||[]).map(function(t,i){
+        const st=i%2===0?'background:var(--primary-50);color:var(--primary)':'background:var(--accent-light);color:#B45309';
+        return '<span style="'+st+'">'+esc(t)+'</span>';
+      }).join('');
+      return '<div class="post-card" style="animation:none">'+
+        '<div class="post-header">'+
+          '<div class="post-avatar" style="background:'+(name==='me'?'var(--primary)':(u.color||'var(--primary)'))+'">'+(name==='me'?esc(PROFILE.avatarText||PROFILE.name.charAt(0)):esc(u.avatarText))+'</div>'+
+          '<div class="post-meta"><div class="post-author">'+esc(u.name)+'</div><div class="post-time">'+(p.time||fmtPostTime(p.createdAt)||'刚刚')+'</div></div>'+
+        '</div>'+
+        '<div class="post-body">'+esc(p.body)+'</div>'+
+        (tags?'<div class="post-tags">'+tags+'</div>':'')+
+      '</div>';
+    }).join('');
+  }
+  document.getElementById('user-home-overlay').classList.add('show');
+}
+function closeUserHome(){document.getElementById('user-home-overlay').classList.remove('show');}
+
+// ── 学习记录日历（我的页） ──
+let slCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1);
+function openStudyLog(){renderCalendar();document.getElementById('study-log-overlay').classList.add('show');}
+function closeStudyLog(){document.getElementById('study-log-overlay').classList.remove('show');}
+function shiftMonth(delta){
+  slCursor=new Date(slCursor.getFullYear(),slCursor.getMonth()+delta,1);
+  renderCalendar();
+}
+function getAllCompletedTasks(){
+  const list=TASKS.concat(getAiTasks());
+  const map={};
+  list.forEach(function(t){ if(t&&t.completionAt&&!map[t.id])map[t.id]=t; });
+  // 课程页「标记已学」的独立记录（cos_course_done），即使今日任务被重新拆解覆盖，学习日历也不丢记录
+  try{
+    const done=JSON.parse(localStorage.getItem('cos_course_done')||'{}');
+    Object.keys(done||{}).forEach(function(id){
+      const key='course-'+id;
+      if(done[id]&&!map[key])map[key]={id:key,name:'完成一门课程学习',tag:'course',completionAt:done[id]};
+    });
+  }catch(e){}
+  return Object.keys(map).map(function(k){return map[k];});
+}
+function renderCalendar(){
+  const y=slCursor.getFullYear(),m=slCursor.getMonth();
+  document.getElementById('sl-month').textContent=y+' 年 '+(m+1)+' 月';
+  const first=new Date(y,m,1).getDay();
+  const lead=(first+6)%7;
+  const days=new Date(y,m+1,0).getDate();
+  const now=new Date();
+  const doneSet={};
+  const all=getAllCompletedTasks();
+  all.forEach(function(t){
+    const d=new Date(t.completionAt);
+    if(d.getFullYear()===y&&d.getMonth()===m)doneSet[d.getDate()]=1;
+  });
+  let cells='';
+  for(let i=0;i<lead;i++)cells+='<div class="sl-cell blank"></div>';
+  for(let d=1;d<=days;d++){
+    let cls='sl-cell';
+    if(doneSet[d])cls+=' done';
+    if(y===now.getFullYear()&&m===now.getMonth()&&d===now.getDate())cls+=' today';
+    cells+='<div class="'+cls+'">'+d+'</div>';
+  }
+  document.getElementById('sl-grid').innerHTML=cells;
+  // 本月统计
+  const monthTasks=all.filter(function(t){const d=new Date(t.completionAt);return d.getFullYear()===y&&d.getMonth()===m;});
+  const daySet={};
+  all.forEach(function(t){daySet[new Date(t.completionAt).toDateString()]=1;});
+  document.getElementById('sl-days').innerHTML=Object.keys(doneSet).length+'<small> 天</small>';
+  document.getElementById('sl-tasks').innerHTML=monthTasks.length+'<small> 个</small>';
+  document.getElementById('sl-streak').innerHTML=Object.keys(daySet).length+'<small> 天</small>';
+  // 最近完成
+  const rec=document.getElementById('sl-recent');
+  const sorted=all.slice().sort(function(a,b){return b.completionAt-a.completionAt;});
+  if(!sorted.length){rec.innerHTML='<div class="sl-empty">完成第一个任务后，这里会记录你的学习足迹 ✨</div>';return;}
+  rec.innerHTML=sorted.slice(0,6).map(function(t){
+    const d=new Date(t.completionAt);
+    return '<div class="sl-rec-item"><div class="sl-rec-dot"></div><div class="sl-rec-name">'+esc(t.name)+'</div><div class="sl-rec-time">'+(d.getMonth()+1)+'月'+d.getDate()+'日</div></div>';
+  }).join('');
+}
+
+// ── 职业推荐库（探索页「更多」） ──
+const JOB_LIB_CATS=['全部','产品','设计','数据','运营','金融','传媒','教育','咨询','技术','人力'];
+const JOB_LIBRARY=[
+  { id:'p01',name:'产品经理',en:'Product Manager',cat:'产品',pay:'实习 150-250 元/天',city:'深圳 / 北京 / 上海',exp:'应届 / 实习',tags:['需求分析','用户研究','产品规划'],
+    intro:'产品经理负责把一个模糊的问题变成可落地的功能：先弄清楚用户到底需要什么，再和设计、研发一起把它做出来，最后用数据验证有没有解决。核心不是画原型，而是判断「做什么、为什么做、先做哪个」。',
+    duties:['调研用户与业务方的真实需求，输出需求文档（PRD）与流程图','和设计师、研发、测试一起排期推进，跟进版本上线','上线后用数据（留存、转化、使用频次）评估效果，规划下一版'],
+    reqs:['能把一个模糊问题拆成清晰、可执行的需求','会写结构化文档，能用 Figma / Axure 把流程画清楚','具备基础数据意识，看得懂漏斗、留存、转化'],
+    plus:['有一段完整的产品实习或独立项目','会一点 SQL 或埋点分析','做过真实用户访谈'],
+    companies:['字节跳动','腾讯','美团','小红书'],
+    path:['产品助理','产品经理','资深产品经理','产品负责人'] },
+  { id:'p02',name:'产品策略分析师',en:'Product Strategy Analyst',cat:'产品',pay:'实习 150-220 元/天',city:'北京 / 上海 / 深圳',exp:'应届 / 实习',tags:['竞品分析','AB测试','商业模型'],
+    intro:'产品策略分析偏向「做判断」：研究竞品和行业趋势，分析用户结构与商业模式，为产品方向、定价和增长策略提供依据。比产品经理更靠前，比数据分析更偏业务。',
+    duties:['跟踪竞品迭代与行业动态，输出竞品拆解报告','分析用户分层与核心路径数据，找出增长机会点','设计 AB 实验方案，评估策略效果并给出建议'],
+    reqs:['结构化表达强，能把复杂信息整理成结论','熟练使用 Excel / SQL 做数据分析','对商业模式和行业格局有基本认知'],
+    plus:['写过完整的行业或竞品分析报告','会用 Tableau / 帆软等可视化工具'],
+    companies:['字节跳动','快手','得物','携程'],
+    path:['策略分析助理','策略分析师','高级策略','策略负责人'] },
+  { id:'p03',name:'数据产品经理',en:'Data Product Manager',cat:'产品',pay:'实习 150-220 元/天',city:'北京 / 上海 / 深圳',exp:'应届 / 实习',tags:['指标体系','数据看板','SQL'],
+    intro:'数据产品经理做的是「让业务能看懂数据」的产品：指标口径、数据看板、自助分析工具。既要懂业务问题，也要能和数据研发对话。',
+    duties:['梳理业务指标口径，设计指标体系和数据看板','收集业务方的分析需求，定义数据产品的功能范围','推动埋点、数仓、报表的落地与迭代'],
+    reqs:['SQL 能独立写，理解常见数据模型','能把业务问题翻译成指标与字段需求','沟通协调能力强，能同时对接业务和技术'],
+    plus:['做过数据看板或报表项目','了解埋点与数仓基本概念'],
+    companies:['字节跳动','美团','京东','平安'],
+    path:['数据产品助理','数据产品经理','资深数据 PM'] },
+  { id:'p04',name:'教育产品经理',en:'EdTech Product Manager',cat:'教育',pay:'实习 130-200 元/天',city:'深圳 / 广州 / 北京',exp:'应届 / 实习',tags:['课程设计','用户洞察','产品规划'],
+    intro:'教育产品经理面向学习场景做产品：课程内容、学习工具、教学服务流程。需要同时理解学习者的动机与教学逻辑。',
+    duties:['调研学生与教师的使用场景，定义学习产品需求','设计课程结构与学习路径，配合教研打磨内容','跟进学习数据（完课率、留存），优化体验'],
+    reqs:['对学习行为和教学设计有观察和思考','能画清学习流程与页面结构','愿意长期打磨内容型产品'],
+    plus:['做过课程、社群或学习工具类项目','有教研或助教经历'],
+    companies:['作业帮','猿辅导','网易有道','腾讯教育'],
+    path:['教育产品助理','教育产品经理','产品负责人'] },
+  { id:'d01',name:'UX设计师',en:'UX Designer',cat:'设计',pay:'实习 120-200 元/天',city:'深圳 / 上海 / 北京',exp:'应届 / 实习',tags:['用户研究','交互设计','可用性测试'],
+    intro:'UX 设计师关心「用户能不能顺畅完成任务」：通过访谈、观察和数据发现真实痛点，设计信息结构与操作流程，再用原型和测试验证。交付物不只是界面，而是解决问题的方案。',
+    duties:['做用户访谈、问卷和可用性测试，提炼真实痛点','设计任务流程、信息架构与交互原型','与产品、UI、研发协作，跟进方案落地并复盘'],
+    reqs:['能独立完成一次小型用户研究与结论输出','会用 Figma 做中高保真原型','表达清晰，能把设计决策讲出理由'],
+    plus:['有完整的「调研—设计—验证」闭环项目','理解基础的无障碍与可用性规范'],
+    companies:['字节跳动','腾讯','华为','大疆'],
+    path:['UX 设计助理','UX 设计师','资深 UX / 设计专家'] },
+  { id:'d02',name:'UI/UX 设计师',en:'UI/UX Designer',cat:'设计',pay:'实习 120-220 元/天',city:'深圳 / 杭州 / 上海',exp:'应届 / 实习',tags:['视觉设计','设计规范','界面设计'],
+    intro:'UI/UX 设计师是界面与体验都要负责的岗位，在中小团队尤其常见：既做交互流程，也做视觉与组件规范。',
+    duties:['根据交互方案完成高保真界面设计','维护组件库与设计规范，保证多端一致','配合研发走查还原度，处理适配与细节问题'],
+    reqs:['Figma 熟练，能建立组件与样式规范','有基本的排版、色彩与层级审美','能接受多轮修改并保持一致性'],
+    plus:['有移动端 + 桌面端适配经验','会一点动效或插画'],
+    companies:['字节跳动','小红书','shein','货拉拉'],
+    path:['UI 设计师','UI/UX 设计师','资深设计 / 设计主管'] },
+  { id:'d03',name:'交互设计师',en:'Interaction Designer',cat:'设计',pay:'实习 130-220 元/天',city:'深圳 / 北京 / 上海',exp:'应届 / 实习',tags:['流程设计','原型','动效'],
+    intro:'交互设计师专注「怎么操作」：流程、状态、反馈与动效节奏。相比 UI，更关心系统在每一步给用户的回应是否清楚。',
+    duties:['梳理复杂业务的操作流程与状态机','输出交互说明文档，覆盖异常与边界情况','设计关键动效与反馈，和研发确认实现效果'],
+    reqs:['逻辑严谨，能想到异常路径和边界状态','会用 Figma / Principle 表达交互','能和研发就实现成本沟通'],
+    plus:['有 B 端或复杂系统设计经验','做过动效规范'],
+    companies:['腾讯','华为','阿里','字节跳动'],
+    path:['交互设计助理','交互设计师','资深交互'] },
+  { id:'d04',name:'用户研究员',en:'User Researcher',cat:'设计',pay:'实习 120-200 元/天',city:'北京 / 上海 / 深圳',exp:'应届 / 实习',tags:['访谈','问卷','洞察'],
+    intro:'用户研究员用研究方法回答「用户是谁、为什么这样用、卡在哪」。产出是洞察与建议，直接影响产品方向。',
+    duties:['设计并执行访谈、问卷、可用性测试','整理访谈记录，输出洞察报告与改进建议','建立用户画像与需求地图，沉淀研究资产'],
+    reqs:['会设计访谈提纲，能问出真实动机','能区分「用户说的」和「用户做的」','报告结构清楚，结论有证据支撑'],
+    plus:['有完整的定性研究项目','了解基础统计分析'],
+    companies:['腾讯','字节跳动','阿里','华为'],
+    path:['研究助理','用户研究员','资深研究员'] },
+  { id:'d05',name:'视觉设计师',en:'Visual Designer',cat:'设计',pay:'实习 100-180 元/天',city:'深圳 / 广州 / 上海',exp:'应届 / 实习',tags:['版式','品牌视觉','插画'],
+    intro:'视觉设计师负责品牌与画面的表达：海报、活动页、品牌视觉系统。核心是审美稳定性与执行效率。',
+    duties:['完成活动页、海报、社媒配图等视觉物料','参与品牌视觉规范与模板建设','配合运营快速产出多尺寸适配版本'],
+    reqs:['版式、色彩、字体基本功扎实','熟练使用 Figma / Illustrator / Photoshop','能在明确规范下稳定输出'],
+    plus:['有品牌或活动视觉案例','会插画、C4D 或动效'],
+    companies:['小红书','得物','网易','广告与品牌公司'],
+    path:['视觉设计助理','视觉设计师','资深视觉 / 美术指导'] },
+  { id:'da01',name:'数据分析师',en:'Data Analyst',cat:'数据',pay:'实习 150-250 元/天',city:'深圳 / 北京 / 上海',exp:'应届 / 实习',tags:['SQL','可视化','业务分析'],
+    intro:'数据分析师用数据回答业务问题：用户为什么流失、哪个渠道更划算、这次改版有没有效果。重点是把数据翻译成可执行的结论。',
+    duties:['写 SQL 取数，搭建日常业务报表','做异动归因与专题分析，输出结论和建议','设计并评估 AB 实验，跟进指标变化'],
+    reqs:['SQL 熟练，能独立完成多表查询','理解常见统计概念（显著性、置信区间）','能把分析结论讲成业务听得懂的话'],
+    plus:['会 Python / R 做数据处理','有可视化看板作品'],
+    companies:['字节跳动','美团','平安','招商银行'],
+    path:['数据分析助理','数据分析师','资深分析师 / 数据负责人'] },
+  { id:'da02',name:'数据运营',en:'Data Operations',cat:'数据',pay:'实习 120-200 元/天',city:'深圳 / 杭州 / 上海',exp:'应届 / 实习',tags:['指标体系','报表','运营策略'],
+    intro:'数据运营是业务和数据之间的桥梁：盯指标、找异常、推动一线动作落地。偏执行与协同，成长快。',
+    duties:['维护日常指标报表，及时发现异常波动','拆解运营目标到具体动作，跟踪执行效果','沉淀口径文档，减少团队反复对数'],
+    reqs:['Excel / SQL 至少一项熟练','细心，对数字敏感','能把问题跟进到闭环'],
+    plus:['做过社群或活动运营','会做自动化报表'],
+    companies:['字节跳动','拼多多','shein','货拉拉'],
+    path:['数据运营专员','数据运营','运营负责人'] },
+  { id:'o01',name:'用户运营',en:'User Operations',cat:'运营',pay:'实习 120-200 元/天',city:'深圳 / 广州 / 北京',exp:'应届 / 实习',tags:['用户分层','社群','留存'],
+    intro:'用户运营围绕「让用户留下来、活跃起来」：分层、触达、活动、社群。需要既懂用户心理，也能落地执行。',
+    duties:['做用户分层，针对不同人群设计触达策略','策划并执行社群、活动、召回动作','跟踪留存与活跃指标，复盘动作效果'],
+    reqs:['沟通表达强，愿意和用户直接打交道','能写清楚的文案与活动方案','对数据变化敏感'],
+    plus:['运营过社群或账号','会基础数据复盘'],
+    companies:['小红书','字节跳动','得物','Soul'],
+    path:['用户运营专员','用户运营','用户增长负责人'] },
+  { id:'o02',name:'增长运营',en:'Growth Operations',cat:'运营',pay:'实习 150-250 元/天',city:'北京 / 上海 / 深圳',exp:'应届 / 实习',tags:['增长模型','实验设计','渠道'],
+    intro:'增长运营负责用更低成本获得更多有效用户：渠道、裂变、转化漏斗、实验。目标导向很强。',
+    duties:['拆解拉新、激活、留存、转化的漏斗','设计并执行增长实验，评估投入产出','管理渠道投放与素材迭代'],
+    reqs:['有实验思维，能设计对照与评估口径','数据敏感，能快速定位漏斗问题','执行力强，能并行推进多个动作'],
+    plus:['做过裂变或投放项目','会 SQL 或埋点分析'],
+    companies:['字节跳动','拼多多','快手','携程'],
+    path:['增长运营专员','增长运营','增长负责人'] },
+  { id:'o03',name:'内容运营',en:'Content Operations',cat:'运营',pay:'实习 100-180 元/天',city:'深圳 / 广州 / 上海',exp:'应届 / 实习',tags:['内容策划','选题','数据复盘'],
+    intro:'内容运营负责内容的生产与分发：选题、编辑、排期、分发渠道与效果复盘。需要稳定的内容判断力。',
+    duties:['做选题规划与内容排期，跟进生产进度','编辑与优化标题、封面、结构','复盘阅读、完播、互动数据，迭代选题'],
+    reqs:['有内容审美和基本的文字功底','理解不同平台的推荐逻辑','能持续稳定产出'],
+    plus:['运营过公众号 / 小红书 / 视频号','会基础剪辑或配图'],
+    companies:['小红书','字节跳动','网易','MCN 机构'],
+    path:['内容运营专员','内容运营','内容负责人'] },
+  { id:'o04',name:'新媒体运营',en:'New Media Operations',cat:'运营',pay:'实习 100-180 元/天',city:'深圳 / 广州 / 杭州',exp:'应届 / 实习',tags:['社媒','短视频','账号运营'],
+    intro:'新媒体运营负责品牌在社交平台上的账号与内容：选题、拍摄剪辑、发布节奏、互动与数据。',
+    duties:['规划账号内容方向与发布节奏','完成图文 / 短视频的策划、拍摄与剪辑','维护评论区与私信，跟踪粉丝增长'],
+    reqs:['熟悉至少一个平台的玩法与规则','会基础剪辑（剪映 / Pr）与排版','对热点敏感，能快速响应'],
+    plus:['有个人账号或账号代运营经历','会简单拍摄与打光'],
+    companies:['品牌市场部','MCN 机构','本地生活商家','互联网公司市场部'],
+    path:['新媒体专员','新媒体运营','内容 / 品牌负责人'] },
+  { id:'f01',name:'财务分析师',en:'Financial Analyst',cat:'金融',pay:'实习 150-250 元/天',city:'深圳 / 上海 / 北京',exp:'应届 / 实习',tags:['财务建模','Excel','报表分析'],
+    intro:'财务分析师用报表和模型回答经营问题：钱花在哪、赚在哪、未来怎么走。四大、企业财务、券商都需要。',
+    duties:['整理与分析三大报表，做同比环比与结构分析','搭建预算与预测模型，跟踪实际 vs 预算差异','输出经营分析报告，支持管理层决策'],
+    reqs:['Excel 熟练（函数、透视表、基础建模）','理解会计科目与报表勾稽关系','数字严谨，能承受结账期强度'],
+    plus:['通过 CPA 部分科目','会 Power BI / Python 处理数据'],
+    companies:['毕马威','普华永道','招商银行','腾讯财务'],
+    path:['财务分析助理','财务分析师','财务经理 / FP&A 负责人'] },
+  { id:'f02',name:'合规管理专员',en:'Compliance Officer',cat:'金融',pay:'实习 120-200 元/天',city:'深圳 / 上海 / 北京',exp:'应届 / 实习',tags:['法规解读','风险评估','合规审查'],
+    intro:'合规管理确保业务在规则内运行：解读监管要求、审查流程与材料、识别风险并推动整改。金融、医疗、互联网平台都需要。',
+    duties:['跟踪监管新规，评估对现有业务的影响','审查合同、宣传材料与业务流程的合规性','组织合规培训与检查，跟进整改闭环'],
+    reqs:['文字严谨，能读懂法规原文','有风险意识，善于发现漏洞','沟通时能坚持原则又不激化矛盾'],
+    plus:['法律 / 金融相关背景','通过法律职业资格或反洗钱相关证书'],
+    companies:['银行','券商','平安','互联网平台合规部'],
+    path:['合规专员','合规经理','合规负责人'] },
+  { id:'f03',name:'金融产品助理',en:'Fintech Product Assistant',cat:'金融',pay:'实习 150-220 元/天',city:'深圳 / 上海 / 杭州',exp:'应届 / 实习',tags:['业务流程','风控','需求文档'],
+    intro:'金融产品助理参与金融类产品的需求与流程设计，比如借贷、支付、理财。需要同时理解业务规则与用户体验。',
+    duties:['整理业务需求，输出流程与规则说明','配合风控、合规确认边界条件','跟进版本上线与问题反馈'],
+    reqs:['逻辑清楚，能把规则写成流程','对金融业务有基本认知','细心，能覆盖异常场景'],
+    plus:['了解支付或信贷基本流程','会画原型'],
+    companies:['平安','招商银行','蚂蚁集团','微众银行'],
+    path:['产品助理','金融产品经理','产品负责人'] },
+  { id:'m01',name:'内容创意策划',en:'Creative Planner',cat:'传媒',pay:'实习 120-200 元/天',city:'深圳 / 上海 / 北京',exp:'应届 / 实习',tags:['创意策划','文案','品牌调性'],
+    intro:'内容创意策划负责「想点子并把它说清楚」：campaign 创意、内容栏目、脚本与文案。需要稳定的创意产出和表达能力。',
+    duties:['根据品牌目标产出创意概念与内容方案','撰写脚本、文案与分镜，配合拍摄执行','复盘内容效果，迭代创意方向'],
+    reqs:['有持续的创意输出习惯和作品','文字表达准确，能匹配品牌调性','能接受多轮改稿'],
+    plus:['有完整的 campaign 或栏目策划案例','会剪辑或简单视觉'],
+    companies:['广告公司','品牌市场部','小红书','网易'],
+    path:['策划助理','内容策划','创意总监'] },
+  { id:'m02',name:'广告创意',en:'Advertising Creative',cat:'传媒',pay:'实习 120-200 元/天',city:'上海 / 北京 / 广州',exp:'应届 / 实习',tags:['广告','创意','文案'],
+    intro:'广告创意在 4A 或创意热店做 campaign：从洞察到 idea 到执行。强度大，但作品积累快。',
+    duties:['参与 brief 解读与创意发想','撰写文案、脚本与创意阐述','配合美术与制片完成落地执行'],
+    reqs:['点子多，能把洞察转成可执行创意','文案基本功扎实','抗压能力强，能适应快节奏'],
+    plus:['有获奖或参赛作品','会第二技能（美术 / 剪辑）'],
+    companies:['奥美','电通','创意热店','品牌 in-house'],
+    path:['创意助理','文案 / 美术','创意组长','创意总监'] },
+  { id:'m03',name:'品牌公关',en:'Brand PR',cat:'传媒',pay:'实习 120-180 元/天',city:'深圳 / 上海 / 北京',exp:'应届 / 实习',tags:['传播策略','媒体关系','危机公关'],
+    intro:'品牌公关负责品牌对外的声音：传播节奏、媒体关系、发布会与危机应对。需要判断力与沟通力。',
+    duties:['制定传播计划，撰写新闻稿与口径','维护媒体与 KOL 关系，跟进报道落地','监测舆情，参与危机应对'],
+    reqs:['文字功底好，能写正式稿件','沟通得体，能应对多方','对舆论环境敏感'],
+    plus:['有媒体或公关实习经历','做过发布会或活动执行'],
+    companies:['品牌公关部','公关公司','互联网公司市场部'],
+    path:['公关专员','公关经理','品牌负责人'] },
+  { id:'c01',name:'管理咨询顾问',en:'Management Consultant',cat:'咨询',pay:'实习 200-300 元/天',city:'上海 / 北京 / 深圳',exp:'应届 / 实习',tags:['问题拆解','方案设计','客户沟通'],
+    intro:'咨询顾问用结构化方法帮企业解决问题：拆解问题、做调研与访谈、形成方案并推动落地。成长快，强度也高。',
+    duties:['拆解客户问题，形成分析框架与工作假设','做访谈、调研与数据分析，验证假设','输出汇报材料，向客户呈现结论与建议'],
+    reqs:['结构化思维强，会用框架拆问题','PPT / Excel 表达专业','能在高压下按时交付'],
+    plus:['有咨询或行业研究实习','英语可作为工作语言'],
+    companies:['麦肯锡','波士顿咨询','毕马威','埃森哲'],
+    path:['咨询分析师','咨询顾问','项目经理','合伙人'] },
+  { id:'c02',name:'项目管理专员（PMO）',en:'PMO Specialist',cat:'咨询',pay:'实习 130-200 元/天',city:'深圳 / 上海 / 北京',exp:'应届 / 实习',tags:['项目排期','进度追踪','风险预警'],
+    intro:'PMO 负责让项目按计划推进：排期、拉齐信息、暴露风险、推动决策。不是拍板的人，但决定项目节奏。',
+    duties:['制定项目计划与里程碑，跟踪进度','组织例会，维护风险与问题清单','沉淀项目复盘与流程规范'],
+    reqs:['条理清楚，能把多方信息拉齐','Excel / 项目管理工具熟练','沟通耐心，能推动他人行动'],
+    plus:['带过社团或跨团队项目','了解敏捷 / 瀑布流程'],
+    companies:['互联网公司 PMO','咨询公司','制造业项目管理部'],
+    path:['项目专员','PMO','项目经理 / PMO 负责人'] },
+  { id:'t01',name:'前端开发工程师',en:'Front-end Engineer',cat:'技术',pay:'实习 200-300 元/天',city:'深圳 / 杭州 / 北京',exp:'应届 / 实习',tags:['HTML/CSS','JavaScript','组件化'],
+    intro:'前端工程师把设计稿变成可用的界面与交互：页面结构、样式、状态逻辑、性能与兼容性。',
+    duties:['实现页面与交互，保证多端一致性','维护组件与工程结构，处理状态与异常','优化加载与渲染性能，排查线上问题'],
+    reqs:['HTML / CSS / JS 基础扎实','理解组件化与常见框架（React / Vue）','能读懂设计稿并还原细节'],
+    plus:['有上线项目或开源作品','了解构建工具与基础工程化'],
+    companies:['字节跳动','腾讯','阿里','shein'],
+    path:['前端工程师','高级前端','前端架构 / 技术专家'] },
+  { id:'t02',name:'测试开发工程师',en:'SDET',cat:'技术',pay:'实习 180-280 元/天',city:'深圳 / 北京 / 上海',exp:'应届 / 实习',tags:['自动化测试','Python/Java','CI/CD'],
+    intro:'测试开发负责质量保障：设计测试用例、写自动化脚本、搭建持续集成，把问题拦在上线前。',
+    duties:['根据需求设计测试用例，覆盖异常与边界','编写与维护自动化测试脚本','接入 CI/CD，跟踪缺陷并推动修复'],
+    reqs:['至少一门语言能写脚本（Python / Java）','理解接口测试与常见缺陷类型','细致，有追根究底的习惯'],
+    plus:['做过自动化测试项目','了解性能测试'],
+    companies:['字节跳动','华为','大疆','平安'],
+    path:['测试工程师','测试开发','质量负责人'] },
+  { id:'t03',name:'嵌入式开发工程师',en:'Embedded Engineer',cat:'技术',pay:'实习 180-280 元/天',city:'深圳 / 东莞 / 上海',exp:'应届 / 实习',tags:['C/C++','硬件调试','RTOS'],
+    intro:'嵌入式工程师在硬件上写代码：驱动、通信、实时任务。手机、汽车、机器人、智能硬件都需要。',
+    duties:['编写与调试驱动、通信与外设程序','在 RTOS / Linux 环境完成实时任务开发','配合硬件做联调，定位软硬件问题'],
+    reqs:['C / C++ 基础扎实','理解中断、内存与常见通信协议','会用示波器、逻辑分析仪调试'],
+    plus:['做过完整硬件项目','了解低功耗设计'],
+    companies:['华为','大疆','比亚迪','OPPO'],
+    path:['嵌入式工程师','高级嵌入式','技术专家'] },
+  { id:'t04',name:'硬件开发工程师',en:'Hardware Engineer',cat:'技术',pay:'实习 180-280 元/天',city:'深圳 / 东莞 / 苏州',exp:'应届 / 实习',tags:['电路设计','PCB','调试'],
+    intro:'硬件工程师负责电路与 PCB 设计、器件选型与调试，把产品从原理图做到能稳定量产。',
+    duties:['完成原理图与 PCB 设计，输出设计文档','做器件选型与成本评估','调试样机，配合工厂完成试产'],
+    reqs:['模电数电基础扎实','会使用 EDA 工具（Altium / Cadence）','能独立排查硬件故障'],
+    plus:['有完整硬件项目','了解 EMC 与可靠性测试'],
+    companies:['华为','大疆','海康威视','比亚迪'],
+    path:['硬件工程师','高级硬件','硬件负责人'] },
+  { id:'p05',name:'产品体验设计师（实习）',en:'Product Experience Designer',cat:'设计',pay:'实习 150-250 元/天',city:'深圳 / 北京',exp:'实习',tags:['体验设计','用户研究','数据驱动'],
+    intro:'介于 UX 与产品之间的岗位，在内容 / 社区类产品里常见：既做体验方案，也参与功能定义，强调用数据验证设计。',
+    duties:['参与功能定义，输出体验方案与原型','做小规模用户验证，快速迭代','与产品、研发共建体验规范'],
+    reqs:['有完整的设计项目，能讲清取舍','会用数据支撑设计判断','沟通与推动能力强'],
+    plus:['做过社区 / 内容类产品','有 AB 实验经验'],
+    companies:['字节跳动','腾讯','小红书','得物'],
+    path:['体验设计实习','体验设计师','资深体验设计'] },
+  { id:'o05',name:'增长产品经理',en:'Growth PM',cat:'产品',pay:'实习 150-250 元/天',city:'北京 / 上海 / 深圳',exp:'应届 / 实习',tags:['增长','漏斗','实验'],
+    intro:'增长产品经理负责拉新、激活与留存的机制设计：注册流程、激励体系、推荐裂变，核心是持续做实验。',
+    duties:['拆解增长漏斗，找到关键卡点','设计激励机制与转化流程','设计并分析 AB 实验，持续迭代'],
+    reqs:['数据敏感，能独立分析漏斗','理解实验方法与统计基础','能快速试错、接受失败'],
+    plus:['做过增长相关项目','会 SQL'],
+    companies:['字节跳动','拼多多','快手','滴滴'],
+    path:['增长产品助理','增长 PM','增长负责人'] },
+  { id:'h01',name:'HRBP',en:'HR Business Partner',cat:'人力',pay:'实习 120-200 元/天',city:'深圳 / 上海 / 北京',exp:'应届 / 实习',tags:['组织诊断','员工关系','人才发展'],
+    intro:'HRBP 是业务的 HR 伙伴：招人、留人、组织诊断、员工关系。既要懂人，也要懂业务在做什么。',
+    duties:['支持业务线招聘与人才盘点','处理员工关系与绩效沟通','做组织与团队氛围诊断，提出改进方案'],
+    reqs:['沟通与共情能力强，能处理敏感问题','了解招聘、绩效、劳动法基础','能站在业务视角看人力问题'],
+    plus:['有 HR 或组织发展实习','了解劳动法基本条款'],
+    companies:['字节跳动','腾讯','华为','美团'],
+    path:['HR 专员','HRBP','HR 负责人'] },
+  { id:'m04',name:'内容创作',en:'Content Creator',cat:'传媒',pay:'实习 100-180 元/天',city:'深圳 / 上海 / 北京',exp:'应届 / 实习',tags:['选题','写作','脚本'],
+    intro:'内容创作把一个想法变成可读、可看的内容：选题、结构、文字与脚本，直接面对读者和观众。',
+    duties:['按选题产出图文或短视频脚本','把专业信息改写成用户看得懂的表达','根据数据反馈调整表达方式'],
+    reqs:['文字表达清楚，能稳定产出','对平台内容风格有基本判断'],
+    plus:['有个人作品或运营过账号'],
+    companies:['小红书','字节跳动','网易','MCN 机构'],
+    path:['内容创作者','内容主编','内容负责人'] },
+  { id:'m05',name:'文案策划',en:'Copywriter',cat:'传媒',pay:'实习 100-180 元/天',city:'深圳 / 广州 / 上海',exp:'应届 / 实习',tags:['文案','品牌','活动'],
+    intro:'文案策划负责品牌与活动的表达：一句主标语、一套物料文案、一次活动的传播话术。',
+    duties:['写品牌、活动、产品的主文案与物料文案','配合设计完成传播物料','根据投放数据优化表达'],
+    reqs:['文字功底扎实，能写出不同语气','理解品牌调性与目标人群'],
+    plus:['有完整作品集','做过活动传播'],
+    companies:['广告公司','品牌市场部','MCN 机构'],
+    path:['文案','文案策划','创意总监'] },
+  { id:'s01',name:'销售',en:'Sales',cat:'运营',pay:'底薪 4-6k + 提成',city:'深圳 / 广州 / 全国',exp:'应届',tags:['客户开发','谈判','跟进'],
+    intro:'销售直接面对客户：找线索、谈需求、推进成交，并对结果负责。',
+    duties:['开发与维护客户，跟进需求到成交','整理客户信息与跟进记录','复盘成交与流失原因'],
+    reqs:['沟通表达强，抗压','能接受结果导向的考核'],
+    plus:['有实习或社团拉赞助经历'],
+    companies:['SaaS 公司','教育培训','本地生活商家'],
+    path:['销售专员','销售经理','区域负责人'] },
+  { id:'s02',name:'客服',en:'Customer Service',cat:'运营',pay:'实习 100-150 元/天',city:'深圳 / 广州 / 成都',exp:'应届 / 实习',tags:['沟通','问题处理','满意度'],
+    intro:'客服是用户遇到问题时第一个找到的人：答疑、处理、反馈，并推动问题不再发生。',
+    duties:['处理用户的咨询、投诉与售后问题','记录高频问题，反馈给产品或运营','跟进问题闭环，提升满意度'],
+    reqs:['耐心，表达清楚','能按流程处理重复问题'],
+    plus:['有社群或前台服务经验'],
+    companies:['电商平台','SaaS 公司','本地生活平台'],
+    path:['客服专员','客服主管','用户体验运营'] },
+  { id:'h02',name:'人力资源',en:'Human Resources',cat:'人力',pay:'实习 120-200 元/天',city:'深圳 / 上海 / 北京',exp:'应届 / 实习',tags:['招聘','员工关系','流程'],
+    intro:'人力资源负责招聘、入离职、员工关系与基础流程，是组织和人之间的接口。',
+    duties:['执行招聘流程：发布、筛选、约面、跟进','处理入离职与员工关系事务','维护人事数据与流程文档'],
+    reqs:['沟通细致，能保守信息','了解基础劳动法规常识'],
+    plus:['做过校园招聘或社团招新'],
+    companies:['互联网公司 HR 部门','制造业','人力资源服务机构'],
+    path:['HR 专员','HRBP','HR 负责人'] }
+];
+let clCat='全部';
+function openCareerLib(q){
+  clCat='全部';
+  const s=document.getElementById('cl-search');
+  if(s)s.value=(q||'');
+  renderCareerLib();
+  document.getElementById('career-lib-overlay').classList.add('show');
+}
+function closeCareerLib(){document.getElementById('career-lib-overlay').classList.remove('show');}
+function renderCareerLib(){
+  const cats=document.getElementById('cl-cats');
+  if(cats){
+    cats.innerHTML=JOB_LIB_CATS.map(function(c){
+      return '<button class="tag-pill'+(c===clCat?' active':'')+'" onclick="setCareerLibCat(this,\''+c+'\')">'+c+'</button>';
+    }).join('');
+  }
+  filterCareerLib();
+}
+function setCareerLibCat(btn,c){
+  clCat=c;
+  document.querySelectorAll('#cl-cats .tag-pill').forEach(function(b){b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  filterCareerLib();
+}
+function careerLibMatches(job,q){
+  if(!q)return true;
+  const hay=[job.name,job.en,job.cat,job.city,job.exp,(job.tags||[]).join(' '),(job.companies||[]).join(' '),job.intro,(job.duties||[]).join(' '),(job.reqs||[]).join(' '),(job.plus||[]).join(' ')].join(' ').toLowerCase();
+  return hay.indexOf(q)>-1;
+}
+function filterCareerLib(){
+  const qEl=document.getElementById('cl-search');
+  const q=(qEl&&qEl.value?qEl.value:'').trim().toLowerCase();
+  const goals=(typeof Store!=='undefined'?Store.get('careerGoal'):null)||[];
+  const goalNames=(Array.isArray(goals)?goals:[]).map(function(g){return (g&&g.name)?g.name:(typeof g==='string'?g:'');});
+  const list=JOB_LIBRARY.filter(function(j){
+    return (clCat==='全部'||j.cat===clCat)&&careerLibMatches(j,q);
+  });
+  const cnt=document.getElementById('cl-count');
+  if(cnt)cnt.textContent=clCat+(q?' · 搜索「'+q+'」':'')+' · 共 '+list.length+' 个岗位';
+  const box=document.getElementById('cl-list');
+  const empty=document.getElementById('cl-empty');
+  if(!box)return;
+  if(!list.length){
+    box.innerHTML='';
+    if(empty)empty.classList.add('show');
+    return;
+  }
+  if(empty)empty.classList.remove('show');
+  const styles=[['var(--primary-50)','var(--primary)'],['var(--indigo-light)','var(--indigo)'],['var(--accent-light)','#B45309'],['var(--sky-light)','var(--sky)'],['var(--violet-light)','var(--violet)'],['var(--rose-light)','var(--rose)']];
+  box.innerHTML=list.map(function(j,i){
+    const bg=styles[i%styles.length][0],cc=styles[i%styles.length][1];
+    const goalHit=goalNames.indexOf(j.name)>-1;
+    return '<div class="cl-card" onclick="openJobDetail(\''+j.id+'\')" aria-label="'+j.name+'">'+
+      '<div class="cl-card-icon" style="background:'+bg+';color:'+cc+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(ICON_MAP[j.name]||'<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>')+'</svg></div>'+
+      '<div class="cl-card-main"><div class="cl-card-title">'+j.name+(goalHit?'<span class="cl-fit">🎯 你的目标</span>':'')+'</div>'+
+        '<div class="cl-card-en">'+j.en+' · '+j.cat+'</div>'+
+        '<div class="cl-card-meta"><span class="pay">'+j.pay+'</span><span>'+j.city+'</span><span>'+j.exp+'</span></div>'+
+      '</div>'+
+      '<div class="cl-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>'+
+    '</div>';
+  }).join('');
+}
+/* ═══════ 职业档案（探索页自选职业点开） ═══════ */
+const CAREER_COURSES={
+  'c-ux-1':'Google UX Design 专业证书',
+  'c-ux-2':'用户研究方法实战：访谈、问卷与可用性测试',
+  'c-ux-3':'交互设计进阶：从流程图到高保真原型',
+  'c-ux-4':'可用性测试与结果解读',
+  'c-ux-5':'设计系统与组件库搭建',
+  'c-pm-1':'产品经理第一课：需求分析与优先级',
+  'c-pm-2':'写好一份 PRD：用户故事与验收标准',
+  'c-pm-3':'数据驱动的产品决策',
+  'c-pm-4':'从 0 到 1 做一个小产品（实战项目课）',
+  'c-da-1':'Google Data Analytics 专业证书',
+  'c-da-2':'SQL 入门到实战：查询、聚合与窗口函数',
+  'c-da-3':'Excel 数据透视与可视化',
+  'c-da-4':'Tableau 可视化入门',
+  'c-soft-1':'简历与作品集叙事：让项目讲出价值',
+  'c-soft-2':'面试表达与 STAR 法则',
+  'c-soft-3':'群面与 case 分析拆解',
+  'c-tool-1':'Figma 从零到组件变体',
+  'c-tool-2':'Notion 搭建个人求职管理系统'
+};
+const CAREER_PROFILE={
+  'UI/UX 设计师':{
+    one:'把用户说不清的需求变成看得懂、用得顺的界面和流程。判断标准不是「好不好看」，而是用户能不能一次用对。',
+    day:'上午看用户反馈和数据、和产品对齐需求边界；下午画流程与原型、拉评审；上线前做走查，盯还原度。',
+    entry:'专业不限，作品集比学校更重要；应届可投，通常要 2–3 个能讲清「问题—方案—验证」的项目。',
+    skills:[
+      {n:'用户研究与访谈',k:['研究','调研','访谈'],c:'c-ux-2'},
+      {n:'原型与流程设计',k:['Figma','原型','工具','流程'],c:'c-ux-3'},
+      {n:'设计规范与组件',k:['组件','设计系统','规范','UX'],c:'c-ux-5'},
+      {n:'可用性测试',k:['可用性','用户测试','测试'],c:'c-ux-4'}
+    ],
+    jd:'d02'
+  },
+  'UX设计师':{
+    one:'更靠前地研究用户：搞清楚人为什么卡住、在哪一步放弃，再把问题定义成可以设计的方案。',
+    day:'做访谈和可用性测试，整理用户旅程与痛点；把结论交给交互和视觉落地，最后回来验证有没有解决。',
+    entry:'心理学、传播、设计背景都常见；核心看你能不能独立跑完一次用户研究并说清结论。',
+    skills:[
+      {n:'用户研究与访谈',k:['研究','调研','访谈'],c:'c-ux-2'},
+      {n:'交互与流程设计',k:['交互','流程','原型'],c:'c-ux-3'},
+      {n:'可用性测试',k:['可用性','用户测试','测试'],c:'c-ux-4'}
+    ],
+    jd:'d01'
+  },
+  '交互设计师':{
+    one:'决定一个功能点下去之后发生什么：流程、状态、异常和反馈，都要在动手画之前想清楚。',
+    day:'拆任务流和状态图，画可点击原型；和开发逐条过交互细节，处理边界和异常情况。',
+    entry:'需要有作品能展示「你怎么想清楚一个复杂流程」，而不是只有几张漂亮截图。',
+    skills:[
+      {n:'流程与状态设计',k:['交互','流程','状态'],c:'c-ux-3'},
+      {n:'原型工具（Figma）',k:['Figma','原型','工具'],c:'c-tool-1'},
+      {n:'可用性测试',k:['可用性','用户测试','测试'],c:'c-ux-4'}
+    ],
+    jd:'d03'
+  },
+  '产品经理':{
+    one:'把模糊的问题变成能落地的功能：判断做什么、为什么做、先做哪个，然后推着团队把它做出来。',
+    day:'上午对需求、写文档；下午和设计研发过方案、排期；上线后看数据决定下一版做不做、怎么做。',
+    entry:'专业不限，看的是能不能把问题拆清楚并推进落地；应届多从产品助理或实习做起。',
+    skills:[
+      {n:'需求分析与优先级',k:['需求','优先级','产品'],c:'c-pm-1'},
+      {n:'PRD 与用户故事',k:['PRD','文档','用户故事'],c:'c-pm-2'},
+      {n:'数据驱动决策',k:['数据','指标','SQL'],c:'c-pm-3'},
+      {n:'完整项目实战',k:['项目','实战'],c:'c-pm-4'}
+    ],
+    jd:'p01'
+  },
+  '产品研究员':{
+    one:'在动手做功能之前，先搞清楚用户到底怎么想、怎么说、怎么做，避免团队拍脑袋做决定。',
+    day:'设计访谈提纲和问卷，约用户做测试；整理原始记录，输出能直接指导设计的结论。',
+    entry:'看重方法是否扎实：样本怎么选、问题怎么问、结论有没有证据支撑。',
+    skills:[
+      {n:'访谈与问卷设计',k:['研究','调研','访谈','问卷'],c:'c-ux-2'},
+      {n:'可用性测试',k:['可用性','用户测试','测试'],c:'c-ux-4'},
+      {n:'数据整理与呈现',k:['Excel','数据','可视化'],c:'c-da-3'}
+    ],
+    jd:'d04'
+  },
+  '数据分析师':{
+    one:'把业务问题翻译成指标和查询，用数据回答「发生了什么、为什么、接下来该看什么」。',
+    day:'接业务方的取数需求写 SQL；搭看板、做周报；发现异常后往下拆维度找原因。',
+    entry:'SQL 是硬门槛，Excel 和可视化是日常；应届可投，实习经历比证书更有用。',
+    skills:[
+      {n:'SQL 取数',k:['SQL'],c:'c-da-2'},
+      {n:'Excel 与可视化',k:['Excel','数据','可视化'],c:'c-da-3'},
+      {n:'Tableau 看板',k:['Tableau','可视化'],c:'c-da-4'},
+      {n:'数据分析系统入门',k:['数据分析','数据'],c:'c-da-1'}
+    ],
+    jd:null
+  },
+  '视觉设计师':{
+    one:'负责界面的「长相」：版式、色彩、图标和品牌一致性，让信息看起来有秩序、有重点。',
+    day:'按设计规范出视觉稿，做多尺寸适配；和前端对还原，处理字体、间距和细节。',
+    entry:'作品集决定一切：风格是否稳定、细节是否经得起放大看。',
+    skills:[
+      {n:'设计规范与组件',k:['组件','设计系统','规范','UX'],c:'c-ux-5'},
+      {n:'Figma 工具',k:['Figma','工具'],c:'c-tool-1'},
+      {n:'作品集呈现',k:['作品集','叙事','简历'],c:'c-soft-1'}
+    ],
+    jd:'d05'
+  },
+  '用户运营':{
+    one:'把用户分层，找出该重点维护的那批人，用活动和触达让他们留下来、用得更深。',
+    day:'看留存和活跃数据，设计分层策略；写推送和活动方案，跟一轮效果再迭代。',
+    entry:'沟通和执行力优先，能从数据里看出问题；应届从运营实习做起。',
+    skills:[
+      {n:'用户洞察',k:['研究','调研','用户'],c:'c-ux-2'},
+      {n:'数据复盘',k:['Excel','数据'],c:'c-da-3'},
+      {n:'增长实验',k:['数据','指标','实验'],c:'c-pm-3'}
+    ],
+    jd:'o01'
+  },
+  '新媒体运营':{
+    one:'负责账号的内容节奏：选题、发布、互动、复盘，把内容做成能持续涨粉的东西。',
+    day:'盯热点和后台数据，排选题与发布计划；写文案、剪素材，按周复盘哪类内容有效。',
+    entry:'看作品：账号数据、爆款拆解、能不能稳定产出，比学历更重要。',
+    skills:[
+      {n:'内容策划与选题',k:['内容','文案','选题'],c:null},
+      {n:'数据复盘',k:['Excel','数据'],c:'c-da-3'},
+      {n:'作品集呈现',k:['作品集','叙事','简历'],c:'c-soft-1'}
+    ],
+    jd:'o04'
+  },
+  '内容创意策划':{
+    one:'把一个产品或品牌想表达的东西，变成一个用户愿意看完、愿意转发的创意概念。',
+    day:'和需求方对 brief，出创意方向；写脚本和文案，跟进制作落地。',
+    entry:'看创意产出和执行力，能拿出完整的 campaign 或内容案例。',
+    skills:[
+      {n:'创意与文案',k:['文案','创意','内容'],c:null},
+      {n:'作品集呈现',k:['作品集','叙事','简历'],c:'c-soft-1'},
+      {n:'效果数据复盘',k:['Excel','数据'],c:'c-da-3'}
+    ],
+    jd:'m01'
+  },
+  '增长运营负责人':{
+    one:'用实验找增长杠杆：渠道、漏斗、留存，哪一步漏得最多就先补哪一步。',
+    day:'看漏斗数据定位瓶颈，设计 A/B 实验；和产品、渠道一起把方案推下去。',
+    entry:'要有数据敏感度和项目推进力；应届可先从增长运营专员做起。',
+    skills:[
+      {n:'增长实验设计',k:['数据','指标','实验'],c:'c-pm-3'},
+      {n:'数据复盘',k:['Excel','数据'],c:'c-da-3'},
+      {n:'需求沟通',k:['需求','优先级'],c:'c-pm-1'}
+    ],
+    jd:'o02'
+  },
+  '管理咨询顾问':{
+    one:'用结构化方法帮企业拆问题：先把问题定义清楚，再给出可执行的方案。',
+    day:'访谈客户、查行业资料，搭分析框架；做 PPT 汇报，扛住合伙人的追问。',
+    entry:'看重学校背景与逻辑能力，case 面试是硬门槛；应届从分析员做起。',
+    skills:[
+      {n:'结构化问题拆解',k:['结构化','问题'],c:null},
+      {n:'Excel 与 PPT 表达',k:['Excel','数据'],c:'c-da-3'},
+      {n:'Case 面试',k:['case','面试','群面'],c:'c-soft-3'}
+    ],
+    jd:'c01'
+  },
+  '项目管理专员（PMO）':{
+    one:'让一个多人的项目按时交付：排期、盯进度、提前把风险暴露出来。',
+    day:'维护排期表，跟各方进度；开会同步、记录风险，推动卡点被解决。',
+    entry:'沟通协调和细心是核心；应届可投，有社团或项目统筹经历加分。',
+    skills:[
+      {n:'项目排期与推进',k:['项目','排期'],c:null},
+      {n:'数据追踪',k:['Excel','数据'],c:'c-da-3'},
+      {n:'表达与汇报',k:['面试','表达','STAR'],c:'c-soft-2'}
+    ],
+    jd:'c02'
+  },
+  '人力资源业务伙伴（HRBP）':{
+    one:'站在业务旁边看人：招人、留人、处理组织问题，把人的问题和业务目标对上。',
+    day:'和业务负责人对组织与招聘需求；面候选人、做员工沟通、处理冲突。',
+    entry:'沟通与判断力优先；应届从 HR 实习生做起，懂业务是长期门槛。',
+    skills:[
+      {n:'组织与员工关系',k:['组织','员工','人力'],c:null},
+      {n:'沟通表达',k:['表达','沟通','面试'],c:'c-soft-2'},
+      {n:'数据整理',k:['Excel','数据'],c:'c-da-3'}
+    ],
+    jd:'h01'
+  },
+  '硬件开发':{
+    one:'把电路和器件做成能稳定工作的硬件：设计、打样、调试，最后量产。',
+    day:'画原理图和 PCB，跟打样；上电调试、测指标，解决量产中的一致性问题。',
+    entry:'电子、自动化等专业对口，动手做过的项目比绩点更有说服力。',
+    skills:[
+      {n:'电路与 PCB',k:['电路','PCB','硬件'],c:null},
+      {n:'硬件调试',k:['调试','硬件'],c:null},
+      {n:'求职表达',k:['面试','表达','STAR'],c:'c-soft-2'}
+    ],
+    jd:'t04'
+  },
+  '销售':{
+    one:'找到有需求的人，讲清楚你的产品能解决什么问题，把信任换成订单。',
+    day:'打电话或拜访客户，跟进意向；整理客户表，复盘成单和丢单的原因。',
+    entry:'不看专业，看抗压和沟通；应届从销售管培或实习做起。',
+    skills:[
+      {n:'沟通与说服',k:['表达','沟通','面试'],c:'c-soft-2'},
+      {n:'客户数据整理',k:['Excel','数据'],c:'c-da-3'},
+      {n:'产品理解',k:['产品','需求'],c:'c-pm-1'}
+    ],
+    jd:null
+  }
+};
+/* ── 补足路径：能力差距 → 课 / 资源 / 导师 ── */
+const MENTOR_INDEX={
+  m01:{n:'陈叙',co:'字节跳动',ro:'高级产品经理',pa:299},
+  m02:{n:'林嘉',co:'腾讯',ro:'交互设计师',pa:299},
+  m03:{n:'周颖',co:'美团',ro:'用户研究员',pa:199},
+  m04:{n:'何嘉树',co:'海康威视',ro:'硬件产品经理',pa:299},
+  m05:{n:'苏敏',co:'毕马威',ro:'咨询顾问',pa:499},
+  m06:{n:'罗一',co:'Shopee',ro:'增长运营',pa:199},
+  m07:{n:'郑亦然',co:'OPPO',ro:'视觉设计师',pa:299},
+  m08:{n:'高远',co:'阿里巴巴',ro:'数据分析师',pa:499}
+};
+/* 资源只做「看什么、看完做什么」，不复制别人的内容；全部指向真实站点 */
+const RESOURCES={
+  r01:{t:'牛客网 · 用户研究岗面经区',src:'外部资源',link:'https://www.nowcoder.com/',
+    see:'站内搜「用户研究 一面」，挑 3 篇，重点看面试官怎么追问「你这个结论从哪来的」。',
+    todo:'把你的一个课程项目按这个追问重写结论，压到 200 字以内。',member:false},
+  r02:{t:'B站 · 用户访谈实操合集',src:'外部资源',link:'https://search.bilibili.com/all?keyword=用户访谈',
+    see:'按播放量排序看前 3 个，只看他们怎么开场、怎么避免问「你是不是也觉得」。',
+    todo:'照着改写一份 8 题的访谈提纲，每题标注「这题想问什么」。',member:true},
+  r03:{t:'Figma Community · 交互原型模板',src:'外部资源',link:'https://www.figma.com/community',
+    see:'搜「mobile flow kit」，挑一个组件齐全的，看它的状态和分支怎么组织。',
+    todo:'用它的结构，把你的一个旧项目补出「空状态 / 报错 / 加载中」三个界面。',member:false},
+  r04:{t:'Behance · UX 流程案例',src:'外部资源',link:'https://www.behance.net/search/projects?search=ux%20flow',
+    see:'找 3 个含流程图的项目，重点看他们怎么标「为什么在这里加一步」。',
+    todo:'给你的项目画一版流程图，每条箭头旁写一句判断依据。',member:true},
+  r05:{t:'Figma Community · Design System',src:'外部资源',link:'https://www.figma.com/community/search?resource_type=files&q=design%20system',
+    see:'挑一个 20 个组件以内的小系统，看它的命名规则和颜色层级怎么定。',
+    todo:'给你项目里的按钮和输入框定一套命名，写成一张对照表。',member:false},
+  r06:{t:'B站 · 可用性测试现场演示',src:'外部资源',link:'https://search.bilibili.com/all?keyword=可用性测试',
+    see:'看测试员怎么做到「不提示、不引导」，注意他重复用户原话的那几句。',
+    todo:'找 2 个同学做 5 分钟测试，全程只记录不提醒，整理出 3 个卡点。',member:false},
+  r07:{t:'人人都是产品经理 · 需求分析专栏',src:'外部资源',link:'http://www.woshipm.com/',
+    see:'搜「需求优先级」，看 2 篇讲排序方法的，重点看他们用什么标准砍需求。',
+    todo:'把你手上想做的功能列出来，用同一套标准排序，写下砍掉哪个和为什么。',member:false},
+  r08:{t:'牛客网 · 产品岗面经区',src:'外部资源',link:'https://www.nowcoder.com/',
+    see:'搜「产品经理 一面」，重点看被问「这个需求为什么现在做」时怎么答。',
+    todo:'挑一个你的项目，写出「为什么现在做」的三条理由，每条要有证据。',member:true},
+  r09:{t:'人人都是产品经理 · PRD 模板区',src:'外部资源',link:'http://www.woshipm.com/',
+    see:'找一份带「验收标准」的 PRD，看它怎么把「做好」写成可判断的句子。',
+    todo:'给你项目的一个功能补 5 条验收标准，每条都要能被别人验证。',member:false},
+  r10:{t:'B站 · 产品数据分析入门',src:'外部资源',link:'https://search.bilibili.com/all?keyword=产品数据分析',
+    see:'看讲「留存 / 转化」的两集，重点看他们怎么把一个模糊问题拆成指标。',
+    todo:'给你的项目定 3 个指标，写清口径：谁、在什么时间内、做了什么算一次。',member:false},
+  r11:{t:'牛客网 · SQL 练习题库',src:'外部资源',link:'https://www.nowcoder.com/',
+    see:'从简单题开始，只做「分组聚合」和「多表关联」两类，各 10 题。',
+    todo:'用真实一点的数据表，自己写 3 条查询：算留存、算转化、找异常。',member:false},
+  r12:{t:'B站 · Excel 数据透视实战',src:'外部资源',link:'https://search.bilibili.com/all?keyword=Excel数据透视',
+    see:'看一集完整的透视表搭建，注意字段拖拽的顺序和为什么要那样放。',
+    todo:'拿一份自己的记录（学习、消费都行）做一张透视表，得出一个结论。',member:false},
+  r13:{t:'Behance · UX 作品集案例',src:'外部资源',link:'https://www.behance.net/search/projects?search=ux%20portfolio',
+    see:'看 3 个完整案例，重点看第一屏放了什么、问题定义写了几行。',
+    todo:'给你的作品集写一版首页结构：一句话定位 + 3 个项目的一句话说明。',member:false},
+  r14:{t:'Figma Community · 作品集模板',src:'外部资源',link:'https://www.figma.com/community/search?resource_type=files&q=portfolio%20template',
+    see:'挑一个排版干净的，只看它的栅格和信息层级，别照抄配色。',
+    todo:'用它的栅格重排你现有项目的一页，对比改前改后的阅读顺序。',member:true},
+  r15:{t:'牛客网 · 咨询 Case 面经区',src:'外部资源',link:'https://www.nowcoder.com/',
+    see:'搜「case 面试」，重点看面试官怎么打断、打断时在挑什么毛病。',
+    todo:'挑一个市场规模题，自己算一遍，把假设逐条写出来。',member:false},
+  r16:{t:'B站 · STAR 法则讲透',src:'外部资源',link:'https://search.bilibili.com/all?keyword=STAR法则+面试',
+    see:'看 2 个讲 STAR 的，重点看反例：哪些回答听起来像背稿。',
+    todo:'把你的一个项目按 STAR 写成 4 句，每句不超过 25 字。',member:false},
+  r17:{t:'人人都是产品经理 · 数据复盘方法',src:'外部资源',link:'http://www.woshipm.com/',
+    see:'搜「活动复盘」，看他们怎么区分「运气好」和「方法对」。',
+    todo:'复盘一次你做过的活动或内容，写出「真正起作用的那一步」。',member:false},
+  r18:{t:'B站 · A/B 测试入门',src:'外部资源',link:'https://search.bilibili.com/all?keyword=AB测试',
+    see:'看讲「样本量」的那一集，重点理解为什么小样本的结论不能信。',
+    todo:'给你想改的一个页面写一个实验方案：改什么、看什么指标、跑多久。',member:false},
+  r19:{t:'企业招聘官网直达（字节 / 腾讯 / 美团 / 阿里）',src:'外部资源',link:'https://jobs.bytedance.com/',
+    see:'先看岗位 JD 里的「任职要求」，把出现次数最多的能力词圈出来。',
+    todo:'对照你自己的简历，标出「JD 要但我没有」的三项，回到职业档案里补。',member:false}
+};
+const SKILL_PATH={
+  '用户研究与访谈':{m:'m03',rs:['r01','r02'],why:'这个岗位要求你能独立跑完一次访谈并提炼出结论，而你目前没有可验证的记录。'},
+  '原型与流程设计':{m:'m02',rs:['r03','r04'],why:'面试官会追问你的流程为什么这么走，没有依据的流程图在作品集里不加分。'},
+  '设计规范与组件':{m:'m07',rs:['r05'],why:'能不能定一套别人能用的规则，是初级和中级设计师的分界线。'},
+  '可用性测试':{m:'m03',rs:['r06'],why:'你要能证明方案是被验证过的，而不是「我觉得这样更好」。'},
+  '交互与流程设计':{m:'m02',rs:['r03'],why:'这个岗位看的是你怎么想清楚一个复杂流程，不是画得漂不漂亮。'},
+  '流程与状态设计':{m:'m02',rs:['r03'],why:'空状态、报错、加载中这些边界，最能看出你有没有真的用过自己的产品。'},
+  '原型工具（Figma）':{m:'m07',rs:['r03'],why:'工具本身不是门槛，但做不出可点的原型，就没法让别人验证你的想法。'},
+  '需求分析与优先级':{m:'m01',rs:['r07','r08'],why:'产品岗面试第一问通常是「这个需求为什么现在做」，答不出优先级逻辑就过不去。'},
+  'PRD 与用户故事':{m:'m01',rs:['r09'],why:'能把「做好」写成可判断的句子，是产品岗最基础也最容易被考的手艺。'},
+  '数据驱动决策':{m:'m08',rs:['r10'],why:'你要能说清上线后看哪几个指标、涨了跌了分别说明什么。'},
+  '完整项目实战':{m:'m04',rs:[],why:'你缺的不是知识点，是一个能从头讲到尾的完整项目。'},
+  '访谈与问卷设计':{m:'m03',rs:['r01'],why:'问题怎么问决定了答案有没有用，这一步做错后面全废。'},
+  'SQL 取数':{m:'m08',rs:['r11'],why:'SQL 是数据岗的硬门槛，不会取数就进不了业务讨论。'},
+  'Excel 与可视化':{m:'m08',rs:['r12'],why:'绝大多数实习的第一周就是做表，做得快不快直接影响别人对你的评价。'},
+  'Tableau 看板':{m:'m08',rs:['r12'],why:'能搭一个别人看得懂的看板，比会做花哨图表更有用。'},
+  '数据分析系统入门':{m:'m08',rs:['r10'],why:'你需要一条完整的方法链：问题 → 指标 → 取数 → 结论。'},
+  '数据整理与呈现':{m:'m08',rs:['r12'],why:'研究结论要能被别人一眼看懂，否则再对也没人用。'},
+  'Figma 工具':{m:'m07',rs:['r03'],why:'组件、变体、自动布局这三样不熟，做图速度会被同龄人拉开。'},
+  '作品集呈现':{m:'m02',rs:['r13','r14'],why:'作品集不是作品堆叠，面试官只想在 3 分钟里看出你的判断力。'},
+  '用户洞察':{m:'m06',rs:['r17'],why:'运营岗要能从一个数据异动里看出用户发生了什么。'},
+  '数据复盘':{m:'m06',rs:['r17'],why:'复盘写不出因果，就会被认为只是执行，不是思考。'},
+  '增长实验':{m:'m06',rs:['r18'],why:'增长岗考的是你敢不敢用实验验证，而不是拍脑袋改。'},
+  '增长实验设计':{m:'m06',rs:['r18'],why:'一个实验方案写不清变量和指标，结论就没有意义。'},
+  '需求沟通':{m:'m01',rs:['r07'],why:'推进不动需求，多半不是方案问题，是没把对方在意的东西说清。'},
+  '结构化问题拆解':{m:'m05',rs:['r15'],why:'咨询 case 的第一关是把问题拆成能算的几块。'},
+  'Case 面试':{m:'m05',rs:['r15'],why:'case 面试有固定套路，但套路之外要能圆回来。'},
+  'Excel 与 PPT 表达':{m:'m05',rs:[],why:'咨询交付物就是 PPT，排版混乱会直接被判不合格。'},
+  '沟通表达':{m:'m01',rs:['r16'],why:'同一件事，讲得清楚和讲不清楚，别人对你的判断差一个档。'},
+  '表达与汇报':{m:'m01',rs:['r16'],why:'项目做得再好，汇报讲不明白就等于没做。'},
+  '求职表达':{m:'m01',rs:['r16'],why:'你的项目不差，差的是没在 2 分钟里讲出它的价值。'},
+  '沟通与说服':{m:'m01',rs:['r16'],why:'销售岗不看学历，看你能不能让对方愿意再听你说下去。'},
+  '产品理解':{m:'m01',rs:['r07'],why:'不懂产品在解决什么问题，话术再熟也成不了单。'},
+  '数据追踪':{m:'m08',rs:['r17'],why:'项目进度说不清，风险就会在最后一周集中爆发。'},
+  '数据整理':{m:'m08',rs:['r12'],why:'表格乱，判断就会乱，这是所有岗位的共同底线。'},
+  '客户数据整理':{m:'m08',rs:['r12'],why:'客户表不清，跟进就会漏，成单率靠运气。'},
+  '效果数据复盘':{m:'m06',rs:['r17'],why:'内容做得好不好，要用数据说话，不能只凭感觉。'}
+};
+function readSkillList(){
+  if(typeof LS==='undefined')return [];
+  var list=LS.get('skills',[]);
+  return Array.isArray(list)?list:[];
+}
+function careerSkillState(it,list){
+  var matched=null;
+  (list||[]).forEach(function(s){
+    if(matched||!s||!s.name)return;
+    (it.k||[]).forEach(function(k){
+      if(!matched&&String(s.name).indexOf(k)>-1)matched=s;
+    });
+  });
+  if(!matched)return {st:'todo',label:'待补'};
+  return matched.mastered?{st:'ok',label:'已具备'}:{st:'doing',label:'学习中'};
+}
+function openCareerProfile(name){
+  const body=document.getElementById('career-profile-body');
+  const sheet=document.getElementById('career-profile-sheet');
+  if(!body||!sheet||!name)return;
+  const p=(typeof CAREER_PROFILE!=='undefined'&&CAREER_PROFILE[name])||null;
+  const meta=(typeof CAREER_META!=='undefined'&&CAREER_META[name])||{en:'Career Goal',tags:[],match:'已选'};
+  const skillList=readSkillList();
+  const items=p?p.skills:(meta.tags||[]).map(function(t){return {n:String(t),k:[String(t)],c:null};});
+  const goals=(typeof Store!=='undefined'?Store.get('careerGoal'):null)||[];
+  const isGoal=(Array.isArray(goals)?goals:[]).some(function(g){
+    return (g&&g.name?g.name:(typeof g==='string'?g:''))===name;
+  });
+  let okN=0,todoN=0,doableN=0;
+  const rows=items.map(function(it){
+    const s=careerSkillState(it,skillList);
+    if(s.st==='ok'){okN++;}
+    else{todoN++;if(it.c)doableN++;}
+    return '<div class="cp-skill hit" onclick="openSkillPath(\''+esc(name)+'\',\''+esc(it.n)+'\')">'+
+      '<div class="cp-skill-main">'+
+        '<div class="cp-skill-name">'+esc(it.n)+'</div>'+
+        '<div class="cp-skill-course">'+(s.st==='ok'?'已具备 · 点开看怎么用':'课 / 资源 / 导师 · 点开选一条')+'</div>'+
+      '</div>'+
+      '<span class="cp-badge '+s.st+'">'+s.label+'</span>'+
+      '<svg class="cp-arrow" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 6-6M9 12l6 6"/></svg>'+
+    '</div>';
+  }).join('');
+  const matchHtml=(typeof meta.match==='number')
+    ? '<div class="cp-match"><b>'+meta.match+'%</b><span>测评匹配度</span></div>'
+    : '<div class="cp-match"><b style="font-size:13px">'+esc(meta.match)+'</b><span>你的目标</span></div>';
+  let jdId=(p&&p.jd)?p.jd:null;
+  if(!jdId&&typeof JOB_LIBRARY!=='undefined'){
+    const hit=JOB_LIBRARY.filter(function(x){return x.name===name;})[0];
+    if(hit)jdId=hit.id;
+  }
+  let firstTodo=null;
+  items.forEach(function(it){
+    if(firstTodo)return;
+    const s=careerSkillState(it,skillList);
+    if(s.st!=='ok'&&it.c)firstTodo=it;
+  });
+  let acts='';
+  acts+='<button class="jd-btn ghost" onclick="closeCareerProfile();'+(jdId?'openJobDetail(\''+jdId+'\')':'openCareerLib(\''+esc(name)+'\')')+'">去看岗位 JD</button>';
+  acts+=firstTodo
+    ? '<button class="jd-btn primary" onclick="location.href=\'courses.html?course='+firstTodo.c+'\'">去补「'+esc(firstTodo.n)+'」</button>'
+    : '<button class="jd-btn primary" onclick="location.href=\'courses.html\'">去课程库看看</button>';
+  body.innerHTML=
+    '<div class="cp-hero">'+
+      '<div class="cp-hero-top">'+
+        '<div><div class="cp-name">'+esc(name)+'</div><div class="cp-en">'+esc(meta.en||'')+' · 目标职业</div></div>'+
+        matchHtml+
+      '</div>'+
+      '<button class="cp-goal-btn'+(isGoal?' on':'')+'" onclick="setCareerGoalFromProfile(this.dataset.n)" data-n="'+esc(name)+'">'+
+        (isGoal?'已设为目标':'设为目标')+
+      '</button>'+
+    '</div>'+
+    '<div class="cp-stat">'+
+      '<div class="cp-stat-item"><b>'+okN+'</b><span>已具备</span></div>'+
+      '<div class="cp-stat-item"><b>'+todoN+'</b><span>待补能力</span></div>'+
+      '<div class="cp-stat-item"><b>'+doableN+'</b><span>有课可补</span></div>'+
+    '</div>'+
+    '<div class="jd-block"><div class="jd-block-title">这个职业在做什么</div>'+
+      '<div class="jd-intro">'+(p?esc(p.one):'「'+esc(name)+'」是你在测评里选中的方向。')+'</div>'+
+      (p&&p.day?'<div class="jd-intro" style="margin-top:8px;color:var(--gray-500)">典型一天：'+esc(p.day)+'</div>':'')+
+    '</div>'+
+    '<div class="jd-block"><div class="jd-block-title">能力清单 · 对照你的技能库</div>'+rows+
+      '<div class="cp-note">「已具备」读自你的技能学习页记录；没记录过的能力先标为待补，去补完课会自动变。</div>'+
+    '</div>'+
+    (p&&p.entry?'<div class="jd-block"><div class="jd-block-title">入门门槛</div><div class="jd-intro">'+esc(p.entry)+'</div></div>':'')+
+    (!p?'<div class="cp-note">这个职业的详细档案还在补充，先给你能力清单和下一步；要完整的岗位要求可以点下面的按钮。</div>':'')+
+    '<div class="jd-foot">'+acts+'</div>';
+  sheet.classList.add('show');
+  body.scrollTop=0;
+  requestAnimationFrame(function(){body.scrollTop=0;});
+}
+function closeCareerProfile(){document.getElementById('career-profile-sheet').classList.remove('show');}
+
+/* ── 补足路径：能力差距 → 课 / 资源 / 导师 ── */
+function mcActive(){
+  try{
+    var m=JSON.parse(localStorage.getItem('cos_membership')||'null');
+    return !!(m&&m.active&&m.expiresAt&&Date.now()<m.expiresAt);
+  }catch(e){return false;}
+}
+function mpriceOf(p){var cut=Math.round(p*0.15);if(cut>50)cut=50;return p-cut;}
+function spFirst(s){
+  if(!s)return '';
+  var i=s.indexOf('。');
+  return i>0?s.slice(0,i+1):s;
+}
+function spOpen(url){
+  if(!url)return;
+  window.open(url,'_blank');
+}
+function closeSkillPath(){
+  document.getElementById('skill-path-sheet').classList.remove('show');
+}
+function openSkillPath(career,skill){
+  var body=document.getElementById('skill-path-body');
+  var sheet=document.getElementById('skill-path-sheet');
+  if(!body||!sheet||!skill)return;
+  var p=(typeof CAREER_PROFILE!=='undefined'&&CAREER_PROFILE[career])||null;
+  var item=null;
+  if(p){
+    (p.skills||[]).forEach(function(s){if(!item&&s.n===skill)item=s;});
+  }
+  if(!item)item={n:skill,k:[skill],c:null};
+  var st=careerSkillState(item,readSkillList());
+  var path=SKILL_PATH[skill]||{};
+  var why=path.why||('这个岗位要求你能「'+skill+'」，而你目前没有可验证的记录。');
+  var member=mcActive();
+  var html='';
+
+  html+='<div class="sp-hero"><div class="sp-name">'+esc(skill)+'</div>'+
+    '<div class="sp-sub"><span>'+esc(career)+'</span><span class="cp-badge '+st.st+'">'+st.label+'</span></div></div>';
+
+  if(st.st==='ok'){
+    html+='<div class="sp-why">这一项你已经记录为 <b>已具备</b>。接下来不用再学一遍，找一个项目把它证明出来：面试时能讲清「我做过、怎么做的、结果如何」。</div>';
+    html+='<div class="sp-item"><span class="sp-tag mentor">导师</span><div class="sp-bd">'+
+      '<div class="sp-t">找一位导师做一次复盘</div>'+
+      '<div class="sp-r">已经有的能力，问题通常出在讲不清楚，而不是不会做。</div>'+
+      '<button class="sp-btn ghost" onclick="closeSkillPath();location.href=\'mentors.html\'">去看导师</button>'+
+    '</div></div>';
+    html+='<div class="sp-tip">已具备的能力不用再补，重点是拿它换一个结果。</div>';
+    body.innerHTML=html;
+    document.getElementById('skill-path-title').textContent='补足路径';
+    sheet.classList.add('show');
+    body.scrollTop=0;
+    return;
+  }
+
+  html+='<div class="sp-why">'+why+'</div>';
+
+  if(item.c){
+    var ct=CAREER_COURSES[item.c]||'';
+    html+='<div class="sp-item"><span class="sp-tag course">课</span><div class="sp-bd">'+
+      '<div class="sp-t">'+esc(ct||'课程库里的对应课程')+'</div>'+
+      '<div class="sp-m">课程库 · 对应这一项能力</div>'+
+      '<div class="sp-r">先把方法框架建立起来，再用一个项目练手。</div>'+
+      '<button class="sp-btn" onclick="closeSkillPath();location.href=\'courses.html?course='+item.c+'\'">'+(st.st==='doing'?'继续学':'去学')+'</button>'+
+    '</div></div>';
+  }
+
+  var rs=(path.rs&&path.rs.length?path.rs:['r19']);
+  rs.forEach(function(rid){
+    var r=RESOURCES[rid];
+    if(!r)return;
+    var locked=(r.member&&!member);
+    html+='<div class="sp-item"><span class="sp-tag res">资源</span><div class="sp-bd">'+
+      (locked?'<span class="sp-lock">Pro</span>':'')+
+      '<div class="sp-t">'+esc(r.t)+'</div>'+
+      '<div class="sp-m">'+esc(r.src)+' · 链接可能失效</div>'+
+      '<div class="sp-see"><i>看什么</i>'+esc(locked?spFirst(r.see):r.see)+'</div>'+
+      (locked?'':'<div class="sp-see"><i>看完做什么</i>'+esc(r.todo)+'</div>')+
+      (locked
+        ? '<div class="sp-r">完整的「看完做什么」和这条资源的其余指引在 Pro 里。</div><button class="sp-btn ghost" onclick="closeSkillPath();location.href=\'membership.html\'">了解会员</button>'
+        : '<button class="sp-btn ghost" onclick="spOpen(\''+r.link+'\')">打开链接</button>')+
+    '</div></div>';
+  });
+
+  var mid=path.m;
+  if(mid&&MENTOR_INDEX[mid]){
+    var mo=MENTOR_INDEX[mid];
+    html+='<div class="sp-item"><span class="sp-tag mentor">导师</span><div class="sp-bd">'+
+      '<div class="sp-t">'+esc(mo.n)+' · '+esc(mo.co)+' '+esc(mo.ro)+'</div>'+
+      '<div class="sp-m">¥'+mo.pa+(member?' · 你的会员价 ¥'+mpriceOf(mo.pa):' · 会员价 ¥'+mpriceOf(mo.pa))+'</div>'+
+      '<div class="sp-r">能带你走一遍这一项的真实场景，结束后给逐条反馈。</div>'+
+      '<button class="sp-btn" onclick="closeSkillPath();location.href=\'mentors.html?mentor='+mid+'\'">去约</button>'+
+    '</div></div>';
+  }else{
+    html+='<div class="sp-item"><span class="sp-tag mentor">导师</span><div class="sp-bd">'+
+      '<div class="sp-t">暂无对口导师</div>'+
+      '<div class="sp-r">这一项目前没有能带你的导师，先靠课程和资源补。</div>'+
+      '<button class="sp-btn ghost" onclick="closeSkillPath();location.href=\'mentors.html\'">看看全部导师</button>'+
+    '</div></div>';
+  }
+
+  html+='<div class="sp-tip">三条路不用都走。挑一条开始，做完再决定下一步。</div>';
+  body.innerHTML=html;
+  document.getElementById('skill-path-title').textContent='补足路径';
+  sheet.classList.add('show');
+  body.scrollTop=0;
+  requestAnimationFrame(function(){body.scrollTop=0;});
+}
+function setCareerGoalFromProfile(name){
+  if(!name||typeof Store==='undefined')return;
+  const goals=Store.get('careerGoal')||[];
+  const list=Array.isArray(goals)?goals:[];
+  const has=list.some(function(g){return (g&&g.name?g.name:(typeof g==='string'?g:''))===name;});
+  if(has){showToast('已在你的目标职业里');return;}
+  list.push({name:name});
+  Store.set('careerGoal',list);
+  showToast('已设为目标职业，探索页会多一张卡片');
+  openCareerProfile(name);
+}
+
+function openJobDetail(id){
+  const j=JOB_LIBRARY.filter(function(x){return x.id===id;})[0];
+  if(!j)return;
+  const body=document.getElementById('job-detail-body');
+  if(!body)return;
+  function listHtml(arr){
+    return (arr||[]).map(function(t){return '<li>'+t+'</li>';}).join('');
+  }
+  const chips=(j.tags||[]).map(function(t){return '<span>'+t+'</span>';}).join('');
+  const comps=(j.companies||[]).map(function(t){return '<span>'+t+'</span>';}).join('');
+  const goalHit=((typeof Store!=='undefined'?Store.get('careerGoal'):null)||[]).some(function(g){
+    return (g&&g.name?g.name:(typeof g==='string'?g:''))===j.name;
+  });
+  body.innerHTML=
+    '<div class="jd-hero">'+
+      '<div class="jd-title">'+j.name+(goalHit?' <span class="cl-fit">🎯 你的目标</span>':'')+'</div>'+
+      '<div class="jd-en">'+j.en+' · '+j.cat+'</div>'+
+      '<div class="jd-meta">'+
+        '<div><b>'+j.pay+'</b><div style="font-size:10px;color:var(--gray-400);margin-top:1px">参考薪资</div></div>'+
+        '<div><b style="color:var(--gray-700)">'+j.city+'</b><div style="font-size:10px;color:var(--gray-400);margin-top:1px">常见城市</div></div>'+
+        '<div><b style="color:var(--gray-700)">'+j.exp+'</b><div style="font-size:10px;color:var(--gray-400);margin-top:1px">经验要求</div></div>'+
+      '</div>'+
+      '<div class="jd-chips">'+chips+'</div>'+
+    '</div>'+
+    '<div class="jd-block"><div class="jd-block-title">岗位简介</div><div class="jd-intro">'+j.intro+'</div></div>'+
+    '<div class="jd-block"><div class="jd-block-title">你主要会做这些</div><ul class="jd-list">'+listHtml(j.duties)+'</ul></div>'+
+    '<div class="jd-block"><div class="jd-block-title">需要具备</div><ul class="jd-list">'+listHtml(j.reqs)+'</ul></div>'+
+    (j.plus&&j.plus.length?'<div class="jd-block"><div class="jd-block-title">加分项</div><ul class="jd-list">'+listHtml(j.plus)+'</ul></div>':'')+
+    '<div class="jd-block"><div class="jd-block-title">常见招聘企业</div><div class="jd-chips">'+comps+'</div></div>'+
+    '<div class="jd-block"><div class="jd-block-title">典型发展路径</div><div class="jd-path">'+
+      (j.path||[]).map(function(p,i){return (i?'<i>→</i>':'')+'<span>'+p+'</span>';}).join('')+
+    '</div></div>'+
+    '<div class="jd-foot">'+
+      '<button class="jd-btn ghost" onclick="closeJobDetail()">关闭</button>'+
+      '<button class="jd-btn primary" onclick="favJobFromLib(\''+j.id+'\')">收藏到岗位夹</button>'+
+    '</div>';
+  document.getElementById('job-detail-sheet').classList.add('show');
+  body.scrollTop=0;
+  requestAnimationFrame(function(){body.scrollTop=0;});
+}
+function closeJobDetail(){document.getElementById('job-detail-sheet').classList.remove('show');}
+function favJobFromLib(id){
+  const j=JOB_LIBRARY.filter(function(x){return x.id===id;})[0];
+  if(!j)return;
+  let list=[];
+  try{list=JSON.parse(localStorage.getItem('cos_job_favs')||'[]');}catch(e){list=[];}
+  if(!Array.isArray(list))list=[];
+  const note='来自职业库 · '+j.cat+'｜'+j.pay;
+  if(list.some(function(x){return x&&x.title===j.name&&x.note===note;})){
+    showToast('该岗位已在收藏夹中');
+    return;
+  }
+  list.unshift({id:'job-'+Date.now(),company:(j.companies&&j.companies[0])||'待定',title:j.name,location:(j.city||'').split(' / ')[0],link:'',note:note,status:'watching',createdAt:Date.now()});
+  try{localStorage.setItem('cos_job_favs',JSON.stringify(list));}
+  catch(e){showToast('收藏失败，请检查浏览器存储');return;}
+  showToast('✅ 已收藏到「岗位信息收藏夹」');
 }
 
 // ── Init ──
@@ -2649,9 +4590,9 @@ function renderUserPosts(){
       const style=i%2===0?'background:var(--primary-50);color:var(--primary)':'background:var(--accent-light);color:#B45309';
       return '<span style="'+style+'">'+esc(t)+'</span>';
     }).join('');
-    return '<div class="post-card" data-post-id="user-'+esc(p.id)+'" aria-label="我的帖子">'+
+    return '<div class="post-card" data-post-id="user-'+esc(p.id)+'" onclick="openPostFromCard(event,this)" aria-label="我的帖子">'+
       '<div class="post-header">'+
-        '<div class="post-avatar" style="background:var(--primary)">'+avatarText+'</div>'+
+        '<div class="post-avatar" style="background:var(--primary)" onclick="openUserHome(\'me\')">'+avatarText+'</div>'+
         '<div class="post-meta"><div class="post-author">'+author+'</div><div class="post-time">'+fmtPostTime(p.createdAt)+'</div></div>'+
         '<span class="post-school">'+school+'</span>'+
       '</div>'+
@@ -2659,7 +4600,7 @@ function renderUserPosts(){
       (tags?'<div class="post-tags">'+tags+'</div>':'')+
       '<div class="post-footer">'+
         '<button class="post-action" onclick="toggleLike(this)" aria-label="点赞"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg><span>0</span></button>'+
-        '<button class="post-action" aria-label="评论"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>0</span></button>'+
+        '<button class="post-action" onclick="openPostComments(event,this)" aria-label="评论"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>0</span></button>'+
         '<button class="post-action" onclick="toggleBookmark(this)" aria-label="收藏"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg><span>收藏</span></button>'+
       '</div>'+
     '</div>';
@@ -2687,6 +4628,7 @@ window.addEventListener('load',()=>{
     if(t==='explore'){switchTab(1);}
     else if(t==='prepare'){switchTab(2);}
     else if(t==='community'){switchTab(3);}
+    else if(t==='profile'){switchTab(4);}
   }catch(e){}
 });
 </script>

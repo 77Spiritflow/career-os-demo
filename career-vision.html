@@ -171,6 +171,10 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-se
 .gp-mpct{font-size:10.5px;font-weight:700;color:var(--primary);flex-shrink:0}
 .gp-note{font-size:11px;color:var(--gray-400);text-align:center;padding:10px 14px;background:var(--gray-50);border-radius:8px;margin-top:12px;line-height:1.6;animation:fadeUp .4s ease both}
 </style>
+<script>
+/* 全局字体大小：设置页「小/中/大」三档全局生效 */
+(function(){try{var v=parseInt(localStorage.getItem('cos_fontsize'),10);if(isNaN(v)||v<0||v>2)v=1;var z=[0.92,1,1.12][v];document.documentElement.style.zoom=(z===1?'':String(z));}catch(e){}})();
+</script>
 </head>
 <body>
 <div class="app">

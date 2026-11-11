@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>课程 · Career OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #0F766E; --primary-hover: #0D6B63; --primary-light: #14B8A6;
+    --primary-50: #F0FDFA; --primary-100: #CCFBF1;
+    --indigo: #4F46E5; --indigo-light: #EEF2FF;
+    --accent: #F59E0B; --accent-light: #FEF3C7;
+    --sky: #0284C7; --sky-light: #E0F2FE;
+    --green: #059669; --green-light: #D1FAE5;
+    --rose: #E11D48; --rose-light: #FFE4E6;
+    --violet: #7C3AED; --violet-light: #EDE9FE;
+    --white: #FFFFFF;
+    --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0; --gray-300: #CBD5E1;
+    --gray-400: #94A3B8; --gray-500: #64748B; --gray-600: #475569; --gray-900: #0F172A;
+    --radius-lg: 16px; --radius-md: 12px; --radius-sm: 10px;
+    --shadow-sm: 0 1px 3px rgba(15,23,42,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--gray-100);color:var(--gray-900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.app{max-width:430px;width:100%;min-height:100vh;background:var(--gray-50);margin:0 auto;position:relative;padding-bottom:40px}
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(248,250,252,.86);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);height:56px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid rgba(226,232,240,.5)}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--gray-500);background:none;border:none;font-family:inherit;cursor:pointer;padding:4px 0}
+.nav-back:active{color:var(--gray-900)}
+.nav-back svg{width:18px;height:18px}
+.nav-title{position:absolute;left:50%;transform:translateX(-50%);font-size:15px;font-weight:600;color:var(--gray-900)}
+.nav-count{position:absolute;right:16px;font-size:12px;color:var(--gray-400);font-weight:500}
+.page{padding:16px 16px 0}
+
+/* ── 目标岗位推荐带 ── */
+.goal-banner{background:linear-gradient(135deg,var(--primary-50),#fff);border:1px solid var(--primary-100);border-radius:var(--radius-lg);padding:14px;margin-bottom:14px}
+.goal-head{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--gray-900)}
+.goal-head svg{width:15px;height:15px;color:var(--primary)}
+.goal-sub{font-size:11.5px;color:var(--gray-500);line-height:1.7;margin-top:6px}
+.goal-picks{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.goal-pick{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-sm);padding:9px 11px;cursor:pointer}
+.goal-pick:active{background:var(--gray-50)}
+.goal-pick-idx{width:18px;height:18px;border-radius:50%;background:var(--primary);color:#fff;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.goal-pick-body{flex:1;min-width:0}
+.goal-pick-title{font-size:12.5px;font-weight:600;color:var(--gray-900);line-height:1.45;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.goal-pick-reason{font-size:10.5px;color:var(--gray-400);margin-top:3px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fy-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.fy-chip{font-size:10.5px;padding:3px 9px;border-radius:99px;background:#fff;border:1px solid var(--gray-200);color:var(--gray-500)}
+.fy-chip.goal{background:var(--primary-50);border-color:var(--primary-100);color:var(--primary);font-weight:600}
+.fy-hint{font-size:10.5px;color:var(--gray-400);line-height:1.6;margin-top:8px}
+.goal-empty-btn{width:100%;margin-top:10px;padding:10px;border-radius:var(--radius-sm);border:none;background:var(--primary);color:#fff;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer}
+
+/* ── 搜索与筛选 ── */
+.search-wrap{display:flex;gap:8px;margin-bottom:12px}
+.search-box{flex:1;display:flex;align-items:center;gap:7px;background:#fff;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);padding:9px 12px}
+.search-box:focus-within{border-color:var(--primary)}
+.search-box svg{width:15px;height:15px;color:var(--gray-400);flex-shrink:0}
+.search-box input{flex:1;border:none;outline:none;font-size:13px;font-family:inherit;color:var(--gray-900);background:transparent}
+.filter-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-chip{flex-shrink:0;padding:6px 14px;font-size:12px;font-weight:500;color:var(--gray-500);background:#fff;border:1px solid var(--gray-200);border-radius:99px;cursor:pointer;transition:all .2s;font-family:inherit}
+.filter-chip.active{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:600}
+
+/* ── 统计 ── */
+.stat-row{display:flex;gap:8px;margin-bottom:14px}
+.stat-item{flex:1;background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-sm);padding:10px 8px;text-align:center}
+.stat-item b{display:block;font-size:16px;font-weight:800;color:var(--primary);line-height:1.2}
+.stat-item span{font-size:10.5px;color:var(--gray-400)}
+
+/* ── 课程卡 ── */
+.course-list{display:flex;flex-direction:column;gap:10px}
+.course-card{background:#fff;border-radius:var(--radius-md);padding:14px;border:1px solid var(--gray-100);box-shadow:var(--shadow-sm);cursor:pointer;animation:fadeUp .4s cubic-bezier(.22,1,.36,1) both}
+.course-card:active{transform:scale(.995)}
+.c-top{display:flex;align-items:flex-start;gap:10px}
+.c-logo{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:800;color:#fff}
+.c-main{flex:1;min-width:0}
+.c-title{font-size:14px;font-weight:700;color:var(--gray-900);line-height:1.4}
+.c-meta{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap;font-size:11px;color:var(--gray-400)}
+.c-meta i{font-style:normal;color:var(--gray-300)}
+.c-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;flex-shrink:0}
+.c-badge.fav{background:var(--primary-50);color:var(--primary)}
+.c-badge.plan{background:var(--sky-light);color:var(--sky)}
+.c-badge.done{background:var(--green-light);color:var(--green)}
+.c-outcome{margin-top:9px;font-size:12px;color:var(--gray-600);line-height:1.7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.c-jobs{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.c-job{font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;background:var(--gray-50);color:var(--gray-500)}
+.empty{display:flex;flex-direction:column;align-items:center;gap:12px;padding:56px 20px;color:var(--gray-300)}
+.empty svg{width:42px;height:42px}
+.empty p{font-size:13px;color:var(--gray-400);text-align:center;line-height:1.7}
+
+/* ── 课程详情弹层 ── */
+.sheet-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:300;display:none;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .25s}
+.sheet-overlay.show{display:flex;opacity:1}
+.sheet-box{width:100%;max-width:430px;background:#fff;border-radius:24px 24px 0 0;display:flex;flex-direction:column;max-height:88vh;animation:slideUp .35s cubic-bezier(.22,1,.36,1) both}
+.sheet-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:20px 22px 10px;background:#fff;border-radius:24px 24px 0 0;position:relative;z-index:3}
+.sheet-title{font-size:16px;font-weight:700;color:var(--gray-900)}
+.sheet-close{width:30px;height:30px;border-radius:50%;background:var(--gray-100);color:var(--gray-500);border:none;font-size:16px;line-height:1;cursor:pointer;font-family:inherit}
+.sheet-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:4px 22px 12px}
+.sheet-footer{flex-shrink:0;padding:12px 22px calc(12px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--gray-100);border-radius:0}
+
+.cd-hero{background:linear-gradient(135deg,var(--primary-50),#fff);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px}
+.cd-title{font-size:18px;font-weight:800;color:var(--gray-900);line-height:1.4;letter-spacing:-.01em}
+.cd-en{font-size:11px;color:var(--gray-400);margin-top:5px}
+.cd-facts{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
+.cd-fact b{display:block;font-size:12.5px;font-weight:700;color:var(--primary)}
+.cd-fact span{font-size:10px;color:var(--gray-400);margin-top:2px;display:block}
+.cd-block{margin-bottom:16px}
+.cd-block-title{font-size:13px;font-weight:800;color:var(--gray-900);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.cd-block-title::before{content:'';width:3px;height:12px;border-radius:2px;background:var(--primary)}
+.cd-p{font-size:12.5px;color:var(--gray-600);line-height:1.75}
+.cd-ol{margin:0;padding-left:0;list-style:none}
+.cd-ol li{font-size:12.5px;color:var(--gray-600);line-height:1.7;padding:8px 10px;background:var(--gray-50);border-radius:8px;margin-bottom:6px}
+.cd-ol li b{color:var(--gray-400);font-weight:700;margin-right:6px}
+.cd-kv{display:flex;gap:8px;font-size:12px;color:var(--gray-600);line-height:1.7;margin-top:6px}
+.cd-kv span{flex-shrink:0;color:var(--gray-400)}
+.cd-actions{display:flex;gap:8px}
+.cd-btn{flex:1;height:44px;border-radius:12px;border:none;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
+.cd-btn:active{transform:scale(.98)}
+.cd-btn.ghost{background:var(--gray-100);color:var(--gray-600)}
+.cd-btn.fav{background:var(--primary-50);color:var(--primary)}
+.cd-btn.fav.on{background:var(--primary);color:#fff}
+.cd-btn.main{background:var(--primary);color:#fff;box-shadow:0 4px 14px rgba(15,118,110,.22);flex:1.4}
+.cd-btn.main.on{background:var(--green);box-shadow:0 4px 14px rgba(5,150,105,.2)}
+.cd-btn:disabled{opacity:.72;cursor:default}
+
+/* ── toast ── */
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--gray-900);color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:400;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@media(min-width:431px){body{background:#E2E8F0}.app{box-shadow:0 0 80px rgba(0,0,0,.08)}}
+    </style>
+<script>
+/* 全局字体大小：设置页「小/中/大」三档全局生效 */
+(function(){try{var v=parseInt(localStorage.getItem('cos_fontsize'),10);if(isNaN(v)||v<0||v>2)v=1;var z=[0.92,1,1.12][v];document.documentElement.style.zoom=(z===1?'':String(z));}catch(e){}})();
+</script>
+</head>
+<body>
+<div class="app">
+    <nav class="top-nav">
+        <button class="nav-back" onclick="goBack()" aria-label="返回">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            <span>返回</span>
+        </button>
+        <div class="nav-title">课程</div>
+        <div class="nav-count" id="navCount">18 门</div>
+    </nav>
+
+    <div class="page">
+        <div class="goal-banner" id="goalBanner"></div>
+
+        <div class="search-wrap">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="courseSearch" placeholder="搜索课程、技能或岗位…" oninput="onSearch(this.value)" aria-label="搜索课程">
+            </div>
+        </div>
+
+        <div class="filter-row" id="catRow"></div>
+
+        <div class="stat-row">
+            <div class="stat-item"><b id="statTotal">0</b><span>门课程</span></div>
+            <div class="stat-item"><b id="statPlan">0</b><span>在学计划</span></div>
+            <div class="stat-item"><b id="statDone">0</b><span>已学完</span></div>
+        </div>
+
+        <div class="course-list" id="courseList"></div>
+    </div>
+</div>
+
+<!-- ═══ 课程详情 ═══ -->
+<div class="sheet-overlay" id="courseSheet" onclick="if(event.target===this)closeCourse()">
+    <div class="sheet-box">
+        <div class="sheet-header">
+            <div class="sheet-title">课程详情</div>
+            <button class="sheet-close" onclick="closeCourse()" aria-label="关闭">✕</button>
+        </div>
+        <div class="sheet-body" id="courseBody"></div>
+        <div class="sheet-footer" id="courseFooter"></div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/store.js"></script>
+<script>
+/* ============================================================
+   courses.js | Career OS — 课程库
+   数据：
+   - cos_course_favs  收藏 [{id,title,platform,cat,savedAt}]
+   - cos_course_done  已学完 {id: timestamp}
+   - cos_course_plan  在学计划 {id: timestamp}
+   - Store.dailyTasks 同步写入，首页「今日任务」可见
+   - cos_skills       标记已学后回写技能（skill-learning 页）
+   ============================================================ */
+var FAV_KEY='cos_course_favs', DONE_KEY='cos_course_done', PLAN_KEY='cos_course_plan';
+var SKILL_KEY='cos_skills';
+
+var CATS=[
+    {id:'all',label:'全部'},
+    {id:'ux',label:'UX 设计'},
+    {id:'pm',label:'产品'},
+    {id:'data',label:'数据分析'},
+    {id:'soft',label:'求职软技能'},
+    {id:'tool',label:'工具实操'}
+];
+var CAT_COLOR={ux:'var(--primary)',pm:'var(--indigo)',data:'var(--sky)',soft:'var(--accent)',tool:'var(--violet)'};
+var CAT_LABEL={ux:'UX 设计',pm:'产品',data:'数据分析',soft:'求职软技能',tool:'工具实操'};
+var LEVEL_STYLE={'入门':'background:var(--green-light);color:var(--green)','进阶':'background:var(--accent-light);color:#B45309','实战':'background:var(--indigo-light);color:var(--indigo)'};
+
+var COURSES=[
+ {id:'c-ux-1',title:'Google UX Design 专业证书',platform:'Coursera',cat:'ux',level:'入门',duration:'约 6 个月 · 240h',free:false,
+  jobs:['产品体验设计师','UI/UX 设计师'],skill:'UX 设计',
+  outcome:'学完能独立走完「调研 → 原型 → 可用性测试」完整项目，产出 3 个可放进作品集的案例。',
+  outline:['用户体验基础与设计思维','用户研究：访谈、画像与旅程图','信息架构与线框图','Figma 高保真原型','可用性测试与作品集打磨'],
+  fit:'零基础想系统转 UX 的同学',pre:'无需前置，建议每周投入 6–8 小时'},
+
+ {id:'c-ux-2',title:'用户研究方法实战：访谈、问卷与可用性测试',platform:'B站',cat:'ux',level:'入门',duration:'6h · 12 节',free:true,
+  jobs:['产品体验设计师','用户研究员'],skill:'用户研究',
+  outcome:'能自己设计一份访谈提纲、跑 5 人可用性测试，并写出结论明确的调研报告。',
+  outline:['什么时候该做用户研究','访谈提纲怎么写才不跑偏','问卷设计与样本量常识','可用性测试的 5 人法则','把结论写成能用的报告'],
+  fit:'有设计基础但调研只停留在「问朋友」的同学',pre:'会用 Figma 或任意原型工具即可'},
+
+ {id:'c-ux-3',title:'交互设计进阶：从流程图到高保真原型',platform:'网易云课堂',cat:'ux',level:'进阶',duration:'18h · 24 节',free:false,
+  jobs:['交互设计师','产品体验设计师'],skill:'交互设计',
+  outcome:'能把一个模糊需求拆成流程图、状态图和可点击的高保真原型。',
+  outline:['任务流与流程图拆解','页面状态与异常态设计','交互细节：反馈、动效与可达性','高保真原型与标注交付'],
+  fit:'已经会画界面、但讲不清「为什么这样设计」的同学',pre:'建议先完成 1 个完整项目或学过基础 UX 课'},
+
+ {id:'c-ux-4',title:'可用性测试与结果解读',platform:'Coursera',cat:'ux',level:'进阶',duration:'8h · 10 节',free:false,
+  jobs:['用户研究员','产品体验设计师'],skill:'可用性测试',
+  outcome:'能独立主持测试、记录问题严重度，并给出可执行的修改建议。',
+  outline:['测试脚本与任务设计','主持技巧：不引导、不救场','问题记录与严重度分级','结果汇报与优先级排序'],
+  fit:'作品集里想补「验证」环节的同学',pre:'有 1 个可测试的原型即可'},
+
+ {id:'c-ux-5',title:'设计系统与组件库搭建',platform:'Figma Learn',cat:'ux',level:'实战',duration:'12h · 16 节',free:true,
+  jobs:['UI/UX 设计师','前端工程师'],skill:'设计系统',
+  outcome:'能从零搭一套带变体、Token 和文档的组件库，并说清协作规范。',
+  outline:['设计 Token：颜色、字号、间距','组件变体与状态命名','自动布局与响应式规则','组件文档与团队协作'],
+  fit:'想补「系统性思维」这块短板的同学',pre:'熟悉 Figma 基础操作'},
+
+ {id:'c-pm-1',title:'产品经理第一课：需求分析与优先级',platform:'极客时间',cat:'pm',level:'入门',duration:'10h · 14 节',free:false,
+  jobs:['产品经理','产品运营'],skill:'需求分析',
+  outcome:'能区分需求真伪、用 RICE/ICE 排优先级，并写出站得住脚的需求文档。',
+  outline:['需求从哪里来','真需求与伪需求的判断','优先级模型：RICE 与 ICE','需求评审怎么过'],
+  fit:'想转产品或刚做产品实习的同学',pre:'无，但建议同步做一个小项目'},
+
+ {id:'c-pm-2',title:'写好一份 PRD：用户故事与验收标准',platform:'人人都是产品经理',cat:'pm',level:'入门',duration:'4h · 8 节',free:true,
+  jobs:['产品经理'],skill:'PRD 写作',
+  outcome:'能写出研发看得懂、测试验得了的 PRD，含边界条件与验收标准。',
+  outline:['PRD 的标准结构','用户故事怎么写','边界、异常与权限','验收标准与上线检查'],
+  fit:'写 PRD 总被研发追问的同学',pre:'无'},
+
+ {id:'c-pm-3',title:'数据驱动的产品决策',platform:'Coursera',cat:'pm',level:'进阶',duration:'16h · 20 节',free:false,
+  jobs:['产品经理','增长运营'],skill:'数据分析',
+  outcome:'能看懂漏斗、留存、A/B 结果，并用数据说服团队改方案。',
+  outline:['核心指标与北极星指标','漏斗与留存分析','A/B 实验设计与显著性','用数据讲一个决策故事'],
+  fit:'想补「数据能力」的 UX / PM 同学',pre:'建议先有 SQL 或 Excel 基础'},
+
+ {id:'c-pm-4',title:'从 0 到 1 做一个小产品（实战项目课）',platform:'B站',cat:'pm',level:'实战',duration:'20h · 8 个模块',free:true,
+  jobs:['产品经理','产品体验设计师'],skill:'产品思维',
+  outcome:'跟着做完一个从痛点到上线的小产品，形成可展示的完整案例。',
+  outline:['选题：找一个真实的小痛点','用户访谈与需求收敛','MVP 范围与原型','开发协作与上线','复盘与数据'],
+  fit:'作品集缺「完整闭环项目」的同学',pre:'需要每周 5 小时以上投入'},
+
+ {id:'c-da-1',title:'Google Data Analytics 专业证书',platform:'Coursera',cat:'data',level:'入门',duration:'约 6 个月 · 180h',free:false,
+  jobs:['数据分析师','产品运营'],skill:'数据分析',
+  outcome:'能用电子表格、SQL、Tableau 完成一次端到端分析并汇报结论。',
+  outline:['分析思维与问题拆解','电子表格与数据清洗','SQL 查询基础','可视化与仪表盘','Capstone 案例'],
+  fit:'零基础想进数据岗的同学',pre:'无需前置，每周 6 小时'},
+
+ {id:'c-da-2',title:'SQL 入门到实战：查询、聚合与窗口函数',platform:'B站',cat:'data',level:'入门',duration:'8h · 15 节',free:true,
+  jobs:['数据分析师','产品经理'],skill:'SQL',
+  outcome:'能独立写出多表关联、分组聚合和窗口函数查询，应对笔试与日常取数。',
+  outline:['数据库与表结构','SELECT / WHERE / JOIN','GROUP BY 与聚合','窗口函数入门','面试常考题型'],
+  fit:'要过数据岗笔试或想自己取数的同学',pre:'无'},
+
+ {id:'c-da-3',title:'Excel 数据透视与可视化',platform:'网易云课堂',cat:'data',level:'入门',duration:'5h · 10 节',free:false,
+  jobs:['产品运营','市场专员'],skill:'Excel',
+  outcome:'能 30 分钟内做完一份带透视表和图表的周报。',
+  outline:['数据规范与清洗','透视表实战','常用图表选择','周报模板搭建'],
+  fit:'要经常做周报、月度复盘的实习同学',pre:'无'},
+
+ {id:'c-da-4',title:'Tableau 可视化入门',platform:'Coursera',cat:'data',level:'进阶',duration:'10h · 12 节',free:false,
+  jobs:['数据分析师','商业分析'],skill:'Tableau',
+  outcome:'能做出可交互的仪表盘，并讲清每一张图想回答的问题。',
+  outline:['连接数据与字段类型','常用图表与参数','仪表盘布局','筛选器与交互','发布与分享'],
+  fit:'需要给团队做数据看板的同学',pre:'有基础数据分析概念即可'},
+
+ {id:'c-soft-1',title:'简历与作品集叙事：让项目讲出价值',platform:'LinkedIn Learning',cat:'soft',level:'入门',duration:'3h · 6 节',free:false,
+  jobs:['全部岗位'],skill:'求职表达',
+  outcome:'能把项目写成「问题—判断—结果」的故事，简历通过率明显提升。',
+  outline:['招聘方怎么 6 秒看简历','STAR 与 CAR 结构','作品集的叙事顺序','常见减分项'],
+  fit:'投了很多没回音的同学',pre:'无'},
+
+ {id:'c-soft-2',title:'面试表达与 STAR 法则',platform:'B站',cat:'soft',level:'入门',duration:'2h · 8 节',free:true,
+  jobs:['全部岗位'],skill:'面试表达',
+  outcome:'能用 90 秒讲清一段经历，答「你最大的缺点」不再翻车。',
+  outline:['自我介绍的三段式','STAR 法则实操','高频行为面试题','反问环节怎么问'],
+  fit:'一到面试就紧张、讲不清重点的同学',pre:'无'},
+
+ {id:'c-soft-3',title:'群面与 case 分析拆解',platform:'极客时间',cat:'soft',level:'进阶',duration:'6h · 10 节',free:false,
+  jobs:['产品经理','咨询顾问'],skill:'案例分析',
+  outcome:'群面里能快速定框架、抢到有效发言，case 面试能拆出结构。',
+  outline:['群面角色与分工','框架：从市场到产品','估算题与费米估算','case 演练与复盘'],
+  fit:'要冲大厂群面 / 咨询 case 的同学',pre:'建议先准备 1–2 段可讲的经历'},
+
+ {id:'c-tool-1',title:'Figma 从零到组件变体',platform:'Figma Learn',cat:'tool',level:'入门',duration:'12h · 18 节',free:true,
+  jobs:['UI/UX 设计师','产品体验设计师'],skill:'Figma',
+  outcome:'能独立做交互原型、组件变体和可交付的标注文件。',
+  outline:['画布、图层与自动布局','样式与组件基础','变体与交互原型','协作、标注与交付'],
+  fit:'还没系统学过 Figma 的同学',pre:'无'},
+
+ {id:'c-tool-2',title:'Notion 搭建个人求职管理系统',platform:'B站',cat:'tool',level:'入门',duration:'4h · 9 节',free:true,
+  jobs:['全部岗位'],skill:'Notion',
+  outcome:'能搭出投递看板、面经库和复盘模板，秋招不再靠记忆管理进度。',
+  outline:['数据库与视图','投递看板设计','面经与复盘模板','每周复盘流程'],
+  fit:'投递岗位多、容易记混的同学',pre:'无'}
+];
+
+var curCat='all', curQuery='', curCourse=null;
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},2200);}
+function readObj(key){try{var v=JSON.parse(localStorage.getItem(key)||'{}');return (v&&typeof v==='object')?v:{};}catch(e){return {};}}
+function readArr(key){try{var v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[];}catch(e){return [];}}
+function saveObj(key,obj){try{localStorage.setItem(key,JSON.stringify(obj));}catch(e){console.warn('[courses] 写入失败',e);}}
+function saveArr(key,arr){try{localStorage.setItem(key,JSON.stringify(arr));}catch(e){console.warn('[courses] 写入失败',e);}}
+
+function getCourse(id){return COURSES.filter(function(c){return c.id===id;})[0]||null;}
+function isFav(id){return readArr(FAV_KEY).some(function(f){return f&&f.id===id;});}
+function isDone(id){return !!readObj(DONE_KEY)[id];}
+function isInPlan(id){return !!readObj(PLAN_KEY)[id];}
+
+/* ── 收藏：写入 cos_course_favs（「我的-收藏夹」课程分类读这个） ── */
+function toggleFav(id){
+    var c=getCourse(id);if(!c)return;
+    var list=readArr(FAV_KEY);
+    var idx=-1;
+    list.forEach(function(f,i){if(f&&f.id===id)idx=i;});
+    if(idx>=0){list.splice(idx,1);showToast('已取消收藏');}
+    else{
+        list.unshift({id:c.id,title:c.title,platform:c.platform,cat:c.cat,level:c.level,duration:c.duration,jobs:c.jobs,outcome:c.outcome,savedAt:Date.now()});
+        showToast('✅ 已收藏到「我的-收藏夹」');
+    }
+    saveArr(FAV_KEY,list);
+    renderList();renderStats();
+    if(curCourse&&curCourse.id===id)renderCourseDetail(curCourse);
+}
+
+/* ── 首页今日任务：镜像 index 的 AI 种子，避免覆盖用户原有任务 ── */
+var SEED_AI=[
+    {id:'ai-0',name:'完善小红书体验分析文案',time:'14:00 – 15:30',tag:'ai',done:true},
+    {id:'ai-1',name:'整理 Career OS 信息架构',time:'16:00 – 17:00',tag:'ai',done:true},
+    {id:'ai-2',name:'制作职业准备页面原型',time:'预计 19:00 开始',tag:'ai',done:false}
+];
+function ensureDailyTasks(){
+    var dt=Store.get('dailyTasks');
+    if(Array.isArray(dt)&&dt.length)return dt;
+    dt=SEED_AI.map(function(t){
+        var o={id:t.id,name:t.name,time:t.time,tag:'ai',done:t.done};
+        if(o.done)o.completionAt=Date.now();
+        return o;
+    });
+    Store.set('dailyTasks',dt);
+    return dt;
+}
+function pushDailyTask(course,done){
+    var dt=ensureDailyTasks();
+    var taskId='course-'+course.id;
+    var idx=-1;
+    dt.forEach(function(t,i){if(t&&t.id===taskId)idx=i;});
+    var task={id:taskId,name:(done?'学完课程：':'学习课程：')+course.title,time:course.duration,tag:'ai',done:!!done};
+    if(done)task.completionAt=Date.now();
+    if(idx>=0){
+        if(dt[idx].completionAt&&!task.completionAt)task.completionAt=dt[idx].completionAt;
+        dt[idx]=Object.assign(dt[idx],task);
+    }else{
+        dt.push(task);
+    }
+    Store.set('dailyTasks',dt);
+}
+
+/* ── 加入学习计划：写 cos_course_plan + 首页今日任务（未完成） ── */
+function addToPlan(id){
+    var c=getCourse(id);if(!c)return;
+    if(isInPlan(id)){showToast('已经在学习计划里了');return;}
+    var plan=readObj(PLAN_KEY);plan[id]=Date.now();saveObj(PLAN_KEY,plan);
+    pushDailyTask(c,false);
+    renderList();renderStats();
+    if(curCourse)renderCourseDetail(curCourse);
+    showToast('已加入学习计划，可在首页今日任务打卡');
+}
+
+/* ── 标记已学：写 cos_course_done + 完成任务（日历变绿）+ 回写技能 ── */
+function markLearned(id){
+    var c=getCourse(id);if(!c)return;
+    if(isDone(id)){showToast('这门课已经标记为学完了');return;}
+    var done=readObj(DONE_KEY);done[id]=Date.now();saveObj(DONE_KEY,done);
+    var plan=readObj(PLAN_KEY);delete plan[id];saveObj(PLAN_KEY,plan);
+    pushDailyTask(c,true);
+    syncSkill(c);
+    renderList();renderStats();
+    if(curCourse)renderCourseDetail(curCourse);
+    showToast('🎉 已标记学完，学习记录 +1，技能已更新');
+}
+function syncSkill(course){
+    var list=readArr(SKILL_KEY);
+    var name=course.skill||course.title;
+    var hit=null;
+    list.forEach(function(s){if(s&&s.name===name)hit=s;});
+    if(hit){
+        if(!hit.mastered){hit.mastered=true;hit.masteredAt=Date.now();}
+    }else{
+        list.push({id:'sk-c-'+course.id,name:name,category:CAT_LABEL[course.cat]||'其他',cycle:course.duration,mastered:true,createdAt:Date.now(),masteredAt:Date.now()});
+    }
+    saveArr(SKILL_KEY,list);
+}
+
+/* ── 顶部个性化推荐：学校 / 专业 / 年级 + 目标岗位 + 已学状态 → 最适配的 3 门 ── */
+var ICON_TARGET='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>';
+var MAJOR_MAP=[
+    {w:['新媒体','传播','新闻','广告','出版','中文','汉语言'],cats:['ux','pm','soft','tool']},
+    {w:['计算机','软件','信息','数据','统计','人工智能','电子','通信'],cats:['data','tool','pm']},
+    {w:['设计','视觉','艺术','美术','数字媒体'],cats:['ux','tool']},
+    {w:['经济','金融','管理','工商','市场','营销','会计','贸易'],cats:['pm','data','soft']}
+];
+function readProfile(){
+    try{
+        var p=JSON.parse(localStorage.getItem('cos_profile_data')||'null');
+        return (p&&typeof p==='object')?p:null;
+    }catch(e){return null;}
+}
+function getGoalNames(){
+    var goal=null;
+    try{goal=Store.get('careerGoal');}catch(e){goal=null;}
+    var names=[];
+    if(Array.isArray(goal))goal.forEach(function(g){
+        var n=(g&&g.name)?g.name:(typeof g==='string'?g:'');
+        if(n)names.push(n);
+    });
+    return names;
+}
+function majorCats(major){
+    if(!major)return [];
+    for(var i=0;i<MAJOR_MAP.length;i++){
+        for(var j=0;j<MAJOR_MAP[i].w.length;j++){
+            if(major.indexOf(MAJOR_MAP[i].w[j])>-1)return MAJOR_MAP[i].cats;
+        }
+    }
+    return [];
+}
+function recommendForYou(){
+    var p=readProfile()||{};
+    var school=(p.school||'').trim(),major=(p.major||'').trim(),grade=(p.grade||'').trim(),identity=p.identity||'student';
+    var names=getGoalNames();
+    var cats=majorCats(major);
+    var isEarly=/大一|大二/.test(grade);
+    var isLate=/大三|大四|研|应届|毕业/.test(grade);
+    var out=[];
+    var focusName=null;
+    COURSES.forEach(function(c){
+        if(isDone(c.id))return;                       // 学完的课不再推荐
+        var score=0,reasons=[];
+        var jobHit=null;
+        names.forEach(function(n){if(!jobHit&&c.jobs&&c.jobs.indexOf(n)>-1)jobHit=n;});
+        if(jobHit){
+            if(!focusName)focusName=jobHit;           // 标签与理由统一用这个命中岗位
+            score+=45;reasons.push('与目标岗位「'+jobHit+'」直接相关');
+        }
+        if(cats.length&&cats.indexOf(c.cat)>-1){score+=22;reasons.push('和你学的「'+major+'」方向一致');}
+        if(identity==='worker'){
+            if(c.level!=='入门'){score+=10;reasons.push('职场人更适合进阶内容');}
+        }else if(isEarly&&c.level==='入门'){
+            score+=12;reasons.push(grade+'阶段先打基础');
+        }else if(isLate&&(c.level==='进阶'||c.level==='实战')){
+            score+=12;reasons.push(grade+'阶段该上实战');
+        }
+        if(c.jobs&&c.jobs.indexOf('全部岗位')>-1)score+=6;
+        if(isFav(c.id))score+=4;
+        if(isInPlan(c.id)){score+=8;reasons.push('已在你的学习计划里');}
+        if(score<=0)return;
+        out.push({c:c,score:score,reasons:reasons.slice(0,2)});
+    });
+    out.sort(function(a,b){return b.score-a.score;});
+    return {school:school,major:major,grade:grade,names:names,focusName:focusName||names[0]||'',hasProfile:!!(school||major||grade),items:out.slice(0,3)};
+}
+function renderGoalBanner(){
+    var box=document.getElementById('goalBanner');
+    if(!box)return;
+    var r=recommendForYou();
+    var info=[];
+    if(r.school)info.push(r.school);
+    if(r.major)info.push(r.major);
+    if(r.grade)info.push(r.grade);
+    var chips='';
+    if(info.length)chips+='<span class="fy-chip">'+esc(info.join(' · '))+'</span>';
+    if(r.focusName)chips+='<span class="fy-chip goal">目标：'+esc(r.focusName)+'</span>';
+    if(!r.items.length){
+        box.innerHTML='<div class="goal-head">'+ICON_TARGET+'还没有可推荐的课程</div>'+
+            '<div class="goal-sub">先完善「学校 / 专业 / 年级」并设定目标岗位，这里会按你的画像推荐最适配的课。</div>'+
+            '<button class="goal-empty-btn" onclick="location.href=\'index.html?tab=explore\'">去完善资料 / 设定目标</button>';
+        return;
+    }
+    var picksHtml=r.items.map(function(it,i){
+        return '<div class="goal-pick" onclick="openCourse(\''+it.c.id+'\')">'+
+            '<div class="goal-pick-idx">'+(i+1)+'</div>'+
+            '<div class="goal-pick-body">'+
+                '<div class="goal-pick-title">'+esc(it.c.title)+'</div>'+
+                '<div class="goal-pick-reason">'+esc(it.reasons.join(' · ')||(it.c.platform+' · '+it.c.duration))+'</div>'+
+            '</div>'+
+        '</div>';
+    }).join('');
+    box.innerHTML='<div class="goal-head">'+ICON_TARGET+'为你推荐 · 基于你的画像</div>'+
+        (chips?'<div class="fy-chips">'+chips+'</div>':'')+
+        (r.hasProfile?'':'<div class="fy-hint">未读取到你的学校 / 专业 / 年级，先按目标岗位推荐。完善资料后会更准 → 我的 · 编辑资料</div>')+
+        '<div class="goal-picks">'+picksHtml+'</div>';
+}
+
+/* ── 列表 ── */
+function renderCats(){
+    var row=document.getElementById('catRow');
+    row.innerHTML=CATS.map(function(c){
+        return '<button class="filter-chip'+(curCat===c.id?' active':'')+'" data-cat="'+c.id+'" onclick="setCat(this)">'+c.label+'</button>';
+    }).join('');
+}
+function setCat(btn){
+    curCat=btn.dataset.cat;
+    renderCats();renderList();
+}
+function onSearch(v){
+    curQuery=(v||'').trim();
+    renderList();
+}
+function filteredCourses(){
+    return COURSES.filter(function(c){
+        if(curCat!=='all'&&c.cat!==curCat)return false;
+        if(!curQuery)return true;
+        var hay=[c.title,c.platform,c.level,c.duration,c.skill,c.outcome,c.outline.join(' '),c.jobs.join(' ')].join(' ').toLowerCase();
+        return hay.indexOf(curQuery.toLowerCase())>-1;
+    });
+}
+function cardHTML(c){
+    var badge='';
+    if(isDone(c.id))badge='<span class="c-badge done">已学完</span>';
+    else if(isInPlan(c.id))badge='<span class="c-badge plan">在学</span>';
+    else if(isFav(c.id))badge='<span class="c-badge fav">已收藏</span>';
+    var jobs=(c.jobs||[]).map(function(j){return '<span class="c-job">'+esc(j)+'</span>';}).join('');
+    return '<div class="course-card" onclick="openCourse(\''+c.id+'\')">'+
+        '<div class="c-top">'+
+            '<div class="c-logo" style="background:'+(CAT_COLOR[c.cat]||'var(--primary)')+'">'+esc(c.title.charAt(0))+'</div>'+
+            '<div class="c-main">'+
+                '<div class="c-title">'+esc(c.title)+'</div>'+
+                '<div class="c-meta"><span>'+esc(c.platform)+'</span><i>·</i><span>'+esc(c.duration)+'</span></div>'+
+            '</div>'+
+            badge+
+        '</div>'+
+        '<div class="c-jobs"><span class="c-job" style="'+LEVEL_STYLE[c.level]+'">'+esc(c.level)+'</span>'+jobs+'</div>'+
+        '<div class="c-outcome">'+esc(c.outcome)+'</div>'+
+    '</div>';
+}
+function renderList(){
+    var list=document.getElementById('courseList');
+    var items=filteredCourses();
+    document.getElementById('navCount').textContent=items.length+' 门';
+    if(!items.length){
+        list.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><p>没有匹配的课程<br>换个关键词，比如「SQL」「作品集」「Figma」</p></div>';
+        return;
+    }
+    list.innerHTML=items.map(cardHTML).join('');
+}
+function renderStats(){
+    document.getElementById('statTotal').textContent=COURSES.length;
+    document.getElementById('statPlan').textContent=Object.keys(readObj(PLAN_KEY)).length;
+    document.getElementById('statDone').textContent=Object.keys(readObj(DONE_KEY)).length;
+}
+
+/* ── 详情 ── */
+function openCourse(id){
+    var c=getCourse(id);if(!c)return;
+    curCourse=c;
+    renderCourseDetail(c);
+    document.getElementById('courseSheet').classList.add('show');
+    document.getElementById('courseBody').scrollTop=0;
+}
+function closeCourse(){
+    document.getElementById('courseSheet').classList.remove('show');
+    curCourse=null;
+}
+function renderCourseDetail(c){
+    var body=document.getElementById('courseBody');
+    if(!body)return;
+    var done=isDone(c.id), inPlan=isInPlan(c.id), fav=isFav(c.id);
+    var outline=c.outline.map(function(t,i){return '<li><b>'+(i+1)+'</b>'+esc(t)+'</li>';}).join('');
+    var jobs=(c.jobs||[]).map(function(j){return '<span class="c-job">'+esc(j)+'</span>';}).join('');
+    var favLabel=fav?'已收藏':'收藏';
+    var planLabel=inPlan?'已在计划':'加入学习计划';
+    var doneLabel=done?'已学完':'标记已学完';
+    body.innerHTML=
+        '<div class="cd-hero">'+
+            '<div class="cd-title">'+esc(c.title)+'</div>'+
+            '<div class="cd-en">'+esc(c.platform)+' · '+esc(CAT_LABEL[c.cat])+' · 外部课程</div>'+
+            '<div class="cd-facts">'+
+                '<div class="cd-fact"><b>'+esc(c.duration.split('·')[0].trim())+'</b><span>预计周期</span></div>'+
+                '<div class="cd-fact"><b>'+esc(c.level)+'</b><span>难度</span></div>'+
+                '<div class="cd-fact"><b>'+(c.free?'免费':'付费')+'</b><span>费用</span></div>'+
+            '</div>'+
+        '</div>'+
+        '<div class="cd-block"><div class="cd-block-title">学完你能做到</div><div class="cd-p">'+esc(c.outcome)+'</div></div>'+
+        '<div class="cd-block"><div class="cd-block-title">课程大纲</div><ul class="cd-ol">'+outline+'</ul></div>'+
+        '<div class="cd-block"><div class="cd-block-title">适合谁 / 前置要求</div>'+
+            '<div class="cd-kv"><span>适合</span><div>'+esc(c.fit)+'</div></div>'+
+            '<div class="cd-kv"><span>前置</span><div>'+esc(c.pre)+'</div></div>'+
+            '<div class="cd-kv"><span>对应技能</span><div>'+esc(c.skill)+'</div></div>'+
+        '</div>'+
+        '<div class="cd-block"><div class="cd-block-title">学完能投这些岗位</div><div class="c-jobs">'+jobs+'</div></div>';
+    var footer=document.getElementById('courseFooter');
+    if(footer){
+        footer.innerHTML='<div class="cd-actions">'+
+            '<button class="cd-btn fav'+(fav?' on':'')+'" onclick="toggleFav(\''+c.id+'\')">'+favLabel+'</button>'+
+            '<button class="cd-btn ghost" onclick="addToPlan(\''+c.id+'\')"'+(inPlan?' disabled':'')+'>'+planLabel+'</button>'+
+            '<button class="cd-btn main'+(done?' on':'')+'" onclick="markLearned(\''+c.id+'\')"'+(done?' disabled':'')+'>'+doneLabel+'</button>'+
+        '</div>';
+    }
+}
+
+function goBack(){
+    if(document.referrer&&document.referrer.indexOf('index.html')>-1){history.back();}
+    else{location.href='index.html?tab=explore';}
+}
+
+/* ── INIT ── */
+renderGoalBanner();
+renderCats();
+renderStats();
+renderList();
+
+/* 从职业档案跳过来时（?course=xxx）直接打开对应课程详情 */
+(function(){
+    var m=/[?&]course=([^&]+)/.exec(location.search);
+    if(!m)return;
+    var id=decodeURIComponent(m[1]);
+    var c=getCourse(id);
+    if(c)openCourse(id);
+})();
+</script>
+</body>
+</html>

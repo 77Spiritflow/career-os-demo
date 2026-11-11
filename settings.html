@@ -460,6 +460,10 @@ var Auth = (function () {
 
         /* ── Toast ── */
     </style>
+<script>
+/* 全局字体大小：设置页「小/中/大」三档全局生效 */
+(function(){try{var v=parseInt(localStorage.getItem('cos_fontsize'),10);if(isNaN(v)||v<0||v>2)v=1;var z=[0.92,1,1.12][v];document.documentElement.style.zoom=(z===1?'':String(z));}catch(e){}})();
+</script>
 </head>
 <body>
 <div class="app">
@@ -541,7 +545,7 @@ var Auth = (function () {
                                 <span class="setting-extra">产品更新、活动通知等</span>
                             </div>
                             <label class="toggle" aria-label="系统推送">
-                                <input type="checkbox" checked onchange="showToast(this.checked?'系统推送已开启':'系统推送已关闭')">
+                                <input type="checkbox" checked id="notifySystem" onchange="setNotify('system',this.checked)">
                                 <div class="toggle-track"></div>
                                 <div class="toggle-thumb"></div>
                             </label>
@@ -552,7 +556,7 @@ var Auth = (function () {
                                 <span class="setting-extra">每日任务、目标截止提醒</span>
                             </div>
                             <label class="toggle" aria-label="任务提醒">
-                                <input type="checkbox" checked onchange="showToast(this.checked?'任务提醒已开启':'任务提醒已关闭')">
+                                <input type="checkbox" checked id="notifyTask" onchange="setNotify('task',this.checked)">
                                 <div class="toggle-track"></div>
                                 <div class="toggle-thumb"></div>
                             </label>
@@ -563,7 +567,7 @@ var Auth = (function () {
                                 <span class="setting-extra">评论回复、点赞、关注通知</span>
                             </div>
                             <label class="toggle" aria-label="社区消息提醒">
-                                <input type="checkbox" onchange="showToast(this.checked?'社区消息提醒已开启':'社区消息提醒已关闭')">
+                                <input type="checkbox" id="notifyCommunity" onchange="setNotify('community',this.checked)">
                                 <div class="toggle-track"></div>
                                 <div class="toggle-thumb"></div>
                             </label>
@@ -649,7 +653,7 @@ var Auth = (function () {
                             </div>
                         </button>
                         <!-- ✅ 改动2：同上，label 直接顶格 -->
-                        <button class="nav-item" onclick="showToast('数据导出功能开发中')">
+                        <button class="nav-item" onclick="exportData()">
                             <div class="nav-item-left" style="flex-direction:column;align-items:flex-start;gap:0">
                                 <span class="setting-label">数据导出功能</span>
                                 <span class="setting-extra">导出你的所有个人数据</span>
@@ -705,7 +709,7 @@ var Auth = (function () {
             <div class="dialog-desc">注销后，你的所有数据将被永久删除且无法恢复，包括个人资料、任务记录、作品集等内容。请谨慎操作。</div>
             <div class="dialog-actions">
                 <button class="dialog-btn cancel" onclick="closeDialog()">再想想</button>
-                <button class="dialog-btn danger" onclick="closeDialog();showToast('账号注销功能开发中')">确认注销</button>
+                <button class="dialog-btn danger" onclick="closeDialog();confirmAccountDelete()">确认注销</button>
             </div>
         </div>
     </div>
@@ -734,6 +738,12 @@ function toggleAccordion(id){
 }
 
 /* ── Font Size Slider ── */
+function applyFontSize(val){
+    val=parseInt(val,10);
+    if(isNaN(val)||val<0||val>2)val=1;
+    const z=[0.92,1,1.12][val];
+    document.documentElement.style.zoom=(z===1?'':String(z));
+}
 function updateFontSlider(val){
     val=parseInt(val);
     const pct=val*50;
@@ -742,7 +752,8 @@ function updateFontSlider(val){
     document.getElementById('fsLabel0').classList.toggle('active',val===0);
     document.getElementById('fsLabel2').classList.toggle('active',val===2);
     const sizes=['小','中','大'];
-    document.body.style.fontSize=['14px','16px','18px'][val];
+    applyFontSize(val);
+    try{localStorage.setItem('cos_fontsize',String(val));}catch(e){}
     showToast('字体大小已切换为「'+sizes[val]+'」');
 }
 
@@ -757,6 +768,94 @@ function handleBack(){ if(typeof Router!=='undefined'){Router.back();}else{windo
 /* ── Dialog ── */
 function openDialog(){ document.getElementById('dialogOverlay').classList.add('open'); }
 function closeDialog(){ document.getElementById('dialogOverlay').classList.remove('open'); }
+
+/* ── 数据导出（JSON 下载） ── */
+function exportData(){
+    try{
+        const data={exportedAt:new Date().toISOString(),source:'Career OS',data:{}};
+        for(let i=0;i<localStorage.length;i++){
+            const k=localStorage.key(i);
+            if(k)data.data[k]=localStorage.getItem(k);
+        }
+        const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+        const a=document.createElement('a');
+        const d=new Date(),pad=n=>String(n).padStart(2,'0');
+        a.href=URL.createObjectURL(blob);
+        a.download='career-os-data-'+d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+        showToast('✅ 数据已导出');
+    }catch(e){
+        showToast('导出失败，请稍后重试');
+        console.warn('[Export] 失败',e);
+    }
+}
+
+/* ── 账号注销（清空本地数据） ── */
+function confirmAccountDelete(){
+    try{localStorage.clear();}catch(e){}
+    try{sessionStorage.clear();}catch(e){}
+    showToast('账号已注销，本地数据已清除');
+    setTimeout(function(){
+        if(typeof Router!=='undefined'){Router.toLogin();}else{window.location.href='login.html';}
+    },800);
+}
+
+/* ── 消息通知设置（本地持久化） ── */
+const NOTIFY_KEY='cos_notify_settings';
+const NOTIFY_DEFAULTS={system:true,task:true,community:false};
+function readNotifySettings(){
+    let s={system:true,task:true,community:false};
+    try{
+        const raw=localStorage.getItem(NOTIFY_KEY);
+        if(raw){
+            const v=JSON.parse(raw);
+            s.system=v.system!==false;
+            s.task=v.task!==false;
+            s.community=v.community===true;
+        }
+    }catch(e){}
+    return s;
+}
+function setNotify(key,on){
+    const s=readNotifySettings();
+    s[key]=!!on;
+    try{localStorage.setItem(NOTIFY_KEY,JSON.stringify(s));}
+    catch(e){showToast('保存失败，请检查浏览器存储');return;}
+    const names={system:'系统推送',task:'任务提醒',community:'社区消息提醒'};
+    showToast(names[key]+(on?'已开启':'已关闭'));
+}
+function initNotifySettings(){
+    const s=readNotifySettings();
+    const map={system:'notifySystem',task:'notifyTask',community:'notifyCommunity'};
+    Object.keys(map).forEach(function(k){
+        const el=document.getElementById(map[k]);
+        if(el)el.checked=!!s[k];
+    });
+}
+initNotifySettings();
+
+/* ── 字体大小：页面加载时恢复上次设置 ── */
+function initFontSize(){
+    let val=1;
+    try{
+        const v=localStorage.getItem('cos_fontsize');
+        if(v!==null){val=parseInt(v,10);if(isNaN(val)||val<0||val>2)val=1;}
+    }catch(e){}
+    const pct=val*50;
+    const fill=document.getElementById('fsFill'),thumb=document.getElementById('fsThumb');
+    if(fill)fill.style.width=pct+'%';
+    if(thumb)thumb.style.left=pct+'%';
+    const l0=document.getElementById('fsLabel0'),l2=document.getElementById('fsLabel2');
+    if(l0)l0.classList.toggle('active',val===0);
+    if(l2)l2.classList.toggle('active',val===2);
+    const slider=document.querySelector('.font-slider-input');
+    if(slider)slider.value=val;
+    applyFontSize(val);
+}
+initFontSize();
 </script>
 
 </body>

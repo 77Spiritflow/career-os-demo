@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>1v1 导师 · Career OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #0F766E; --primary-hover: #0D6B63; --primary-light: #14B8A6;
+    --primary-50: #F0FDFA; --primary-100: #CCFBF1;
+    --accent: #F59E0B; --accent-light: #FEF3C7; --accent-deep: #B45309;
+    --green: #059669; --green-light: #D1FAE5;
+    --rose: #F43F5E;
+    --white: #FFFFFF;
+    --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0; --gray-300: #CBD5E1;
+    --gray-400: #94A3B8; --gray-500: #64748B; --gray-600: #475569; --gray-900: #0F172A;
+    --radius-lg: 22px; --radius-md: 16px; --radius-sm: 12px;
+    --shadow-sm: 0 1px 3px rgba(15,23,42,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--gray-100);color:var(--gray-900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.app{max-width:430px;width:100%;min-height:100vh;background:var(--gray-50);margin:0 auto;position:relative;padding-bottom:36px}
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(248,250,252,.86);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);height:56px;display:flex;align-items:center;padding:0 20px;border-bottom:1px solid rgba(226,232,240,.5)}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--gray-500);background:none;border:none;font-family:inherit;cursor:pointer;padding:4px 0}
+.nav-back:active{color:var(--gray-900)}
+.nav-back svg{width:18px;height:18px}
+.nav-title{position:absolute;left:50%;transform:translateX(-50%);font-size:15px;font-weight:600;color:var(--gray-900)}
+.nav-count{position:absolute;right:20px;font-size:11px;font-weight:600;color:var(--gray-400)}
+.page{padding:16px 20px 0}
+
+/* ── 顶部说明 ── */
+.intro{padding:2px 2px 14px}
+.intro h1{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.4}
+.intro p{font-size:11.5px;color:var(--gray-500);line-height:1.75;margin-top:7px}
+.intro .price-note{font-size:10.5px;color:var(--gray-400);line-height:1.7;margin-top:8px;padding-top:8px;border-top:1px solid var(--gray-200)}
+
+/* ── 筛选 ── */
+.chips{display:flex;gap:7px;overflow-x:auto;padding:2px 20px 12px;margin:0 -20px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:6px 13px;border-radius:100px;border:1px solid var(--gray-200);background:#fff;color:var(--gray-500);font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .18s}
+.chip.active{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600}
+
+/* ── 导师卡 ── */
+.mcard{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-md);padding:15px 17px;margin-bottom:11px;box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .15s}
+.mcard:active{transform:scale(.99)}
+.mhead{display:flex;gap:11px;align-items:flex-start}
+.avatar{width:42px;height:42px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700}
+.mmain{flex:1;min-width:0}
+.mname{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.mname b{font-size:14px;font-weight:700;color:var(--gray-900)}
+.mname span{font-size:10.5px;color:var(--gray-400)}
+.morg{font-size:11.5px;color:var(--gray-600);margin-top:3px;font-weight:500}
+.morg em{font-style:normal;color:var(--gray-400);font-weight:400}
+.mintro{font-size:11px;color:var(--gray-500);line-height:1.6;margin-top:6px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+
+.mtags{display:grid;grid-template-columns:1fr 1fr;gap:5px 8px;margin-top:10px}
+.mtag{display:flex;gap:5px;font-size:10.5px;color:var(--gray-500);line-height:1.5;min-width:0}
+.mtag i{font-style:normal;flex-shrink:0;font-size:9.5px;font-weight:700;color:var(--primary);background:var(--primary-50);border-radius:4px;padding:1px 4px;height:16px;line-height:14px}
+.mtag span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.mfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px;padding-top:11px;border-top:1px solid var(--gray-100)}
+.mprice{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.mprice b{font-size:16px;font-weight:800;color:var(--gray-900);letter-spacing:-.02em}
+.mprice em{font-style:normal;font-size:10.5px;font-weight:600;color:var(--accent-deep);background:var(--accent-light);padding:2px 7px;border-radius:5px}
+.mbtn{flex-shrink:0;padding:8px 16px;border-radius:10px;border:none;background:var(--gray-900);color:#fff;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer}
+.mbtn:active{transform:scale(.97)}
+
+/* ── 预约列表 ── */
+.sec{margin-top:24px}
+.sec-head{font-size:13.5px;font-weight:800;color:var(--gray-900)}
+.sec-sub{font-size:11.5px;color:var(--gray-400);line-height:1.7;margin-top:5px;margin-bottom:10px}
+.book{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-md);padding:13px 14px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.book-l b{font-size:12.5px;font-weight:700;display:block}
+.book-l span{font-size:11px;color:var(--gray-500);display:block;margin-top:3px}
+.book-l i{font-style:normal;font-size:10px;color:var(--primary);background:var(--primary-50);padding:2px 6px;border-radius:4px;margin-left:6px}
+.book-r{text-align:right;flex-shrink:0}
+.book-r b{font-size:13px;font-weight:700;display:block}
+.book-r button{margin-top:5px;font-size:10.5px;color:var(--gray-400);background:none;border:none;font-family:inherit;cursor:pointer;padding:2px 0}
+.empty{font-size:11.5px;color:var(--gray-400);background:#fff;border:1px dashed var(--gray-200);border-radius:var(--radius-md);padding:18px;text-align:center;line-height:1.7}
+
+.foot{font-size:10.5px;color:var(--gray-400);line-height:1.8;text-align:center;padding:24px 12px 8px}
+
+/* ── 详情弹层 ── */
+.sheet-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:300;display:none;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .25s}
+.sheet-overlay.show{display:flex;opacity:1}
+.sheet-box{width:100%;max-width:430px;background:#fff;border-radius:24px 24px 0 0;display:flex;flex-direction:column;max-height:88vh;animation:slideUp .35s cubic-bezier(.22,1,.36,1) both}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-head-left{display:flex;align-items:center;gap:13px;min-width:0}
+.dt-avatar{width:52px;height:52px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:700;box-shadow:0 0 0 3px var(--gray-100)}
+.sheet-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:20px 22px 12px;gap:12px}
+.sheet-title{font-size:16px;font-weight:700;color:var(--gray-900)}
+.sheet-sub{font-size:11.5px;color:var(--gray-500);margin-top:4px;line-height:1.6}
+.sheet-close{width:30px;height:30px;border-radius:50%;background:var(--gray-100);color:var(--gray-500);border:none;font-size:16px;line-height:1;cursor:pointer;font-family:inherit;flex-shrink:0}
+.sheet-body{flex:1;min-height:0;overflow-y:auto;padding:0 22px 8px}
+.sheet-footer{flex-shrink:0;padding:12px 22px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--gray-100)}
+
+.dblock{margin-top:16px}
+.dlabel{font-size:10.5px;font-weight:800;letter-spacing:.05em;color:var(--gray-400);margin-bottom:8px}
+.dtext{font-size:12px;color:var(--gray-600);line-height:1.8}
+.dcap{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--gray-100)}
+.dcap:last-child{border-bottom:none}
+.dcap i{font-style:normal;flex-shrink:0;font-size:9.5px;font-weight:700;color:var(--primary);background:var(--primary-50);border-radius:4px;padding:2px 5px;height:17px;line-height:13px;margin-top:1px}
+.dcap div b{display:block;font-size:11.5px;font-weight:600;color:var(--gray-900);line-height:1.5}
+.dcap div span{display:block;font-size:10.5px;color:var(--gray-400);line-height:1.6;margin-top:2px}
+
+.pbox{background:var(--gray-50);border:1px solid var(--gray-100);border-radius:12px;padding:12px 13px;margin-top:4px}
+.prow{display:flex;justify-content:space-between;font-size:11.5px;padding:3px 0;color:var(--gray-500)}
+.prow b{color:var(--gray-900);font-weight:600}
+.prow.total{padding-top:8px;margin-top:5px;border-top:1px solid var(--gray-200);font-size:12px}
+.prow.total b{font-size:15px;font-weight:800}
+.pnote{font-size:10px;color:var(--gray-400);line-height:1.65;margin-top:8px;padding-top:8px;border-top:1px dashed var(--gray-200)}
+
+.slots{display:flex;gap:7px;flex-wrap:wrap}
+.slot{padding:7px 12px;border-radius:9px;border:1px solid var(--gray-200);background:#fff;font-size:11.5px;color:var(--gray-600);font-family:inherit;cursor:pointer}
+.slot.on{border-color:var(--primary);background:var(--primary-50);color:var(--primary);font-weight:600}
+.slot.dis{opacity:.42;cursor:not-allowed;text-decoration:line-through}
+
+.coupon{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--accent-light);border-radius:10px;padding:9px 12px;margin-top:10px}
+.coupon-l{font-size:11px;color:var(--accent-deep);font-weight:600;line-height:1.5}
+.coupon-r{font-size:10.5px;color:var(--accent-deep);background:#fff;border:none;border-radius:6px;padding:4px 8px;font-family:inherit;cursor:pointer;font-weight:600;flex-shrink:0}
+.coupon.warn{background:var(--gray-100)}
+.coupon.warn .coupon-l{color:var(--gray-500);font-weight:400}
+
+.tip-line{font-size:10.5px;color:var(--gray-400);line-height:1.7;margin-top:8px}
+.tip-line a{color:var(--primary);text-decoration:none;font-weight:600;margin-left:3px;cursor:pointer}
+
+.bigbtn{width:100%;height:48px;border-radius:14px;border:none;background:var(--gray-900);color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
+.bigbtn:active{transform:scale(.985)}
+.bigbtn .sm{font-size:11px;font-weight:500;opacity:.7;margin-left:6px}
+.foot-note{font-size:10px;color:var(--gray-400);text-align:center;margin-top:8px;line-height:1.6}
+
+/* ── toast ── */
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--gray-900);color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    </style>
+    <script>
+(function(){try{var v=parseInt(localStorage.getItem('cos_fontsize'),10);if(isNaN(v)||v<0||v>2)v=1;var z=[0.92,1,1.12][v];document.documentElement.style.zoom=(z===1?'':String(z));}catch(e){}})();
+    </script>
+</head>
+<body>
+<div class="app">
+    <nav class="top-nav">
+        <button class="nav-back" onclick="goBack()" aria-label="返回">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            <span>返回</span>
+        </button>
+        <div class="nav-title">1v1 导师</div>
+        <div class="nav-count" id="navCount">8 位</div>
+    </nav>
+
+    <div class="page">
+        <div class="intro">
+            <h1>找一位真正做过这行的人</h1>
+            <p>不是泛泛的职业建议，是具体到岗位的面试、简历、作品集和内推渠道。</p>
+            <p class="price-note">价格由平台统一制定，含导师课时费与平台服务费。会员折扣的差额由平台承担，导师收入不变。</p>
+        </div>
+
+        <div class="chips" id="chips"></div>
+        <div id="mentorList"></div>
+
+        <div class="sec">
+            <div class="sec-head">我的预约</div>
+            <div class="sec-sub">已约的时段会出现在这里，可随时取消。</div>
+            <div id="bookingList"></div>
+        </div>
+
+        <div class="foot">导师背景与价格均为演示数据，不会真实扣款。<br>内推仅提供渠道与信息，不承诺录用结果。</div>
+    </div>
+</div>
+
+<div class="sheet-overlay" id="detailSheet" onclick="if(event.target===this)closeDetail()">
+    <div class="sheet-box">
+        <div class="sheet-header">
+            <div class="sheet-head-left">
+                <div class="dt-avatar" id="dtAvatar">导</div>
+                <div>
+                    <div class="sheet-title" id="dtName">导师</div>
+                    <div class="sheet-sub" id="dtOrg"></div>
+                </div>
+            </div>
+            <button class="sheet-close" onclick="closeDetail()" aria-label="关闭">&times;</button>
+        </div>
+        <div class="sheet-body" id="dtBody"></div>
+        <div class="sheet-footer" id="dtFooter"></div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   1v1 导师
+   - 导师列表（分类筛选）
+   - 详情：四类能力 + 价格构成 + 时段
+   - 预约：会员用券 / 原价
+   - 会员券从 cos_membership 扣减
+   数据：cos_mentor_bookings
+   ══════════════════════════════════════════ */
+
+var DAY = 86400000;
+var CATS = [
+  { id: 'all', name: '全部' },
+  { id: 'ux', name: 'UI·UX' },
+  { id: 'pm', name: '产品' },
+  { id: 'ops', name: '运营' },
+  { id: 'data', name: '数据' },
+  { id: 'tech', name: '技术' },
+  { id: 'consult', name: '咨询' }
+];
+
+var MENTORS = [
+  {
+    id: 'm01', name: '陈叙', color: '#0F766E', cat: 'pm',
+    company: '字节跳动', role: '高级产品经理', years: 6,
+    rating: 4.9, sessions: 128, price: 299,
+    intro: '做过电商与内容两条业务线，面过 60+ 候选人，知道简历上哪句话会被追问。',
+    sim: '产品经理终面（case + 连环追问）',
+    resume: '产品简历与项目复盘，把「我参与了」改成「我推动了」',
+    refer: '字节产品岗内推渠道（可查在招 HC）',
+    project: '用抖音电商真实业务做一次需求拆解练习',
+    slots: ['周三 20:00', '周六 10:00', '周日 15:00']
+  },
+  {
+    id: 'm02', name: '林嘉', color: '#6366F1', cat: 'ux',
+    company: '腾讯', role: '交互设计师', years: 5,
+    rating: 4.9, sessions: 96, price: 299,
+    intro: 'CDC 出身，做过社交与工具类产品。最擅长把作品集里讲不清的项目问清楚。',
+    sim: '交互设计岗面试（作品集讲解答辩）',
+    resume: 'UX 作品集结构与叙事顺序，砍掉凑数的项目',
+    refer: '腾讯设计岗内推渠道',
+    project: '拿一个真实需求，从竞品到交互稿走完一遍',
+    slots: ['周二 19:30', '周四 21:00', '周六 14:00']
+  },
+  {
+    id: 'm03', name: '周颖', color: '#0EA5E9', cat: 'ux',
+    company: '美团', role: '用户研究员', years: 4,
+    rating: 4.8, sessions: 64, price: 199,
+    intro: '做过到店与外卖的用研项目，带过校招实习生，熟悉用研岗到底考什么。',
+    sim: '用研岗面试（研究设计 + 追问）',
+    resume: '调研报告与访谈提纲，让结论站得住',
+    refer: '美团用研岗内推渠道',
+    project: '一份能直接放进作品集的用户访谈方案',
+    slots: ['周一 20:00', '周三 21:00', '周日 10:00']
+  },
+  {
+    id: 'm04', name: '何嘉树', color: '#F43F5E', cat: 'pm',
+    company: '海康威视', role: '硬件产品经理', years: 7,
+    rating: 4.9, sessions: 152, price: 299,
+    intro: '从结构工程师转产品，做过三条硬件产品线，清楚硬件岗和互联网岗的差别。',
+    sim: '硬件产品岗面试（需求 + 成本 + 交付）',
+    resume: '硬件产品简历，突出你解决过的具体问题',
+    refer: '海康校招内推渠道',
+    project: '写一份能被评审的硬件需求文档',
+    slots: ['周二 20:30', '周五 19:00', '周六 16:00']
+  },
+  {
+    id: 'm05', name: '苏敏', color: '#8B5CF6', cat: 'consult',
+    company: '毕马威', role: '咨询顾问', years: 5,
+    rating: 4.8, sessions: 58, price: 499,
+    intro: '做过消费与零售行业的战略项目，case interview 陪练过三十多人。',
+    sim: '咨询 case interview（市场进入 / 盈利拆解）',
+    resume: '咨询简历与 case 框架，先学会算数再谈洞察',
+    refer: '四大咨询内推渠道',
+    project: '一份 10 页以内的行业分析 deck',
+    slots: ['周三 19:00', '周六 11:00', '周日 14:00']
+  },
+  {
+    id: 'm06', name: '罗一', color: '#F59E0B', cat: 'ops',
+    company: 'Shopee', role: '增长运营', years: 4,
+    rating: 4.7, sessions: 71, price: 199,
+    intro: '做过东南亚市场的拉新与留存，面试时最爱问「你这个活动到底带来了什么」。',
+    sim: '运营岗面试（数据追问 + 活动复盘）',
+    resume: '运营简历，把流水账改成有因果的复盘',
+    refer: 'Shopee 运营岗内推渠道',
+    project: '复盘一次真实活动，找出真正起作用的那一步',
+    slots: ['周一 21:00', '周四 20:00', '周六 15:00']
+  },
+  {
+    id: 'm07', name: '郑亦然', color: '#14B8A6', cat: 'ux',
+    company: 'OPPO', role: '视觉设计师', years: 6,
+    rating: 4.8, sessions: 89, price: 299,
+    intro: '做过系统 UI 与品牌视觉，看作品集先看排版，再看你有没有判断力。',
+    sim: '视觉设计岗面试（作品集点评）',
+    resume: '视觉作品集排版与呈现，让强项在第一屏出现',
+    refer: 'OPPO 设计岗内推渠道',
+    project: '做一套能落地的视觉规范（含组件与栅格）',
+    slots: ['周二 21:00', '周五 20:30', '周日 11:00']
+  },
+  {
+    id: 'm08', name: '高远', color: '#475569', cat: 'data',
+    company: '阿里巴巴', role: '数据分析师', years: 5,
+    rating: 4.9, sessions: 113, price: 499,
+    intro: '做过交易与用户增长的数据支持，面数据岗必考 SQL 和业务题，两样都练。',
+    sim: '数据分析岗面试（SQL + 业务分析题）',
+    resume: '数据简历与项目，讲清口径和结论',
+    refer: '阿里数据岗内推渠道',
+    project: '一份真实业务的分析报告（含假设与验证）',
+    slots: ['周三 21:30', '周六 13:00', '周日 19:00']
+  }
+];
+
+var currentCat = 'all';
+var currentMentor = null;
+var currentSlot = '';
+var useCoupon = true;
+
+/* ── 存储 ── */
+function getJSON(key, def){
+  try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e){ return def; }
+}
+function setJSON(key, val){
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){}
+}
+function getMember(){ return getJSON('cos_membership', null); }
+function saveMember(m){ setJSON('cos_membership', m); }
+function memberActive(){
+  var m = getMember();
+  return !!(m && m.active && m.expiresAt && Date.now() < m.expiresAt);
+}
+function couponLeft(){
+  var m = getMember();
+  if (!m || !m.active || Date.now() >= m.expiresAt) return 0;
+  return Math.max(0, (m.couponsTotal || 0) - (m.couponsUsed || 0));
+}
+function getBookings(){ return getJSON('cos_mentor_bookings', []); }
+function saveBookings(list){ setJSON('cos_mentor_bookings', list); }
+
+function memberPrice(p){
+  var cut = Math.round(p * 0.15);
+  if (cut > 50) cut = 50;
+  return p - cut;
+}
+function money(n){ return '¥' + n; }
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._h);
+  t._h = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+function goBack(){
+  if (document.referrer && document.referrer.indexOf('index.html') > -1) { history.back(); }
+  else { location.href = 'index.html?tab=prepare'; }
+}
+
+/* ── 筛选 ── */
+function renderChips(){
+  var html = '';
+  CATS.forEach(function(c){
+    html += '<button class="chip ' + (c.id === currentCat ? 'active' : '') + '" onclick="setCat(\'' + c.id + '\')">' + c.name + '</button>';
+  });
+  document.getElementById('chips').innerHTML = html;
+}
+function setCat(id){
+  currentCat = id;
+  renderChips();
+  renderList();
+}
+
+/* ── 列表 ── */
+function renderList(){
+  var list = MENTORS.filter(function(m){ return currentCat === 'all' || m.cat === currentCat; });
+  document.getElementById('navCount').textContent = list.length + ' 位';
+  if (!list.length) {
+    document.getElementById('mentorList').innerHTML = '<div class="empty">这个分类下暂时没有导师</div>';
+    return;
+  }
+  var html = '';
+  list.forEach(function(m){
+    html += '<div class="mcard" onclick="openDetail(\'' + m.id + '\')">' +
+      '<div class="mhead">' +
+        '<div class="avatar" style="background:' + m.color + '">' + m.name.charAt(0) + '</div>' +
+        '<div class="mmain">' +
+          '<div class="mname"><b>' + m.name + '</b><span>' + m.rating + ' · 已约 ' + m.sessions + ' 场</span></div>' +
+          '<div class="morg">' + m.company + ' <em>·</em> ' + m.role + ' <em>·</em> ' + m.years + ' 年</div>' +
+          '<div class="mintro">' + m.intro + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="mtags">' +
+        '<div class="mtag"><i>模拟</i><span>' + m.sim + '</span></div>' +
+        '<div class="mtag"><i>简历</i><span>' + m.resume + '</span></div>' +
+        '<div class="mtag"><i>内推</i><span>' + m.refer + '</span></div>' +
+        '<div class="mtag"><i>项目</i><span>' + m.project + '</span></div>' +
+      '</div>' +
+      '<div class="mfoot">' +
+        '<div class="mprice"><b>' + money(m.price) + '</b><em>会员 ' + money(memberPrice(m.price)) + '</em></div>' +
+        '<button class="mbtn">去预约</button>' +
+      '</div>' +
+    '</div>';
+  });
+  document.getElementById('mentorList').innerHTML = html;
+}
+
+/* ── 详情 ── */
+function openDetail(id){
+  var m = MENTORS.filter(function(x){ return x.id === id; })[0];
+  if (!m) return;
+  currentMentor = m;
+  currentSlot = '';
+  useCoupon = couponLeft() > 0;
+
+  document.getElementById('dtName').textContent = m.name;
+  document.getElementById('dtOrg').textContent = m.company + ' · ' + m.role + ' · ' + m.years + ' 年';
+  var av = document.getElementById('dtAvatar');
+  av.textContent = m.name.charAt(0);
+  av.style.background = m.color;
+
+  document.getElementById('dtBody').innerHTML =
+    '<div class="dblock"><div class="dtext">' + m.intro + '</div></div>' +
+    '<div class="dblock">' +
+      '<div class="dlabel">这位导师能给你什么</div>' +
+      '<div class="dcap"><i>模拟</i><div><b>' + m.sim + '</b><span>按真实面试流程走一遍，结束后给逐条反馈</span></div></div>' +
+      '<div class="dcap"><i>简历</i><div><b>' + m.resume + '</b><span>带着现有简历或作品集来，现场改</span></div></div>' +
+      '<div class="dcap"><i>内推</i><div><b>' + m.refer + '</b><span>仅提供渠道与信息，不承诺录用结果</span></div></div>' +
+      '<div class="dcap"><i>项目</i><div><b>' + m.project + '</b><span>可作为作品集里的一个实战项目</span></div></div>' +
+    '</div>' +
+    '<div class="dblock">' +
+      '<div class="dlabel">价格</div>' +
+      '<div class="pbox">' +
+        '<div class="prow total" style="border-top:none;margin-top:0;padding-top:0"><span>本次应付</span><b id="dtTotal">' + money(m.price) + '</b></div>' +
+        '<div class="pnote">含导师课时费与平台服务费，具体分成由平台与导师约定。会员价差额由平台补贴，导师实收不变；本页价格为演示数据。</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="dblock">' +
+      '<div class="dlabel">选择时段</div>' +
+      '<div class="slots" id="slotWrap"></div>' +
+    '</div>' +
+    '<div id="couponWrap"></div>';
+
+  renderSlots();
+  renderCoupon();
+  renderFooter();
+  document.getElementById('detailSheet').classList.add('show');
+}
+
+function renderSlots(){
+  if (!currentMentor) return;
+  var booked = getBookings();
+  var html = '';
+  currentMentor.slots.forEach(function(s){
+    var taken = booked.some(function(b){ return b.mentorId === currentMentor.id && b.slot === s && b.status === 'upcoming'; });
+    var cls = 'slot' + (taken ? ' dis' : '') + (currentSlot === s ? ' on' : '');
+    html += '<button class="' + cls + '" ' + (taken ? 'disabled' : 'onclick="pickSlot(\'' + s + '\')"') + '>' + s + (taken ? ' 已约' : '') + '</button>';
+  });
+  var el = document.getElementById('slotWrap');
+  if (el) el.innerHTML = html;
+}
+
+function pickSlot(s){
+  currentSlot = (currentSlot === s ? '' : s);
+  renderSlots();
+  renderFooter();
+}
+
+function renderCoupon(){
+  var wrap = document.getElementById('couponWrap');
+  if (!wrap || !currentMentor) return;
+  var left = couponLeft();
+  var active = memberActive();
+
+  if (!active) {
+    var save = currentMentor.price - memberPrice(currentMentor.price);
+    wrap.innerHTML =
+      '<div class="tip-line">会员价 ' + money(memberPrice(currentMentor.price)) + '，本次可省 ' + money(save) + '。' +
+      '<a onclick="location.href=\'membership.html\'">了解会员</a></div>';
+    return;
+  }
+  if (left <= 0) {
+    wrap.innerHTML = '<div class="coupon warn"><div class="coupon-l">今年的 3 张会员券已用完，本次按原价预约</div></div>';
+    return;
+  }
+  if (useCoupon) {
+    wrap.innerHTML =
+      '<div class="coupon">' +
+        '<div class="coupon-l">已使用会员 85 折券 · 本次省 ' + money(currentMentor.price - memberPrice(currentMentor.price)) + '<br>剩余 ' + left + ' 张</div>' +
+        '<button class="coupon-r" onclick="toggleCoupon()">不用券</button>' +
+      '</div>';
+  } else {
+    wrap.innerHTML =
+      '<div class="coupon warn">' +
+        '<div class="coupon-l">本次按原价预约，券留到下次</div>' +
+        '<button class="coupon-r" onclick="toggleCoupon()">用券</button>' +
+      '</div>';
+  }
+}
+
+function toggleCoupon(){
+  useCoupon = !useCoupon;
+  renderCoupon();
+  renderFooter();
+}
+
+function finalPrice(){
+  if (!currentMentor) return 0;
+  if (memberActive() && useCoupon && couponLeft() > 0) return memberPrice(currentMentor.price);
+  return currentMentor.price;
+}
+
+function renderFooter(){
+  if (!currentMentor) return;
+  var price = finalPrice();
+  var isMemberPrice = price < currentMentor.price;
+  document.getElementById('dtFooter').innerHTML =
+    '<button class="bigbtn" onclick="bookNow()">' + (isMemberPrice ? '会员价预约 ' : '预约 ') + money(price) +
+      '<span class="sm">' + (currentSlot ? '· ' + currentSlot : '· 请先选时段') + '</span>' +
+    '</button>' +
+    '<div class="foot-note">预约后可在本页取消；取消后会员券自动退回</div>';
+
+  var totalEl = document.getElementById('dtTotal');
+  if (totalEl) totalEl.textContent = money(price);
+}
+
+function closeDetail(){
+  document.getElementById('detailSheet').classList.remove('show');
+  currentMentor = null;
+  currentSlot = '';
+}
+
+/* ── 预约 ── */
+function bookNow(){
+  if (!currentMentor) return;
+  if (!currentSlot) { showToast('先选一个时段'); return; }
+
+  var bookings = getBookings();
+  var dup = bookings.some(function(b){ return b.mentorId === currentMentor.id && b.slot === currentSlot && b.status === 'upcoming'; });
+  if (dup) { showToast('这个时段已经被约了'); renderSlots(); return; }
+
+  var price = finalPrice();
+  var usedCoupon = price < currentMentor.price;
+  var now = Date.now();
+  var id = 'bk-' + now;
+
+  bookings.push({
+    id: id, mentorId: currentMentor.id, mentorName: currentMentor.name,
+    company: currentMentor.company, role: currentMentor.role,
+    slot: currentSlot, price: price, payType: usedCoupon ? 'member' : 'full',
+    status: 'upcoming', createdAt: now
+  });
+  saveBookings(bookings);
+
+  if (usedCoupon) {
+    var m = getMember();
+    if (m) {
+      m.couponsUsed = (m.couponsUsed || 0) + 1;
+      m.couponRecords = m.couponRecords || [];
+      m.couponRecords.push({ bookingId: id, mentorId: currentMentor.id, at: now });
+      saveMember(m);
+    }
+  }
+
+  var name = currentMentor.name;
+  var slot = currentSlot;
+  closeDetail();
+  renderList();
+  renderBookings();
+  showToast('已预约 ' + name + ' · ' + slot);
+}
+
+function cancelBooking(id){
+  var bookings = getBookings();
+  var target = bookings.filter(function(b){ return b.id === id; })[0];
+  if (!target) return;
+
+  saveBookings(bookings.filter(function(b){ return b.id !== id; }));
+
+  if (target.payType === 'member') {
+    var m = getMember();
+    if (m) {
+      m.couponsUsed = Math.max(0, (m.couponsUsed || 0) - 1);
+      m.couponRecords = (m.couponRecords || []).filter(function(r){ return r.bookingId !== id; });
+      saveMember(m);
+    }
+  }
+
+  renderList();
+  renderBookings();
+  showToast(target.payType === 'member' ? '已取消，会员券已退回' : '已取消预约');
+}
+
+/* ── 预约列表 ── */
+function renderBookings(){
+  var list = getBookings().filter(function(b){ return b.status === 'upcoming'; });
+  var wrap = document.getElementById('bookingList');
+  if (!list.length) {
+    wrap.innerHTML = '<div class="empty">还没有预约。选一位导师，约一个能对上时间的时段。</div>';
+    return;
+  }
+  var html = '';
+  list.slice().reverse().forEach(function(b){
+    html += '<div class="book">' +
+      '<div class="book-l">' +
+        '<b>' + b.mentorName + ' · ' + b.slot + (b.payType === 'member' ? '<i>会员价</i>' : '') + '</b>' +
+        '<span>' + b.company + ' · ' + b.role + '</span>' +
+      '</div>' +
+      '<div class="book-r">' +
+        '<b>' + money(b.price) + '</b>' +
+        '<button onclick="cancelBooking(\'' + b.id + '\')">取消预约</button>' +
+      '</div>' +
+    '</div>';
+  });
+  wrap.innerHTML = html;
+}
+
+/* ── INIT ── */
+renderChips();
+renderList();
+renderBookings();
+
+/* 深链：职业档案「去约」→ 直接打开对应导师详情 */
+(function(){
+  var m = location.search.match(/[?&]mentor=([^&]+)/);
+  if (!m) return;
+  var id = decodeURIComponent(m[1]);
+  if (MENTORS.some(function(x){ return x.id === id; })) openDetail(id);
+})();
+</script>
+</body>
+</html>

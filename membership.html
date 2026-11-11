@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>会员 · Career OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #0F766E; --primary-hover: #0D6B63; --primary-light: #14B8A6;
+    --primary-50: #F0FDFA; --primary-100: #CCFBF1;
+    --accent: #F59E0B; --accent-light: #FEF3C7; --accent-deep: #B45309;
+    --green: #059669; --green-light: #D1FAE5;
+    --white: #FFFFFF;
+    --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0; --gray-300: #CBD5E1;
+    --gray-400: #94A3B8; --gray-500: #64748B; --gray-600: #475569; --gray-900: #0F172A;
+    --radius-lg: 22px; --radius-md: 16px; --radius-sm: 12px;
+    --shadow-sm: 0 1px 3px rgba(15,23,42,.06);
+    --shadow-md: 0 2px 8px rgba(15,23,42,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--gray-100);color:var(--gray-900);min-height:100vh;-webkit-font-smoothing:antialiased}
+.app{max-width:430px;width:100%;min-height:100vh;background:var(--gray-50);margin:0 auto;position:relative;padding-bottom:36px}
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(248,250,252,.86);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);height:56px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid rgba(226,232,240,.5)}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--gray-500);background:none;border:none;font-family:inherit;cursor:pointer;padding:4px 0}
+.nav-back:active{color:var(--gray-900)}
+.nav-back svg{width:18px;height:18px}
+.nav-title{position:absolute;left:50%;transform:translateX(-50%);font-size:15px;font-weight:600;color:var(--gray-900)}
+.nav-state{position:absolute;right:16px;font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--accent-deep);background:var(--accent-light);padding:3px 8px;border-radius:6px;display:none}
+.nav-state.show{display:block}
+.page{padding:16px 16px 0}
+
+/* ── Hero ── */
+.hero{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);padding:20px 18px 18px;position:relative;overflow:hidden;box-shadow:var(--shadow-sm)}
+.hero::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#F59E0B,#FBBF24,#F59E0B)}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pro-badge{font-size:10px;font-weight:800;letter-spacing:.1em;padding:3px 9px;border-radius:6px;background:linear-gradient(135deg,#F59E0B,#FBBF24);color:#fff}
+.hero-price{font-size:11.5px;color:var(--gray-400)}
+.hero-price b{font-size:20px;font-weight:800;color:var(--gray-900);letter-spacing:-.02em}
+.hero-price i{font-style:normal;font-size:11px;color:var(--gray-400)}
+.hero h1{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.4;margin-top:14px}
+.hero p{font-size:12.5px;color:var(--gray-500);line-height:1.8;margin-top:8px}
+.hero-facts{display:flex;gap:18px;margin-top:16px;padding-top:14px;border-top:1px solid var(--gray-100)}
+.hero-facts div{flex:1}
+.hero-facts b{font-size:15px;font-weight:800;color:var(--primary);display:block;line-height:1.2}
+.hero-facts span{font-size:10.5px;color:var(--gray-400);display:block;margin-top:3px}
+.hero-status{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11.5px;color:var(--green);font-weight:600}
+.hero-status i{width:6px;height:6px;border-radius:50%;background:var(--green);display:block}
+.hero-status.expired{color:var(--gray-500)}
+.hero-status.expired i{background:var(--gray-400)}
+
+/* ── 区块 ── */
+.sec{margin-top:26px}
+.sec-head{font-size:13.5px;font-weight:800;color:var(--gray-900);letter-spacing:-.01em}
+.sec-sub{font-size:11.5px;color:var(--gray-400);line-height:1.7;margin-top:5px;margin-bottom:11px}
+
+/* ── 权益分组 ── */
+.bgroup{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-md);margin-bottom:10px;overflow:hidden}
+.bgroup-title{font-size:10.5px;font-weight:800;letter-spacing:.06em;color:var(--gray-400);padding:12px 15px 7px}
+.bitem{display:flex;gap:11px;padding:11px 15px;border-top:1px solid var(--gray-100)}
+.bnum{font-size:10px;font-weight:800;color:var(--accent);width:16px;flex-shrink:0;padding-top:2px;letter-spacing:.02em}
+.bmain{flex:1;min-width:0}
+.bt{font-size:12.5px;font-weight:700;color:var(--gray-900);line-height:1.45}
+.bd{font-size:11px;color:var(--gray-500);line-height:1.65;margin-top:3px}
+.bwhere{display:inline-block;font-size:9.5px;color:var(--gray-400);border:1px solid var(--gray-200);border-radius:99px;padding:1px 7px;margin-top:6px}
+
+/* ── 免费 / Pro 边界 ── */
+.free-pro{display:flex;gap:8px}
+.fp-card{flex:1;background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-md);padding:13px 12px}
+.fp-card.pro{background:var(--accent-light);border-color:#FDE68A}
+.fp-title{font-size:11px;font-weight:800;margin-bottom:7px;color:var(--gray-600)}
+.fp-card.pro .fp-title{color:var(--accent-deep)}
+.fp-body i{font-style:normal;display:block;font-size:10.5px;color:var(--gray-500);line-height:1.85}
+.fp-card.pro .fp-body i{color:#92400E}
+.boundary-note{font-size:11px;color:var(--gray-400);line-height:1.7;margin-top:9px}
+
+/* ── 开通卡 ── */
+.pay-card{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-md);padding:16px;box-shadow:var(--shadow-sm)}
+.pay-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.pay-name{font-size:13.5px;font-weight:800;color:var(--gray-900)}
+.pay-cycle{font-size:10.5px;color:var(--gray-400);margin-top:4px}
+.pay-price{text-align:right;flex-shrink:0}
+.pay-price b{font-size:22px;font-weight:800;color:var(--gray-900);letter-spacing:-.02em}
+.pay-price span{font-size:10.5px;color:var(--gray-400);margin-left:2px}
+.pay-line{font-size:11.5px;color:var(--gray-500);line-height:1.7;margin-top:11px;padding-top:11px;border-top:1px solid var(--gray-100)}
+.pay-note{font-size:10.5px;color:var(--gray-400);line-height:1.65;margin-top:9px;text-align:center}
+.btn-dark{width:100%;height:46px;margin-top:13px;border-radius:14px;background:var(--gray-900);color:#fff;border:none;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .15s}
+.btn-dark:active{transform:scale(.985)}
+.btn-line{width:100%;height:44px;margin-top:9px;border-radius:14px;background:#fff;color:var(--gray-600);border:1px solid var(--gray-200);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer}
+.btn-line:active{background:var(--gray-50)}
+
+/* ── 管理区 ── */
+.mcard{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-md);padding:4px 16px 6px;margin-bottom:10px}
+.mcard-title{font-size:10.5px;font-weight:800;letter-spacing:.06em;color:var(--gray-400);padding:11px 0 4px}
+.mrow{display:flex;align-items:center;justify-content:space-between;padding:9px 0;font-size:12px;border-bottom:1px solid var(--gray-100);gap:12px}
+.mrow:last-child{border-bottom:none}
+.mrow span{color:var(--gray-500);flex-shrink:0}
+.mrow b{font-weight:600;color:var(--gray-900);text-align:right}
+.mrow b.gold{color:var(--accent-deep)}
+.mnote{font-size:10.5px;color:var(--gray-400);line-height:1.65;padding:8px 0 10px}
+.switch{width:42px;height:24px;border-radius:99px;background:var(--gray-200);position:relative;border:none;cursor:pointer;transition:background .2s;flex-shrink:0}
+.switch::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 2px rgba(0,0,0,.16)}
+.switch.on{background:var(--primary)}
+.switch.on::after{left:21px}
+.ord{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100);gap:10px}
+.ord:last-child{border-bottom:none}
+.ord-left b{display:block;font-size:12px;font-weight:600;color:var(--gray-900)}
+.ord-left span{display:block;font-size:10.5px;color:var(--gray-400);margin-top:2px}
+.ord-amt{font-size:12.5px;font-weight:700;color:var(--gray-900)}
+.empty-line{font-size:11.5px;color:var(--gray-400);padding:14px 0 16px;text-align:center}
+
+/* ── 页脚 ── */
+.foot{font-size:10.5px;color:var(--gray-400);line-height:1.75;text-align:center;padding:24px 12px 8px}
+
+/* ── 弹层 ── */
+.sheet-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:300;display:none;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .25s}
+.sheet-overlay.show{display:flex;opacity:1}
+.sheet-box{width:100%;max-width:430px;background:#fff;border-radius:24px 24px 0 0;display:flex;flex-direction:column;max-height:82vh;animation:slideUp .35s cubic-bezier(.22,1,.36,1) both}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:20px 22px 10px}
+.sheet-title{font-size:16px;font-weight:700;color:var(--gray-900)}
+.sheet-close{width:30px;height:30px;border-radius:50%;background:var(--gray-100);color:var(--gray-500);border:none;font-size:16px;line-height:1;cursor:pointer;font-family:inherit}
+.sheet-body{flex:1;min-height:0;overflow-y:auto;padding:4px 22px 8px}
+.sheet-footer{flex-shrink:0;padding:12px 22px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--gray-100);display:flex;gap:9px}
+.cf-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--gray-100);font-size:12.5px}
+.cf-row:last-child{border-bottom:none}
+.cf-row span{color:var(--gray-500)}
+.cf-row b{font-weight:600}
+.cf-amount b{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.cf-note{font-size:11px;color:var(--gray-400);line-height:1.7;padding:12px 0 4px}
+.cf-btn{flex:1;height:46px;border-radius:14px;border:none;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
+.cf-btn.ghost{background:var(--gray-100);color:var(--gray-600);flex:.8}
+.cf-btn.main{background:var(--gray-900);color:#fff}
+.cf-btn.main:active{transform:scale(.985)}
+.cf-btn.danger{background:#fff;color:#E11D48;border:1px solid #FECDD3}
+
+/* ── toast ── */
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--gray-900);color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    </style>
+    <script>
+(function(){try{var v=parseInt(localStorage.getItem('cos_fontsize'),10);if(isNaN(v)||v<0||v>2)v=1;var z=[0.92,1,1.12][v];document.documentElement.style.zoom=(z===1?'':String(z));}catch(e){}})();
+    </script>
+</head>
+<body>
+<div class="app">
+    <nav class="top-nav">
+        <button class="nav-back" onclick="goBack()" aria-label="返回">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            <span>返回</span>
+        </button>
+        <div class="nav-title">会员中心</div>
+        <div class="nav-state" id="navState">PRO</div>
+    </nav>
+
+    <div class="page">
+        <div id="heroWrap"></div>
+
+        <div class="sec">
+            <div class="sec-head">Pro 包含什么</div>
+            <div class="sec-sub">11 项专享，分三组：帮你做完、直接拿到、优先与优惠。</div>
+            <div id="benefitList"></div>
+        </div>
+
+        <div class="sec">
+            <div class="sec-head">免费与 Pro 的边界</div>
+            <div class="sec-sub">原有的诊断功能不会收费，Pro 只加「动手做」的部分。</div>
+            <div class="free-pro">
+                <div class="fp-card">
+                    <div class="fp-title">免费永久</div>
+                    <div class="fp-body">
+                        <i>职业测评与职业档案</i>
+                        <i>能力差距诊断</i>
+                        <i>岗位 JD 与薪资</i>
+                        <i>课程库与学习计划</i>
+                        <i>社区与帖子</i>
+                        <i>AI 就业方向分析</i>
+                    </div>
+                </div>
+                <div class="fp-card pro">
+                    <div class="fp-title">Pro 额外</div>
+                    <div class="fp-body">
+                        <i>AI 简历 / 作品集 / 模拟面试</i>
+                        <i>Agent 多步执行</i>
+                        <i>作品集模板与面经库</i>
+                        <i>学长经验与内推信息</i>
+                        <i>导师 85 折 × 3 次</i>
+                        <i>作品集评审 1 次</i>
+                    </div>
+                </div>
+            </div>
+            <div class="boundary-note">一句话：免费部分帮你看清该做什么，Pro 帮你把事做完。</div>
+        </div>
+
+        <div class="sec" id="actionArea"></div>
+
+        <div class="foot">会员价格与权益为演示数据，不会真实扣款。<br>演示环境不对接真实支付通道。</div>
+    </div>
+</div>
+
+<div class="sheet-overlay" id="confirmSheet" onclick="if(event.target===this)closeConfirm()">
+    <div class="sheet-box">
+        <div class="sheet-header">
+            <div class="sheet-title" id="cfTitle">确认开通</div>
+            <button class="sheet-close" onclick="closeConfirm()" aria-label="关闭">&times;</button>
+        </div>
+        <div class="sheet-body" id="cfBody"></div>
+        <div class="sheet-footer" id="cfFooter"></div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   会员中心
+   - 权益说明
+   - 开通 / 续费 / 关闭自动续费
+   - 会员记录与权益使用
+   数据：cos_membership
+   ══════════════════════════════════════════ */
+
+var PLAN = { id: 'pro-annual', name: 'Career OS Pro', price: 199, days: 365, coupons: 3, reviews: 1 };
+var DAY = 86400000;
+
+var BENEFITS = [
+  {
+    g: '帮你做完 · AI 代劳',
+    items: [
+      { t: 'AI 简历诊断与改写', d: '逐条指出问题，直接生成可投递的版本', w: 'AI 对话页' },
+      { t: '作品集文案生成', d: '把项目经历写成 Case Study 结构，不空喊', w: 'AI 对话页' },
+      { t: '模拟面试对话', d: '按目标岗位出题、追问、给反馈', w: 'AI 对话页' },
+      { t: 'Agent 多步执行', d: '一句话跑完：分析岗位 → 改简历 → 生成投递清单', w: 'AI 对话页' }
+    ]
+  },
+  {
+    g: '直接拿到 · 资源包',
+    items: [
+      { t: '作品集模板库', d: '3 套：UX 项目 / 产品项目 / 实习复盘', w: '职业档案' },
+      { t: '学长学姐经验库', d: '真实去向与面试复盘，不是泛泛的建议', w: '社区' },
+      { t: '企业面经与面试流程', d: '20 家企业：几轮、考什么、多久出结果', w: '职业档案' },
+      { t: '内推信息', d: '公开招聘入口与学长内推码，不承诺结果', w: '职业档案' }
+    ]
+  },
+  {
+    g: '优先与优惠',
+    items: [
+      { t: '导师课 85 折', d: '每年 3 次，单笔最高减 50 元', w: '导师页' },
+      { t: '作品集评审 1 次', d: '导师 1v1 逐页点评，给具体修改意见', w: '导师页' },
+      { t: '优先预约', d: '可约更早的时段，热门导师不用等', w: '导师页' }
+    ]
+  }
+];
+
+/* ── 数据读写 ── */
+function readMember(){
+  try {
+    var v = localStorage.getItem('cos_membership');
+    return v ? JSON.parse(v) : null;
+  } catch(e){ return null; }
+}
+function saveMember(m){
+  try { localStorage.setItem('cos_membership', JSON.stringify(m)); } catch(e){}
+}
+function isActive(m){
+  return !!(m && m.active && m.expiresAt && Date.now() < m.expiresAt);
+}
+function fmt(ts){
+  var d = new Date(ts);
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function daysLeft(ts){
+  return Math.max(0, Math.ceil((ts - Date.now()) / DAY));
+}
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._h);
+  t._h = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+function goBack(){
+  if (document.referrer && document.referrer.indexOf('index.html') > -1) { history.back(); }
+  else { location.href = 'index.html?tab=profile'; }
+}
+
+/* ── 渲染 ── */
+function renderHero(m, active){
+  var wrap = document.getElementById('heroWrap');
+  var navState = document.getElementById('navState');
+
+  if (!m) {
+    navState.classList.remove('show');
+    wrap.innerHTML =
+      '<div class="hero">' +
+        '<div class="hero-top">' +
+          '<span class="pro-badge">PRO</span>' +
+          '<span class="hero-price"><b>¥' + PLAN.price + '</b><i> / 年</i></span>' +
+        '</div>' +
+        '<h1>把该做的事，真正做完</h1>' +
+        '<p>免费部分帮你想清楚方向，Pro 帮你把简历、面试、作品集做到可以投出去。</p>' +
+        '<div class="hero-facts">' +
+          '<div><b>11</b><span>项专享</span></div>' +
+          '<div><b>3</b><span>次导师折扣</span></div>' +
+          '<div><b>1</b><span>次作品集评审</span></div>' +
+        '</div>' +
+      '</div>';
+    return;
+  }
+
+  if (active) {
+    navState.classList.add('show');
+    wrap.innerHTML =
+      '<div class="hero">' +
+        '<div class="hero-top">' +
+          '<span class="pro-badge">PRO</span>' +
+          '<span class="hero-price">' + fmt(m.startedAt) + ' 开通</span>' +
+        '</div>' +
+        '<h1>会员生效中</h1>' +
+        '<div class="hero-status"><i></i>有效期至 ' + fmt(m.expiresAt) + ' · 剩余 ' + daysLeft(m.expiresAt) + ' 天</div>' +
+        '<div class="hero-facts">' +
+          '<div><b>' + Math.max(0, (m.couponsTotal||0) - (m.couponsUsed||0)) + '</b><span>剩余导师券</span></div>' +
+          '<div><b>' + Math.max(0, (m.reviewTotal||0) - (m.reviewUsed||0)) + '</b><span>剩余评审</span></div>' +
+          '<div><b>' + daysLeft(m.expiresAt) + '</b><span>剩余天数</span></div>' +
+        '</div>' +
+      '</div>';
+    return;
+  }
+
+  navState.classList.remove('show');
+  wrap.innerHTML =
+    '<div class="hero">' +
+      '<div class="hero-top">' +
+        '<span class="pro-badge">PRO</span>' +
+        '<span class="hero-price">已于 ' + fmt(m.expiresAt) + ' 到期</span>' +
+      '</div>' +
+      '<h1>会员已到期</h1>' +
+      '<div class="hero-status expired"><i></i>续费后 Pro 权益立即恢复</div>' +
+      '<div class="hero-facts">' +
+        '<div><b>11</b><span>项专享</span></div>' +
+        '<div><b>3</b><span>次导师折扣</span></div>' +
+        '<div><b>1</b><span>次作品集评审</span></div>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderBenefits(){
+  var n = 0;
+  var html = '';
+  BENEFITS.forEach(function(group){
+    html += '<div class="bgroup"><div class="bgroup-title">' + group.g + '</div>';
+    group.items.forEach(function(it){
+      n++;
+      html += '<div class="bitem">' +
+        '<div class="bnum">' + String(n).padStart(2,'0') + '</div>' +
+        '<div class="bmain">' +
+          '<div class="bt">' + it.t + '</div>' +
+          '<div class="bd">' + it.d + '</div>' +
+          '<span class="bwhere">使用位置 · ' + it.w + '</span>' +
+        '</div>' +
+      '</div>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('benefitList').innerHTML = html;
+}
+
+function renderAction(m, active){
+  var area = document.getElementById('actionArea');
+
+  if (!m || !active) {
+    var title = m ? '续费 Pro' : '开通 Pro';
+    var sub = m ? '当前会员已到期，续费后权益立即恢复' : '年付 · 到期不自动续费';
+    area.innerHTML =
+      '<div class="sec-head">' + title + '</div>' +
+      '<div class="sec-sub">' + sub + '</div>' +
+      '<div class="pay-card">' +
+        '<div class="pay-top">' +
+          '<div><div class="pay-name">' + PLAN.name + '</div><div class="pay-cycle">年付 · 有效期 ' + PLAN.days + ' 天</div></div>' +
+          '<div class="pay-price"><b>¥' + PLAN.price + '</b><span>/ 年</span></div>' +
+        '</div>' +
+        '<div class="pay-line">11 项专享全部包含 · 3 次导师 85 折 · 1 次作品集评审</div>' +
+        '<button class="btn-dark" onclick="openConfirm(\'' + (m ? 'renew' : 'purchase') + '\')">' + (m ? '续费一年' : '开通 Pro') + '</button>' +
+        '<div class="pay-note">演示环境，不会真实扣款</div>' +
+      '</div>';
+    return;
+  }
+
+  var orders = (m.orders || []).slice().reverse();
+  var ordHtml = '';
+  if (!orders.length) {
+    ordHtml = '<div class="empty-line">暂无订单记录</div>';
+  } else {
+    orders.forEach(function(o){
+      ordHtml += '<div class="ord">' +
+        '<div class="ord-left"><b>' + (o.type === 'renew' ? '续费 Pro' : '开通 Pro') + '</b><span>' + fmt(o.at) + ' · ' + (o.type === 'renew' ? '续费' : '首次开通') + '</span></div>' +
+        '<div class="ord-amt">¥' + o.amount + '</div>' +
+      '</div>';
+    });
+  }
+
+  area.innerHTML =
+    '<div class="sec-head">管理会员</div>' +
+    '<div class="sec-sub">开通记录、权益使用与自动续费都在这里。</div>' +
+    '<div class="mcard">' +
+      '<div class="mcard-title">会员信息</div>' +
+      '<div class="mrow"><span>套餐</span><b>' + PLAN.name + ' · 年付</b></div>' +
+      '<div class="mrow"><span>开通时间</span><b>' + fmt(m.startedAt) + '</b></div>' +
+      '<div class="mrow"><span>到期时间</span><b>' + fmt(m.expiresAt) + '</b></div>' +
+      '<div class="mrow"><span>自动续费</span><button class="switch ' + (m.autoRenew ? 'on' : '') + '" onclick="toggleAutoRenew()" aria-label="自动续费开关"></button></div>' +
+    '</div>' +
+    '<div class="mcard">' +
+      '<div class="mcard-title">权益使用</div>' +
+      '<div class="mrow"><span>导师 85 折券</span><b class="gold">' + (m.couponsUsed||0) + ' / ' + (m.couponsTotal||0) + ' 张</b></div>' +
+      '<div class="mrow"><span>作品集评审</span><b class="gold">' + (m.reviewUsed||0) + ' / ' + (m.reviewTotal||0) + ' 次</b></div>' +
+      '<div class="mnote">在导师页预约时自动抵扣，用完即止；续费后重新发放。</div>' +
+    '</div>' +
+    '<div class="mcard">' +
+      '<div class="mcard-title">订单记录</div>' +
+      ordHtml +
+    '</div>' +
+    '<button class="btn-dark" onclick="openConfirm(\'renew\')">续费一年 · ¥' + PLAN.price + '</button>' +
+    '<button class="btn-line" onclick="openConfirm(\'cancel\')">关闭自动续费</button>';
+}
+
+/* ── 确认弹层 ── */
+var confirmType = 'purchase';
+
+function openConfirm(type){
+  confirmType = type;
+  var m = readMember();
+  var title = { purchase: '确认开通', renew: '确认续费', cancel: '关闭自动续费' }[type] || '确认';
+  document.getElementById('cfTitle').textContent = title;
+
+  var body = '';
+  var footer = '';
+
+  if (type === 'cancel') {
+    body =
+      '<div class="cf-row"><span>当前到期</span><b>' + fmt(m.expiresAt) + '</b></div>' +
+      '<div class="cf-row"><span>到期后</span><b>会员失效，不再扣费</b></div>' +
+      '<div class="cf-note">关闭后，到期日之前仍可正常使用全部 Pro 权益；已支付费用不退还。</div>';
+    footer =
+      '<button class="cf-btn ghost" onclick="closeConfirm()">再想想</button>' +
+      '<button class="cf-btn danger" onclick="doCancel()">确认关闭</button>';
+  } else if (type === 'renew') {
+    var base = Math.max(m && m.expiresAt ? m.expiresAt : Date.now(), Date.now());
+    body =
+      '<div class="cf-row cf-amount"><span>应付金额</span><b>¥' + PLAN.price + '</b></div>' +
+      '<div class="cf-row"><span>套餐</span><b>' + PLAN.name + ' · 年付</b></div>' +
+      '<div class="cf-row"><span>新到期日</span><b>' + fmt(base + PLAN.days * DAY) + '</b></div>' +
+      '<div class="cf-row"><span>权益</span><b>3 张导师券 + 1 次评审</b></div>' +
+      '<div class="cf-note">演示环境，不会真实扣款。续费后券与评审次数重新发放。</div>';
+    footer =
+      '<button class="cf-btn ghost" onclick="closeConfirm()">取消</button>' +
+      '<button class="cf-btn main" onclick="doPurchase(\'renew\')">确认支付</button>';
+  } else {
+    body =
+      '<div class="cf-row cf-amount"><span>应付金额</span><b>¥' + PLAN.price + '</b></div>' +
+      '<div class="cf-row"><span>套餐</span><b>' + PLAN.name + ' · 年付</b></div>' +
+      '<div class="cf-row"><span>有效期</span><b>' + fmt(Date.now()) + ' 至 ' + fmt(Date.now() + PLAN.days * DAY) + '</b></div>' +
+      '<div class="cf-row"><span>权益</span><b>11 项专享</b></div>' +
+      '<div class="cf-note">演示环境，不会真实扣款。开通后可在本页关闭自动续费。</div>';
+    footer =
+      '<button class="cf-btn ghost" onclick="closeConfirm()">取消</button>' +
+      '<button class="cf-btn main" onclick="doPurchase(\'purchase\')">确认支付</button>';
+  }
+
+  document.getElementById('cfBody').innerHTML = body;
+  document.getElementById('cfFooter').innerHTML = footer;
+  document.getElementById('confirmSheet').classList.add('show');
+}
+
+function closeConfirm(){
+  document.getElementById('confirmSheet').classList.remove('show');
+}
+
+function doPurchase(type){
+  var now = Date.now();
+  var m = readMember();
+
+  if (type === 'renew' && m) {
+    var base = Math.max(m.expiresAt || now, now);
+    m.active = true;
+    m.expiresAt = base + PLAN.days * DAY;
+    m.couponsTotal = PLAN.coupons;
+    m.couponsUsed = 0;
+    m.reviewTotal = PLAN.reviews;
+    m.reviewUsed = 0;
+    m.orders = m.orders || [];
+    m.orders.push({ id: 'mo-' + now, type: 'renew', amount: PLAN.price, at: now });
+    saveMember(m);
+    closeConfirm();
+    render();
+    showToast('已续费一年，权益已重新发放');
+    return;
+  }
+
+  var fresh = {
+    active: true,
+    planId: PLAN.id,
+    planName: PLAN.name,
+    price: PLAN.price,
+    startedAt: now,
+    expiresAt: now + PLAN.days * DAY,
+    autoRenew: true,
+    couponsTotal: PLAN.coupons,
+    couponsUsed: 0,
+    couponRecords: [],
+    reviewTotal: PLAN.reviews,
+    reviewUsed: 0,
+    orders: [{ id: 'mo-' + now, type: 'purchase', amount: PLAN.price, at: now }]
+  };
+  saveMember(fresh);
+  closeConfirm();
+  render();
+  showToast('Pro 已开通，11 项权益已解锁');
+}
+
+function doCancel(){
+  var m = readMember();
+  if (!m) { closeConfirm(); return; }
+  m.autoRenew = false;
+  saveMember(m);
+  closeConfirm();
+  render();
+  showToast('已关闭自动续费，到期后失效');
+}
+
+function toggleAutoRenew(){
+  var m = readMember();
+  if (!m || !isActive(m)) return;
+  m.autoRenew = !m.autoRenew;
+  saveMember(m);
+  render();
+  showToast(m.autoRenew ? '已开启自动续费' : '已关闭自动续费');
+}
+
+/* ── 统一渲染 ── */
+function render(){
+  var m = readMember();
+  var active = isActive(m);
+  renderHero(m, active);
+  renderAction(m, active);
+}
+
+/* ── INIT ── */
+renderBenefits();
+render();
+</script>
+</body>
+</html>

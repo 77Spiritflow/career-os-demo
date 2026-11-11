@@ -51,6 +51,26 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-se
 .tip{display:flex;gap:8px;background:var(--primary-50);border:1px solid var(--primary-100);border-radius:var(--radius-sm);padding:10px 12px;font-size:12px;color:var(--gray-600);line-height:1.6}
 .tip svg{width:14px;height:14px;color:var(--primary);flex-shrink:0;margin-top:2px}
 
+/* ── 自定义标签 ── */
+.custom-tag-row{display:flex;gap:8px;margin-top:10px}
+.custom-tag-row input{flex:1;min-width:0;border:1.5px solid var(--gray-200);border-radius:99px;padding:8px 14px;font-size:12.5px;font-family:inherit;outline:none;color:var(--gray-900);background:#fff;transition:border-color .2s}
+.custom-tag-row input:focus{border-color:var(--primary)}
+.custom-tag-row input::placeholder{color:var(--gray-300)}
+.custom-tag-add{flex-shrink:0;border:none;background:var(--primary);color:#fff;font-size:12.5px;font-weight:600;font-family:inherit;border-radius:99px;padding:8px 16px;cursor:pointer;transition:all .2s}
+.custom-tag-add:active{transform:scale(.96);background:var(--primary-hover)}
+
+/* ── 主页展示开关 ── */
+.privacy-row{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-md);padding:14px;box-shadow:var(--shadow-sm)}
+.privacy-info{flex:1;min-width:0}
+.privacy-title{font-size:13px;font-weight:600;color:var(--gray-900)}
+.privacy-desc{font-size:11px;color:var(--gray-400);margin-top:3px;line-height:1.5}
+.switch{position:relative;display:inline-block;width:46px;height:26px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch-slider{position:absolute;inset:0;background:var(--gray-200);border-radius:99px;transition:.25s;cursor:pointer}
+.switch-slider::before{content:'';position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked + .switch-slider{background:var(--primary)}
+.switch input:checked + .switch-slider::before{transform:translateX(20px)}
+
 /* ── 弹窗 ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:0 24px;opacity:0;transition:opacity .25s;pointer-events:none}
 .modal-overlay.show{opacity:1;pointer-events:auto}
@@ -70,6 +90,10 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-se
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @media(min-width:431px){body{background:#E2E8F0}.app{box-shadow:0 0 80px rgba(0,0,0,.08)}}
     </style>
+<script>
+/* 全局字体大小：设置页「小/中/大」三档全局生效 */
+(function(){try{var v=parseInt(localStorage.getItem('cos_fontsize'),10);if(isNaN(v)||v<0||v>2)v=1;var z=[0.92,1,1.12][v];document.documentElement.style.zoom=(z===1?'':String(z));}catch(e){}})();
+</script>
 </head>
 <body>
 <div class="app">
@@ -99,6 +123,23 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-se
                 <button type="button" class="tag-chip" onclick="toggleTag(this)">实习分享</button>
                 <button type="button" class="tag-chip" onclick="toggleTag(this)">简历修改</button>
                 <button type="button" class="tag-chip" onclick="toggleTag(this)">面试技巧</button>
+            </div>
+            <div class="custom-tag-row">
+                <input id="customTagInput" type="text" maxlength="10" placeholder="自定义标签（如：实习日记）">
+                <button type="button" class="custom-tag-add" onclick="addCustomTag()">添加</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="privacy-row">
+                <div class="privacy-info">
+                    <div class="privacy-title">展示在我的个人主页</div>
+                    <div class="privacy-desc">开启后，这条帖子会出现在你的个人主页「我的帖子」中</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="showOnProfile" checked>
+                    <span class="switch-slider"></span>
+                </label>
             </div>
         </div>
 
@@ -153,6 +194,25 @@ function toggleTag(btn){
   selTags.push(btn.textContent);
 }
 
+/* ── 自定义标签 ── */
+function addCustomTag(){
+  var input=document.getElementById('customTagInput');
+  var val=input.value.trim();
+  if(!val){ showToast('请输入标签名'); input.focus(); return; }
+  if(val.length>10){ showToast('标签最长 10 个字'); return; }
+  if(selTags.length>=2){ showToast('最多选择 2 个标签'); return; }
+  if(selTags.indexOf(val)>-1){ showToast('该标签已添加'); return; }
+  var btn=document.createElement('button');
+  btn.type='button';
+  btn.className='tag-chip sel';
+  btn.textContent=val;
+  btn.onclick=function(){ toggleTag(btn); };
+  document.getElementById('tagGrid').appendChild(btn);
+  selTags.push(val);
+  input.value='';
+  showToast('已添加标签 ✅');
+}
+
 /* ── 字数统计 ── */
 var bodyEl=document.getElementById('postBody');
 bodyEl.addEventListener('input', function(){
@@ -172,6 +232,7 @@ function publish(){
     school: profile.school, major: profile.major,
     body: body,
     tags: selTags.slice(),
+    showOnProfile: document.getElementById('showOnProfile').checked,
     createdAt: Date.now()
   });
   try{ localStorage.setItem(POSTS_KEY, JSON.stringify(list)); }catch(e){ showToast('保存失败，请重试'); return; }

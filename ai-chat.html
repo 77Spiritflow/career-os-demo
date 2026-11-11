@@ -422,6 +422,8 @@ var Auth = (function () {
         .msg-bubble{padding:12px 15px;border-radius:18px;font-size:13.5px;line-height:1.6;word-break:break-word}
         .msg-row.ai .msg-bubble{background:var(--white);color:var(--gray-800);border:1px solid var(--gray-100);border-top-left-radius:6px;box-shadow:var(--shadow-sm)}
         .msg-row.user .msg-bubble{background:var(--gray-900);color:#fff;border-top-right-radius:6px}
+        /* 从收藏夹深链进入时的目标消息高亮 */
+        .msg-row.deep-focus .msg-bubble{box-shadow:0 0 0 3px rgba(15,118,110,.3),0 4px 16px rgba(15,118,110,.16);transition:box-shadow .3s}
         .msg-bubble strong{font-weight:600;color:var(--gray-900)}
         .msg-row.user .msg-bubble strong{color:#fff}
         .msg-bubble .highlight{color:var(--primary);font-weight:600}
@@ -813,6 +815,10 @@ var Auth = (function () {
         .msg-row.user .msg-bubble pre{background:rgba(255,255,255,.08)}
         .msg-row.user .msg-bubble pre code{color:var(--gray-300)}
     </style>
+<script>
+/* 全局字体大小：设置页「小/中/大」三档全局生效 */
+(function(){try{var v=parseInt(localStorage.getItem('cos_fontsize'),10);if(isNaN(v)||v<0||v>2)v=1;var z=[0.92,1,1.12][v];document.documentElement.style.zoom=(z===1?'':String(z));}catch(e){}})();
+</script>
 </head>
 <body>
 <div class="app">
@@ -1170,6 +1176,41 @@ let folders = ['全部', '学习规划', '作品集', '求职准备'];
 let activeFolder = '全部';
 let folderPickTargetId = null;
 
+/* ── AI 回复收藏（持久化，供「我的-收藏夹」汇总） ── */
+const AI_BM_KEY = 'cos_ai_bookmarks';
+function readAiBookmarks(){
+    try{
+        const v = JSON.parse(localStorage.getItem(AI_BM_KEY) || '[]');
+        return Array.isArray(v) ? v : [];
+    }catch(e){ return []; }
+}
+function writeAiBookmarks(list){
+    try{ localStorage.setItem(AI_BM_KEY, JSON.stringify(list)); }
+    catch(e){ console.warn('[ai-chat] 收藏写入失败', e); }
+}
+function upsertAiBookmark(entry, on){
+    const list = readAiBookmarks();
+    const idx = list.findIndex(b => b.chatId === entry.chatId && b.msgIdx === entry.msgIdx);
+    if(on){
+        if(idx >= 0) list[idx] = Object.assign(list[idx], entry);
+        else list.unshift(entry);
+    }else{
+        if(idx >= 0) list.splice(idx, 1);
+    }
+    writeAiBookmarks(list);
+}
+/* 启动时把已收藏标记写回 chatHistory，按钮高亮与抽屉计数才正确 */
+(function restoreAiBookmarks(){
+    try{
+        readAiBookmarks().forEach(function(b){
+            const chat = chatHistory.find(function(c){ return c.id === b.chatId; });
+            if(chat && chat.messages && chat.messages[b.msgIdx]){
+                chat.messages[b.msgIdx].bookmark = true;
+            }
+        });
+    }catch(e){}
+})();
+
 /* ══════════════════════════════════════
    STATE
    ══════════════════════════════════════ */
@@ -1422,6 +1463,15 @@ function bookmarkMsg(btn){
             if(idx>=0&&idx<chat.messages.length){
                 if(!chat.messages[idx].bookmark) chat.messages[idx].bookmark=false;
                 chat.messages[idx].bookmark=isBookmarked;
+                upsertAiBookmark({
+                    chatId:chat.id,
+                    chatTitle:chat.title,
+                    msgIdx:idx,
+                    role:chat.messages[idx].role||'ai',
+                    text:(chat.messages[idx].text||row.dataset.rawText||''),
+                    time:chat.time||'',
+                    savedAt:Date.now()
+                },isBookmarked);
             }
         }
     }
@@ -1490,6 +1540,7 @@ function removeBookmark(chatId,msgIdx){
     if(chat&&chat.messages[msgIdx]){
         chat.messages[msgIdx].bookmark=false;
     }
+    upsertAiBookmark({chatId:chatId,msgIdx:msgIdx},false);
     renderBookmarkList();
     updateBookmarkCount();
     showToast('已取消收藏');
@@ -1586,7 +1637,7 @@ function saveChat(userText, aiText){
     renderDrawer();
 }
 
-function loadChat(chatId){
+function loadChat(chatId,focusIdx){
     const chat=chatHistory.find(c=>c.id===chatId);if(!chat) return;
     toggleDrawer(false);
     currentTab=chat.tab;
@@ -1605,6 +1656,18 @@ function loadChat(chatId){
             }
         }
     });
+    /* 深链定位：?chat=1&msg=1 时滚到那条消息并短暂高亮 */
+    const rows=container.querySelectorAll('.msg-row');
+    if(typeof focusIdx==='number'&&focusIdx>=0&&rows[focusIdx]){
+        scrollToBottom();
+        const row=rows[focusIdx];
+        setTimeout(function(){
+            row.scrollIntoView({block:'center'});
+            row.classList.add('deep-focus');
+            setTimeout(function(){row.classList.remove('deep-focus');},2400);
+        },80);
+        return;
+    }
     scrollToBottom();
 }
 
@@ -1854,6 +1917,23 @@ function initScene(){
     }, 600);
 }
 
+/* ── 深链：从「我的-收藏夹」点 AI 回答进来时，直接定位到当时那条消息（?chat=1&msg=1） ── */
+function initDeepLink(){
+    var q=location.search||'';
+    var cm=q.match(/[?&]chat=([^&]+)/);
+    if(!cm) return;
+    var chatId=parseInt(decodeURIComponent(cm[1]),10);
+    if(isNaN(chatId)) return;
+    var mm=q.match(/[?&]msg=([^&]+)/);
+    var msgIdx=null;
+    if(mm){
+        var parsed=parseInt(decodeURIComponent(mm[1]),10);
+        if(!isNaN(parsed)&&parsed>=0) msgIdx=parsed;
+    }
+    if(!chatHistory.some(function(c){return c.id===chatId;})) return;
+    loadChat(chatId,msgIdx);
+}
+
 /* ══════════════════════════════════════
    INIT
    ══════════════════════════════════════ */
@@ -1862,6 +1942,7 @@ initVoice();
 renderInitial();
 renderAcCards();
 initScene();
+initDeepLink();
 </script>
 
 </body>
