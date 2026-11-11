@@ -117,6 +117,45 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-se
 .slot{padding:7px 12px;border-radius:9px;border:1px solid var(--gray-200);background:#fff;font-size:11.5px;color:var(--gray-600);font-family:inherit;cursor:pointer}
 .slot.on{border-color:var(--primary);background:var(--primary-50);color:var(--primary);font-weight:600}
 .slot.dis{opacity:.42;cursor:not-allowed;text-decoration:line-through}
+.slot.vip{border-color:#FDE68A;background:var(--accent-light);color:var(--accent-deep)}
+.slot.vip.on{border-color:var(--accent-deep);background:var(--accent-light);color:var(--accent-deep);font-weight:600}
+.slot.vip.locked{background:var(--gray-50);border-color:var(--gray-200);color:var(--gray-400);cursor:pointer}
+.slot-sep{width:100%;font-size:10px;font-weight:800;color:var(--accent-deep);letter-spacing:.03em;margin-top:5px;display:flex;align-items:center;gap:7px}
+.slot-sep:after{content:'';flex:1;height:1px;background:var(--accent-light)}
+.slot-note{width:100%;font-size:10.5px;color:var(--gray-400);margin-top:1px}
+.slot-note a{color:var(--primary);font-weight:600;text-decoration:none}
+
+/* ── 作品集评审 ── */
+.rv-card{display:flex;align-items:center;gap:11px;background:var(--accent-light);border:1px solid #FDE68A;border-radius:14px;padding:12px 13px;margin-bottom:14px;cursor:pointer}
+.rv-card.off{background:var(--gray-50);border-color:var(--gray-200)}
+.rv-ico{width:34px;height:34px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--accent-deep);flex-shrink:0;font-weight:700}
+.rv-card.off .rv-ico{color:var(--gray-400)}
+.rv-txt{flex:1;min-width:0}
+.rv-txt b{display:block;font-size:12.5px;color:var(--gray-900);font-weight:700}
+.rv-txt span{display:block;font-size:10.5px;color:var(--accent-deep);margin-top:2px;line-height:1.5}
+.rv-card.off .rv-txt span{color:var(--gray-400)}
+.rv-btn{flex-shrink:0;font-size:11px;font-weight:700;color:#fff;background:var(--accent-deep);border:none;border-radius:9px;padding:7px 11px;font-family:inherit;cursor:pointer}
+.rv-card.off .rv-btn{background:var(--gray-900)}
+
+.rv-step{font-size:11px;font-weight:700;color:var(--gray-900);margin:16px 0 9px;display:flex;align-items:center;gap:7px}
+.rv-step:first-child{margin-top:2px}
+.rv-step em{font-style:normal;width:18px;height:18px;border-radius:50%;background:var(--primary-50);color:var(--primary);font-size:10.5px;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+.rv-mentors{display:flex;gap:8px;overflow-x:auto;margin:0 -22px;padding:0 22px 4px}
+.rv-mentors::-webkit-scrollbar{display:none}
+.rv-m{flex-shrink:0;width:76px;text-align:center;border:1.5px solid var(--gray-200);border-radius:12px;padding:9px 4px 8px;cursor:pointer;background:#fff}
+.rv-m.on{border-color:var(--primary);background:var(--primary-50)}
+.rv-mav{width:34px;height:34px;border-radius:50%;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 6px}
+.rv-m b{display:block;font-size:11px;color:var(--gray-900);font-weight:700}
+.rv-m span{display:block;font-size:9.5px;color:var(--gray-400);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rv-hint{font-size:10.5px;color:var(--gray-400);padding:2px 0}
+.rv-input{width:100%;height:44px;border:1px solid var(--gray-200);border-radius:11px;padding:0 13px;font-size:12px;font-family:inherit;color:var(--gray-900);background:#fff;outline:none;box-sizing:border-box}
+.rv-input:focus{border-color:var(--primary)}
+.rv-tip{font-size:10px;color:var(--gray-400);line-height:1.65;margin-top:12px;padding:9px 11px;background:var(--gray-50);border-radius:9px}
+.rv-done{background:var(--primary-50);border:1px solid #CCFBF1;border-radius:13px;padding:14px;margin-top:4px}
+.rv-done-t{font-size:12.5px;font-weight:800;color:var(--primary);margin-bottom:10px}
+.rv-done-row{display:flex;gap:10px;font-size:11px;padding:4px 0;line-height:1.55}
+.rv-done-row span{color:var(--gray-400);flex-shrink:0;width:52px}
+.rv-done-row b{color:var(--gray-900);font-weight:500;word-break:break-all}
 
 .coupon{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--accent-light);border-radius:10px;padding:9px 12px;margin-top:10px}
 .coupon-l{font-size:11px;color:var(--accent-deep);font-weight:600;line-height:1.5}
@@ -158,6 +197,8 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-se
             <p class="price-note">价格由平台统一制定，含导师课时费与平台服务费。会员折扣的差额由平台承担，导师收入不变。</p>
         </div>
 
+        <div id="reviewEntry"></div>
+
         <div class="chips" id="chips"></div>
         <div id="mentorList"></div>
 
@@ -185,6 +226,17 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-se
         </div>
         <div class="sheet-body" id="dtBody"></div>
         <div class="sheet-footer" id="dtFooter"></div>
+    </div>
+</div>
+
+<div class="sheet-overlay" id="reviewSheet" onclick="if(event.target===this)closeReview()">
+    <div class="sheet-box">
+        <div class="sheet-header">
+            <div class="sheet-title">作品集评审</div>
+            <button class="sheet-close" onclick="closeReview()" aria-label="关闭">&times;</button>
+        </div>
+        <div class="sheet-body" id="reviewBody"></div>
+        <div class="sheet-footer" id="reviewFooter"></div>
     </div>
 </div>
 
@@ -221,7 +273,8 @@ var MENTORS = [
     resume: '产品简历与项目复盘，把「我参与了」改成「我推动了」',
     refer: '字节产品岗内推渠道（可查在招 HC）',
     project: '用抖音电商真实业务做一次需求拆解练习',
-    slots: ['周三 20:00', '周六 10:00', '周日 15:00']
+    slots: ['周三 20:00', '周六 10:00', '周日 15:00'],
+    vip: ['周一 19:00', '周五 20:00']
   },
   {
     id: 'm02', name: '林嘉', color: '#6366F1', cat: 'ux',
@@ -232,7 +285,8 @@ var MENTORS = [
     resume: 'UX 作品集结构与叙事顺序，砍掉凑数的项目',
     refer: '腾讯设计岗内推渠道',
     project: '拿一个真实需求，从竞品到交互稿走完一遍',
-    slots: ['周二 19:30', '周四 21:00', '周六 14:00']
+    slots: ['周二 19:30', '周四 21:00', '周六 14:00'],
+    vip: ['周一 20:30', '周日 16:00']
   },
   {
     id: 'm03', name: '周颖', color: '#0EA5E9', cat: 'ux',
@@ -243,7 +297,8 @@ var MENTORS = [
     resume: '调研报告与访谈提纲，让结论站得住',
     refer: '美团用研岗内推渠道',
     project: '一份能直接放进作品集的用户访谈方案',
-    slots: ['周一 20:00', '周三 21:00', '周日 10:00']
+    slots: ['周一 20:00', '周三 21:00', '周日 10:00'],
+    vip: ['周二 19:00', '周六 09:30']
   },
   {
     id: 'm04', name: '何嘉树', color: '#F43F5E', cat: 'pm',
@@ -254,7 +309,8 @@ var MENTORS = [
     resume: '硬件产品简历，突出你解决过的具体问题',
     refer: '海康校招内推渠道',
     project: '写一份能被评审的硬件需求文档',
-    slots: ['周二 20:30', '周五 19:00', '周六 16:00']
+    slots: ['周二 20:30', '周五 19:00', '周六 16:00'],
+    vip: ['周一 19:30', '周日 13:00']
   },
   {
     id: 'm05', name: '苏敏', color: '#8B5CF6', cat: 'consult',
@@ -265,7 +321,8 @@ var MENTORS = [
     resume: '咨询简历与 case 框架，先学会算数再谈洞察',
     refer: '四大咨询内推渠道',
     project: '一份 10 页以内的行业分析 deck',
-    slots: ['周三 19:00', '周六 11:00', '周日 14:00']
+    slots: ['周三 19:00', '周六 11:00', '周日 14:00'],
+    vip: ['周二 20:00', '周五 19:30']
   },
   {
     id: 'm06', name: '罗一', color: '#F59E0B', cat: 'ops',
@@ -276,7 +333,8 @@ var MENTORS = [
     resume: '运营简历，把流水账改成有因果的复盘',
     refer: 'Shopee 运营岗内推渠道',
     project: '复盘一次真实活动，找出真正起作用的那一步',
-    slots: ['周一 21:00', '周四 20:00', '周六 15:00']
+    slots: ['周一 21:00', '周四 20:00', '周六 15:00'],
+    vip: ['周三 20:00', '周日 16:30']
   },
   {
     id: 'm07', name: '郑亦然', color: '#14B8A6', cat: 'ux',
@@ -287,7 +345,8 @@ var MENTORS = [
     resume: '视觉作品集排版与呈现，让强项在第一屏出现',
     refer: 'OPPO 设计岗内推渠道',
     project: '做一套能落地的视觉规范（含组件与栅格）',
-    slots: ['周二 21:00', '周五 20:30', '周日 11:00']
+    slots: ['周二 21:00', '周五 20:30', '周日 11:00'],
+    vip: ['周一 19:00', '周四 19:30']
   },
   {
     id: 'm08', name: '高远', color: '#475569', cat: 'data',
@@ -298,7 +357,8 @@ var MENTORS = [
     resume: '数据简历与项目，讲清口径和结论',
     refer: '阿里数据岗内推渠道',
     project: '一份真实业务的分析报告（含假设与验证）',
-    slots: ['周三 21:30', '周六 13:00', '周日 19:00']
+    slots: ['周三 21:30', '周六 13:00', '周日 19:00'],
+    vip: ['周二 19:30', '周五 21:00']
   }
 ];
 
@@ -306,6 +366,8 @@ var currentCat = 'all';
 var currentMentor = null;
 var currentSlot = '';
 var useCoupon = true;
+var rvMentorId = '';
+var rvSlot = '';
 
 /* ── 存储 ── */
 function getJSON(key, def){
@@ -327,6 +389,20 @@ function couponLeft(){
 }
 function getBookings(){ return getJSON('cos_mentor_bookings', []); }
 function saveBookings(list){ setJSON('cos_mentor_bookings', list); }
+function getReview(){ return getJSON('cos_portfolio_review', null); }
+function saveReview(r){ setJSON('cos_portfolio_review', r); }
+function reviewLeft(){
+  var m = getMember();
+  if (!m || !m.active || !m.expiresAt || Date.now() >= m.expiresAt) return -1;
+  return Math.max(0, (m.reviewTotal || 0) - (m.reviewUsed || 0));
+}
+function fmtAt(t){
+  var d = new Date(t); function p(n){ return n < 10 ? '0' + n : n; }
+  return d.getFullYear() + '.' + p(d.getMonth() + 1) + '.' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function escH(s){
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
 
 function memberPrice(p){
   var cut = Math.round(p * 0.15);
@@ -439,14 +515,31 @@ function openDetail(id){
 function renderSlots(){
   if (!currentMentor) return;
   var booked = getBookings();
-  var html = '';
-  currentMentor.slots.forEach(function(s){
+  var isM = memberActive();
+  function mk(s, isVip){
     var taken = booked.some(function(b){ return b.mentorId === currentMentor.id && b.slot === s && b.status === 'upcoming'; });
-    var cls = 'slot' + (taken ? ' dis' : '') + (currentSlot === s ? ' on' : '');
-    html += '<button class="' + cls + '" ' + (taken ? 'disabled' : 'onclick="pickSlot(\'' + s + '\')"') + '>' + s + (taken ? ' 已约' : '') + '</button>';
-  });
+    var locked = isVip && !isM && !taken;
+    var cls = 'slot' + (isVip ? ' vip' : '') + (taken ? ' dis' : '') + (locked ? ' locked' : '') + (currentSlot === s ? ' on' : '');
+    var act = taken ? 'disabled' : (locked ? 'onclick="vipLocked()"' : 'onclick="pickSlot(\'' + s + '\')"');
+    var tail = taken ? ' 已约' : (locked ? ' Pro' : '');
+    return '<button class="' + cls + '" ' + act + '>' + (isVip && !taken ? '★ ' : '') + s + tail + '</button>';
+  }
+  var html = currentMentor.slots.map(function(s){ return mk(s, false); }).join('');
+  var vip = currentMentor.vip || [];
+  if (vip.length) {
+    html += '<div class="slot-sep">会员专享 · 每周 2 个更早时段</div>';
+    html += vip.map(function(s){ return mk(s, true); }).join('');
+    if (!isM) html += '<div class="slot-note">开通 Pro 后可约这些时段 <a onclick="goMembership()">了解 Pro →</a></div>';
+  }
   var el = document.getElementById('slotWrap');
   if (el) el.innerHTML = html;
+}
+
+function vipLocked(){
+  showToast('会员专享时段 · 开通 Pro 后可约');
+}
+function goMembership(){
+  location.href = 'membership.html';
 }
 
 function pickSlot(s){
@@ -604,10 +697,132 @@ function renderBookings(){
   wrap.innerHTML = html;
 }
 
+/* ── 作品集评审 ── */
+function renderReviewEntry(){
+  var el = document.getElementById('reviewEntry');
+  if (!el) return;
+  var left = reviewLeft();
+  var rec = getReview();
+  var block, cls;
+
+  if (left < 0) {
+    cls = ' off';
+    block = '<div class="rv-ico">评</div>' +
+      '<div class="rv-txt"><b>作品集评审</b><span>会员权益，导师逐页给书面意见</span></div>' +
+      '<button class="rv-btn">了解 Pro</button>';
+  } else if (rec) {
+    cls = '';
+    block = '<div class="rv-ico">评</div>' +
+      '<div class="rv-txt"><b>作品集评审 · 已提交</b><span>' + escH(rec.mentorName) + ' · ' + escH(rec.slot) + ' · 48 小时内反馈</span></div>' +
+      '<button class="rv-btn">查看</button>';
+  } else if (left === 0) {
+    cls = ' off';
+    block = '<div class="rv-ico">评</div>' +
+      '<div class="rv-txt"><b>作品集评审 · 已用完</b><span>今年 1 次已使用，续费后可再次预约</span></div>' +
+      '<button class="rv-btn">了解 Pro</button>';
+  } else {
+    cls = '';
+    block = '<div class="rv-ico">评</div>' +
+      '<div class="rv-txt"><b>作品集评审 · 剩 ' + left + ' 次</b><span>把链接给导师，逐页看结构、叙事、视觉</span></div>' +
+      '<button class="rv-btn">去预约</button>';
+  }
+  el.innerHTML = '<div class="rv-card' + cls + '" onclick="' + ((left < 0 || (left === 0 && !rec)) ? 'goMembership()' : 'openReview()') + '">' + block + '</div>';
+}
+
+function openReview(){
+  var rec = getReview();
+  var body = document.getElementById('reviewBody');
+  var foot = document.getElementById('reviewFooter');
+
+  if (rec) {
+    body.innerHTML = '<div class="rv-done">' +
+      '<div class="rv-done-t">已提交 · 48 小时内反馈</div>' +
+      '<div class="rv-done-row"><span>导师</span><b>' + escH(rec.mentorName) + ' · ' + escH(rec.company) + '</b></div>' +
+      '<div class="rv-done-row"><span>时段</span><b>' + escH(rec.slot) + '</b></div>' +
+      '<div class="rv-done-row"><span>作品集</span><b>' + escH(rec.link) + '</b></div>' +
+      '<div class="rv-done-row"><span>提交</span><b>' + fmtAt(rec.at) + '</b></div>' +
+      '</div>' +
+      '<div class="rv-tip">演示流程：不会真的发给导师，也不会产生真实评审与交付。</div>';
+    foot.innerHTML = '<button class="bigbtn" style="background:var(--gray-100);color:var(--gray-600)" onclick="closeReview()">关闭</button>';
+  } else {
+    rvMentorId = '';
+    rvSlot = '';
+    body.innerHTML =
+      '<div class="rv-step"><em>1</em>选一位导师</div>' +
+      '<div class="rv-mentors" id="rvMentors"></div>' +
+      '<div class="rv-step"><em>2</em>选一个时段</div>' +
+      '<div class="slots" id="rvSlots"></div>' +
+      '<div class="rv-step"><em>3</em>作品集链接</div>' +
+      '<input class="rv-input" id="rvLink" placeholder="https:// 粘贴你的作品集链接" />' +
+      '<div class="rv-tip">导师会在这里逐页看你的结构、叙事和视觉，48 小时内回一份书面意见。演示流程：不会真的发给导师，也不会产生真实评审与交付。</div>';
+    renderRvMentors();
+    renderRvSlots();
+    foot.innerHTML = '<button class="bigbtn" onclick="submitReview()">提交评审申请</button>';
+  }
+  document.getElementById('reviewSheet').classList.add('show');
+  body.scrollTop = 0;
+}
+
+function renderRvMentors(){
+  var el = document.getElementById('rvMentors');
+  if (!el) return;
+  el.innerHTML = MENTORS.map(function(m){
+    return '<div class="rv-m' + (rvMentorId === m.id ? ' on' : '') + '" onclick="pickRvMentor(\'' + m.id + '\')">' +
+      '<div class="rv-mav" style="background:' + m.color + '">' + m.name.charAt(0) + '</div>' +
+      '<b>' + m.name + '</b><span>' + m.company + '</span></div>';
+  }).join('');
+}
+function pickRvMentor(id){
+  rvMentorId = (rvMentorId === id ? '' : id);
+  rvSlot = '';
+  renderRvMentors();
+  renderRvSlots();
+}
+function renderRvSlots(){
+  var el = document.getElementById('rvSlots');
+  if (!el) return;
+  var m = MENTORS.filter(function(x){ return x.id === rvMentorId; })[0];
+  if (!m) { el.innerHTML = '<div class="rv-hint">先选一位导师，再挑时段</div>'; return; }
+  var booked = getBookings();
+  var html = m.slots.map(function(s){
+    var taken = booked.some(function(b){ return b.mentorId === m.id && b.slot === s && b.status === 'upcoming'; });
+    return '<button class="slot' + (taken ? ' dis' : '') + (rvSlot === s ? ' on' : '') + '" ' + (taken ? 'disabled' : 'onclick="pickRvSlot(\'' + s + '\')"') + '>' + s + (taken ? ' 已约' : '') + '</button>';
+  }).join('');
+  html += (m.vip || []).map(function(s){
+    return '<button class="slot vip' + (rvSlot === s ? ' on' : '') + '" onclick="pickRvSlot(\'' + s + '\')">★ ' + s + '</button>';
+  }).join('');
+  el.innerHTML = html;
+}
+function pickRvSlot(s){
+  rvSlot = (rvSlot === s ? '' : s);
+  renderRvSlots();
+}
+function submitReview(){
+  if (!rvMentorId) { showToast('先选一位导师'); return; }
+  if (!rvSlot) { showToast('先选一个时段'); return; }
+  var inp = document.getElementById('rvLink');
+  var link = ((inp && inp.value) || '').trim();
+  if (!link) { showToast('填一下作品集链接'); return; }
+  if (!/^(https?:\/\/|www\.)/i.test(link)) { showToast('链接要以 https:// 开头'); return; }
+  if (reviewLeft() <= 0) { showToast('评审次数已用完'); return; }
+  var m = MENTORS.filter(function(x){ return x.id === rvMentorId; })[0];
+  var mem = getMember();
+  mem.reviewUsed = (mem.reviewUsed || 0) + 1;
+  saveMember(mem);
+  saveReview({ mentorId: m.id, mentorName: m.name, company: m.company, slot: rvSlot, link: link, at: Date.now(), status: 'pending' });
+  showToast('已提交 · 导师 48 小时内给反馈');
+  closeReview();
+  renderReviewEntry();
+}
+function closeReview(){
+  document.getElementById('reviewSheet').classList.remove('show');
+}
+
 /* ── INIT ── */
 renderChips();
 renderList();
 renderBookings();
+renderReviewEntry();
 
 /* 深链：职业档案「去约」→ 直接打开对应导师详情 */
 (function(){

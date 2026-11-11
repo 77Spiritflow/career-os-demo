@@ -65,6 +65,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-se
 .bt{font-size:12.5px;font-weight:700;color:var(--gray-900);line-height:1.45}
 .bd{font-size:11px;color:var(--gray-500);line-height:1.65;margin-top:3px}
 .bwhere{display:inline-block;font-size:9.5px;color:var(--gray-400);border:1px solid var(--gray-200);border-radius:99px;padding:1px 7px;margin-top:6px}
+.bsoon{display:inline-block;font-size:9.5px;color:var(--accent-deep);background:var(--accent-light);border-radius:99px;padding:1px 7px;margin-top:6px;margin-left:5px}
 
 /* ── 免费 / Pro 边界 ── */
 .free-pro{display:flex;gap:8px}
@@ -160,7 +161,7 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-se
 
         <div class="sec">
             <div class="sec-head">Pro 包含什么</div>
-            <div class="sec-sub">11 项专享，分三组：帮你做完、直接拿到、优先与优惠。</div>
+            <div class="sec-sub">9 项专享，分三组：帮你做完、找到渠道、优先与优惠。</div>
             <div id="benefitList"></div>
         </div>
 
@@ -182,10 +183,10 @@ body{font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-se
                 <div class="fp-card pro">
                     <div class="fp-title">Pro 额外</div>
                     <div class="fp-body">
-                        <i>AI 简历 / 作品集 / 模拟面试</i>
+                        <i>AI 简历 / 模拟面试</i>
                         <i>Agent 多步执行</i>
-                        <i>作品集模板与面经库</i>
-                        <i>学长经验与内推信息</i>
+                        <i>面试信息渠道包</i>
+                        <i>学长经验与内推渠道</i>
                         <i>导师 85 折 × 3 次</i>
                         <i>作品集评审 1 次</i>
                     </div>
@@ -230,18 +231,16 @@ var BENEFITS = [
     g: '帮你做完 · AI 代劳',
     items: [
       { t: 'AI 简历诊断与改写', d: '逐条指出问题，直接生成可投递的版本', w: 'AI 对话页' },
-      { t: '作品集文案生成', d: '把项目经历写成 Case Study 结构，不空喊', w: 'AI 对话页' },
       { t: '模拟面试对话', d: '按目标岗位出题、追问、给反馈', w: 'AI 对话页' },
       { t: 'Agent 多步执行', d: '一句话跑完：分析岗位 → 改简历 → 生成投递清单', w: 'AI 对话页' }
     ]
   },
   {
-    g: '直接拿到 · 资源包',
+    g: '找得到 · 渠道与经验',
     items: [
-      { t: '作品集模板库', d: '3 套：UX 项目 / 产品项目 / 实习复盘', w: '职业档案' },
-      { t: '学长学姐经验库', d: '真实去向与面试复盘，不是泛泛的建议', w: '社区' },
-      { t: '企业面经与面试流程', d: '20 家企业：几轮、考什么、多久出结果', w: '职业档案' },
-      { t: '内推信息', d: '公开招聘入口与学长内推码，不承诺结果', w: '职业档案' }
+      { t: '面试信息渠道包', d: '6 个真实入口：牛客 / 官网招聘页 / B站·小红书 / 实习僧 / 就业中心 / 脉脉，说清去哪找、看什么', w: '职业档案' },
+      { t: '学长学姐经验库', d: '真实去向与面试复盘；接入知乎知识库后开放', w: '社区', s: 'soon' },
+      { t: '内推渠道', d: '8 位导师的岗位内推渠道（仅提供信息，不承诺录用）+ 社区学长学姐推荐', w: '导师页' }
     ]
   },
   {
@@ -249,7 +248,7 @@ var BENEFITS = [
     items: [
       { t: '导师课 85 折', d: '每年 3 次，单笔最高减 50 元', w: '导师页' },
       { t: '作品集评审 1 次', d: '导师 1v1 逐页点评，给具体修改意见', w: '导师页' },
-      { t: '优先预约', d: '可约更早的时段，热门导师不用等', w: '导师页' }
+      { t: '优先预约', d: '每位导师每周 2 个会员专享时段，可约更早的时间，热门导师不用等', w: '导师页' }
     ]
   }
 ];
@@ -302,7 +301,7 @@ function renderHero(m, active){
         '<h1>把该做的事，真正做完</h1>' +
         '<p>免费部分帮你想清楚方向，Pro 帮你把简历、面试、作品集做到可以投出去。</p>' +
         '<div class="hero-facts">' +
-          '<div><b>11</b><span>项专享</span></div>' +
+          '<div><b>9</b><span>项专享</span></div>' +
           '<div><b>3</b><span>次导师折扣</span></div>' +
           '<div><b>1</b><span>次作品集评审</span></div>' +
         '</div>' +
@@ -358,7 +357,7 @@ function renderBenefits(){
         '<div class="bmain">' +
           '<div class="bt">' + it.t + '</div>' +
           '<div class="bd">' + it.d + '</div>' +
-          '<span class="bwhere">使用位置 · ' + it.w + '</span>' +
+          '<span class="bwhere">使用位置 · ' + it.w + '</span>' + (it.s === 'soon' ? '<span class="bsoon">即将开放</span>' : '') +
         '</div>' +
       '</div>';
     });
@@ -381,7 +380,7 @@ function renderAction(m, active){
           '<div><div class="pay-name">' + PLAN.name + '</div><div class="pay-cycle">年付 · 有效期 ' + PLAN.days + ' 天</div></div>' +
           '<div class="pay-price"><b>¥' + PLAN.price + '</b><span>/ 年</span></div>' +
         '</div>' +
-        '<div class="pay-line">11 项专享全部包含 · 3 次导师 85 折 · 1 次作品集评审</div>' +
+        '<div class="pay-line">9 项专享全部包含 · 3 次导师 85 折 · 1 次作品集评审</div>' +
         '<button class="btn-dark" onclick="openConfirm(\'' + (m ? 'renew' : 'purchase') + '\')">' + (m ? '续费一年' : '开通 Pro') + '</button>' +
         '<div class="pay-note">演示环境，不会真实扣款</div>' +
       '</div>';
@@ -461,7 +460,7 @@ function openConfirm(type){
       '<div class="cf-row cf-amount"><span>应付金额</span><b>¥' + PLAN.price + '</b></div>' +
       '<div class="cf-row"><span>套餐</span><b>' + PLAN.name + ' · 年付</b></div>' +
       '<div class="cf-row"><span>有效期</span><b>' + fmt(Date.now()) + ' 至 ' + fmt(Date.now() + PLAN.days * DAY) + '</b></div>' +
-      '<div class="cf-row"><span>权益</span><b>11 项专享</b></div>' +
+      '<div class="cf-row"><span>权益</span><b>9 项专享</b></div>' +
       '<div class="cf-note">演示环境，不会真实扣款。开通后可在本页关闭自动续费。</div>';
     footer =
       '<button class="cf-btn ghost" onclick="closeConfirm()">取消</button>' +
@@ -516,7 +515,7 @@ function doPurchase(type){
   saveMember(fresh);
   closeConfirm();
   render();
-  showToast('Pro 已开通，11 项权益已解锁');
+  showToast('Pro 已开通，9 项权益已解锁');
 }
 
 function doCancel(){

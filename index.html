@@ -807,6 +807,21 @@ var Auth = (function () {
         .sp-btn.ghost{background:var(--gray-100);color:var(--gray-600)}
         .sp-lock{position:absolute;right:12px;top:12px;font-size:9px;font-weight:800;color:var(--accent-deep);background:var(--accent-light);border-radius:99px;padding:2px 7px}
         .sp-tip{font-size:10.5px;color:var(--gray-400);line-height:1.6;margin-top:14px;padding-left:2px}
+        .sp-tag.school{background:var(--gray-100);color:var(--gray-500)}
+
+        /* 面试信息渠道 */
+        #interview-hub-sheet .sheet-box{display:flex;flex-direction:column;overflow:hidden;padding:0;max-height:88vh}
+        #interview-hub-sheet .sheet-header{flex-shrink:0;padding:22px 22px 10px;margin-bottom:0;background:#fff;border-radius:24px 24px 0 0;position:relative;z-index:3}
+        #interview-hub-sheet #interview-hub-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:4px 22px calc(22px + var(--safe-b))}
+        .ih-entry{display:flex;align-items:center;gap:10px;margin:14px 0 2px;padding:12px 14px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--gray-50);cursor:pointer}
+        .ih-entry:active{background:var(--gray-100)}
+        .ih-ico{width:32px;height:32px;border-radius:10px;background:var(--accent-light);color:var(--accent-deep);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+        .ih-txt{flex:1;min-width:0}
+        .ih-txt b{display:block;font-size:13px;color:var(--gray-900);font-weight:600}
+        .ih-txt span{display:block;font-size:11px;color:var(--gray-400);margin-top:2px}
+        .ih-arrow{flex-shrink:0;font-size:16px;color:var(--gray-300);line-height:1}
+        .ih-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+        .ih-links a{font-size:11px;color:var(--primary);background:var(--primary-50);border:1px solid var(--primary-200);border-radius:99px;padding:3px 9px;text-decoration:none}
 
         /* ═══════ 社区帖子详情 ═══════ */
         .pd-body{flex:1;overflow-y:auto;padding:16px 16px 18px}
@@ -887,6 +902,39 @@ var Auth = (function () {
         .compare-body .tl-file{margin:0}
         .sheet-submit{width:100%;height:46px;border-radius:12px;background:var(--primary);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px}
         .sheet-submit:active{transform:scale(.98)}
+        /* ── 作品集自检清单 ── */
+        .pf-check{display:flex;align-items:center;gap:11px;background:var(--primary-50);border:1px solid #CCFBF1;border-radius:14px;padding:13px 14px;margin-bottom:12px;cursor:pointer}
+        .pfc-ico{width:34px;height:34px;border-radius:10px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
+        .pfc-b{flex:1;min-width:0}
+        .pfc-b b{display:block;font-size:12.5px;color:var(--gray-900);font-weight:700}
+        .pfc-b span{display:block;font-size:10.5px;color:var(--primary);margin-top:2px}
+        .pfc-bar{height:4px;background:#fff;border-radius:99px;margin-top:7px;overflow:hidden}
+        .pfc-bar i{display:block;height:100%;background:var(--primary);border-radius:99px;transition:width .3s}
+        .pfc-arrow{flex-shrink:0;font-size:17px;color:var(--primary);opacity:.5}
+
+        #pf-check-sheet .sheet-box{display:flex;flex-direction:column;overflow:hidden;padding:0;max-height:88vh}
+        #pf-check-sheet .sheet-header{flex-shrink:0;padding:22px 22px 10px;margin-bottom:0;background:#fff;border-radius:24px 24px 0 0;position:relative;z-index:3}
+        #pf-check-sheet #pf-check-body{flex:1;min-height:0;overflow-y:auto;padding:0 22px calc(22px + var(--safe-b))}
+
+        .pc-top{display:flex;align-items:center;gap:14px;background:var(--gray-50);border-radius:13px;padding:13px 14px;margin:2px 0 16px}
+        .pc-num{display:flex;align-items:baseline;gap:2px;flex-shrink:0}
+        .pc-num b{font-size:26px;font-weight:800;color:var(--primary);line-height:1}
+        .pc-num span{font-size:12px;color:var(--gray-400)}
+        .pc-top-r{flex:1;min-width:0}
+        .pc-bar{height:5px;background:var(--gray-200);border-radius:99px;overflow:hidden}
+        .pc-bar i{display:block;height:100%;background:var(--primary);border-radius:99px}
+        .pc-top-t{font-size:10.5px;color:var(--gray-500);margin-top:6px}
+        .pc-group{margin-bottom:16px}
+        .pc-gh{display:flex;align-items:center;justify-content:space-between;padding-bottom:7px;margin-bottom:2px;border-bottom:1px solid var(--gray-100)}
+        .pc-gh b{font-size:12px;font-weight:800;color:var(--gray-900)}
+        .pc-gh span{font-size:10.5px;color:var(--gray-400)}
+        .pc-item{display:flex;align-items:flex-start;gap:9px;padding:9px 2px;cursor:pointer;border-bottom:1px solid var(--gray-50)}
+        .pc-item span{font-size:11.5px;color:var(--gray-600);line-height:1.6}
+        .pc-item.on span{color:var(--gray-400);text-decoration:line-through}
+        .pc-box{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--gray-300);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:700}
+        .pc-item.on .pc-box{background:var(--primary);border-color:var(--primary)}
+        .pc-tip{font-size:10px;color:var(--gray-400);line-height:1.65;padding:9px 11px;background:var(--gray-50);border-radius:9px;margin-top:4px}
+
         .pf-grid{display:flex;flex-direction:column;gap:12px}
         .pf-card{background:#fff;border:1px solid var(--gray-100);border-radius:14px;padding:15px;cursor:pointer;box-shadow:var(--shadow-xs);transition:all .2s;display:flex;flex-direction:column;gap:7px}
         .pf-card:active{transform:scale(.98)}
@@ -1584,6 +1632,16 @@ var Auth = (function () {
     </div>
 </div>
 
+<div class="sheet-overlay" id="interview-hub-sheet" style="z-index:270" onclick="if(event.target===this)closeInterviewHub()">
+    <div class="sheet-box">
+        <div class="sheet-header">
+            <div class="sheet-title">面试信息渠道</div>
+            <button class="sheet-close" onclick="closeInterviewHub()" aria-label="关闭">✕</button>
+        </div>
+        <div id="interview-hub-body"></div>
+    </div>
+</div>
+
 <!-- ═══ 收藏夹（我的页聚合收藏） ═══ -->
 <div class="overlay-page" id="fav-overlay">
     <nav class="overlay-nav">
@@ -1681,6 +1739,17 @@ var Auth = (function () {
     <div class="build-page-body" id="pf-project-detail" style="display:none"></div>
     <input type="file" id="pf-img-file" accept="image/*" style="display:none" onchange="addWorkFile(this,'img')">
     <input type="file" id="pf-file-file" style="display:none" onchange="addWorkFile(this,'file')">
+</div>
+
+<!-- ═══ 作品集自检清单 Sheet ═══ -->
+<div class="sheet-overlay" id="pf-check-sheet" style="z-index:210" onclick="if(event.target===this)closePfCheck()">
+    <div class="sheet-box">
+        <div class="sheet-header">
+            <div class="sheet-title">作品集自检清单</div>
+            <button class="sheet-close" onclick="closePfCheck()" aria-label="关闭">×</button>
+        </div>
+        <div id="pf-check-body"></div>
+    </div>
 </div>
 
 <!-- ═══ 新建项目 Sheet ═══ -->
@@ -3271,6 +3340,84 @@ function hostOf(url){
   try{return new URL(url).hostname.replace(/^www\./,'');}catch(e){return '外部链接';}
 }
 
+// ── 作品集自检清单（免费，20 条） ──
+const PF_CHECK=[
+  {g:'结构',items:[
+    {id:'s1',t:'第一屏就能看出你是谁、目标岗位是什么'},
+    {id:'s2',t:'项目数量控制在 3–5 个，不堆作品凑数'},
+    {id:'s3',t:'每个项目都有「问题 / 你的角色 / 结果」三段'},
+    {id:'s4',t:'有目录或导航，页面多也能快速定位到某个项目'},
+    {id:'s5',t:'每页都有标题，翻到任何一页都知道在讲哪个项目'},
+    {id:'s6',t:'手机打开不崩：文字不溢出、图片不变形'}
+  ]},
+  {g:'叙事',items:[
+    {id:'n1',t:'每个项目开头一句话说清「解决什么问题」'},
+    {id:'n2',t:'写清你负责哪部分，不写「我们团队」'},
+    {id:'n3',t:'有决策依据：为什么选这个方案，不选另一个'},
+    {id:'n4',t:'有过程稿或迭代记录，不只有最终效果图'},
+    {id:'n5',t:'结尾有结果：数据、上线、用户反馈，或一次诚实的复盘'}
+  ]},
+  {g:'视觉',items:[
+    {id:'v1',t:'全站字号不超过 4 级，标题层级一致'},
+    {id:'v2',t:'有主色，辅助色不超过 2 个'},
+    {id:'v3',t:'图片清晰、比例统一，没有拉伸变形'},
+    {id:'v4',t:'留白够，一屏不超过 3 个信息块'},
+    {id:'v5',t:'边距和栅格统一，元素不贴边'}
+  ]},
+  {g:'可信度',items:[
+    {id:'c1',t:'每个数据都有来源或口径说明'},
+    {id:'c2',t:'团队项目标注了你的具体贡献'},
+    {id:'c3',t:'没有把课程作业包装成商业项目'},
+    {id:'c4',t:'链接可访问，没有死链，也不需要登录才能看'}
+  ]}
+];
+const PF_TOTAL=20;
+
+function getPfCheck(){return LS.get('portfolio_check',{});}
+function pfDone(){
+  const c=getPfCheck();let n=0;
+  PF_CHECK.forEach(function(g){g.items.forEach(function(i){if(c[i.id])n++;});});
+  return n;
+}
+function pfCheckCard(){
+  const done=pfDone();
+  return '<div class="pf-check" onclick="openPfCheck()">'+
+    '<div class="pfc-ico">✓</div>'+
+    '<div class="pfc-b"><b>作品集自检清单</b><span>20 条，已完成 '+done+' 条</span><div class="pfc-bar"><i style="width:'+Math.round(done/PF_TOTAL*100)+'%"></i></div></div>'+
+    '<div class="pfc-arrow">›</div>'+
+  '</div>';
+}
+function openPfCheck(){
+  const body=document.getElementById('pf-check-body');
+  const c=getPfCheck();const done=pfDone();
+  const hint=done===PF_TOTAL?'全部通过，可以投了':(done>=14?'差几条就完整了':'先把结构那几条补齐');
+  body.innerHTML=
+    '<div class="pc-top"><div class="pc-num"><b>'+done+'</b><span>/ '+PF_TOTAL+'</span></div>'+
+      '<div class="pc-top-r"><div class="pc-bar"><i style="width:'+Math.round(done/PF_TOTAL*100)+'%"></i></div><div class="pc-top-t">'+hint+'</div></div></div>'+
+    PF_CHECK.map(function(g){
+      const gd=g.items.filter(function(i){return c[i.id];}).length;
+      return '<div class="pc-group"><div class="pc-gh"><b>'+g.g+'</b><span>'+gd+' / '+g.items.length+'</span></div>'+
+        g.items.map(function(it){
+          const on=!!c[it.id];
+          return '<div class="pc-item'+(on?' on':'')+'" onclick="togglePfCheck(\''+it.id+'\')">'+
+            '<div class="pc-box">'+(on?'✓':'')+'</div><span>'+it.t+'</span></div>';
+        }).join('')+'</div>';
+    }).join('')+
+    '<div class="pc-tip">自检清单免费，勾选只存在本机浏览器。它回答「作品集哪里不合格」；具体怎么改，去导师页约一次作品集评审。</div>';
+  document.getElementById('pf-check-sheet').classList.add('show');
+  body.scrollTop=0;
+}
+function togglePfCheck(id){
+  const c=getPfCheck();
+  if(c[id])delete c[id];else c[id]=true;
+  LS.set('portfolio_check',c);
+  const keep=document.getElementById('pf-check-body').scrollTop;
+  openPfCheck();
+  document.getElementById('pf-check-body').scrollTop=keep;
+  if(!pfCurProject)renderProjects();
+}
+function closePfCheck(){document.getElementById('pf-check-sheet').classList.remove('show');}
+
 // ── 作品集 ──
 let pfCurProject=null;
 let PF_DATA=null;
@@ -3302,10 +3449,10 @@ function renderProjects(){
   const box=document.getElementById('pf-projects');
   if(!box)return;
   if(!data.length){
-    box.innerHTML='<div class="build-empty">'+MAG_ICON+'<p>还没有项目作品<br>点击右上角「新建」创建你的第一个项目</p></div>';
+    box.innerHTML=pfCheckCard()+'<div class="build-empty">'+MAG_ICON+'<p>还没有项目作品<br>点击右上角「新建」创建你的第一个项目</p></div>';
     return;
   }
-  box.innerHTML='<div class="pf-grid">'+data.map(function(p){
+  box.innerHTML=pfCheckCard()+'<div class="pf-grid">'+data.map(function(p){
     return '<div class="pf-card" onclick="openProject(\''+p.id+'\')">'+
       '<div class="pf-name">'+esc(p.name)+'<span class="pf-count">'+(p.works?p.works.length:0)+' 件作品</span></div>'+
       (p.desc?'<div class="pf-desc">'+esc(p.desc)+'</div>':'')+
@@ -4267,6 +4414,28 @@ const RESOURCES={
     see:'先看岗位 JD 里的「任职要求」，把出现次数最多的能力词圈出来。',
     todo:'对照你自己的简历，标出「JD 要但我没有」的三项，回到职业档案里补。',member:false}
 };
+/* ── 面试信息渠道：只给入口和「看什么」，不搬任何内容 ── */
+const INTERVIEW_CHANNELS=[
+  {n:'牛客网',src:'res',tag:'外部资源',
+   links:[{t:'nowcoder.com',u:'https://www.nowcoder.com/'}],
+   see:'搜「公司名 + 岗位」，看近一年的真实复盘和笔试真题。先看差评，好评的参考价值低。'},
+  {n:'目标公司官网招聘页',src:'res',tag:'外部资源',
+   links:[{t:'字节校招',u:'https://jobs.bytedance.com/campus'},{t:'腾讯校招',u:'https://careers.tencent.com/campus.html'},{t:'美团招聘',u:'https://zhaopin.meituan.com/'}],
+   see:'官网写的是最准的流程和时间线：几轮、什么时候开、什么时候截止，以你投的那家为准。'},
+  {n:'B站 · 小红书',src:'res',tag:'外部资源',
+   links:[{t:'B站搜面经',u:'https://search.bilibili.com/all?keyword=%E9%9D%A2%E7%BB%8F'}],
+   see:'搜「公司名 + 岗位 + 面经」，看视频版复盘，重点听面试官追问了什么。小红书在 App 内同样搜法。'},
+  {n:'实习僧 · BOSS直聘',src:'res',tag:'外部资源',
+   links:[{t:'实习僧',u:'https://www.shixiseng.com/'},{t:'BOSS直聘',u:'https://www.zhipin.com/'}],
+   see:'看岗位量和 JD 措辞，反推对方真正要什么；同类岗位的 JD 差异，就是这家最在意的能力。'},
+  {n:'学校就业中心',src:'school',tag:'校内资源',
+   links:[],
+   see:'打开学校就业信息网或就业公众号，看宣讲会排期和内推群。信息最准，而且免费。'},
+  {n:'脉脉',src:'res',tag:'外部资源',
+   links:[{t:'maimai.cn',u:'https://maimai.cn/'}],
+   see:'看内部人怎么描述团队、加班和流程；只当事实参考，别当结论。'}
+];
+
 const SKILL_PATH={
   '用户研究与访谈':{m:'m03',rs:['r01','r02'],why:'这个岗位要求你能独立跑完一次访谈并提炼出结论，而你目前没有可验证的记录。'},
   '原型与流程设计':{m:'m02',rs:['r03','r04'],why:'面试官会追问你的流程为什么这么走，没有依据的流程图在作品集里不加分。'},
@@ -4390,6 +4559,11 @@ function openCareerProfile(name){
     '</div>'+
     (p&&p.entry?'<div class="jd-block"><div class="jd-block-title">入门门槛</div><div class="jd-intro">'+esc(p.entry)+'</div></div>':'')+
     (!p?'<div class="cp-note">这个职业的详细档案还在补充，先给你能力清单和下一步；要完整的岗位要求可以点下面的按钮。</div>':'')+
+    '<div class="ih-entry" onclick="openInterviewHub()">'+
+      '<div class="ih-ico">面</div>'+
+      '<div class="ih-txt"><b>面试准备 · 去哪找面经</b><span>6 个真实渠道，说清看什么</span></div>'+
+      '<div class="ih-arrow">›</div>'+
+    '</div>'+
     '<div class="jd-foot">'+acts+'</div>';
   sheet.classList.add('show');
   body.scrollTop=0;
@@ -4413,6 +4587,30 @@ function spFirst(s){
 function spOpen(url){
   if(!url)return;
   window.open(url,'_blank');
+}
+function openInterviewHub(){
+  const body=document.getElementById('interview-hub-body');
+  body.innerHTML=
+    '<div class="sp-hero">'+
+      '<div class="sp-name">去哪找真实面经</div>'+
+      '<div class="sp-sub">6 个渠道 · 不搬内容，只告诉你看什么</div>'+
+      '<div class="sp-why">公开面经有真有假。同一个岗位交叉看 2–3 个来源，再判断哪些是共性要求。</div>'+
+    '</div>'+
+    INTERVIEW_CHANNELS.map(function(c){
+      return '<div class="sp-item"><div class="sp-bd">'+
+        '<div class="sp-t" style="padding-right:0">'+esc(c.n)+' <span class="sp-tag '+c.src+'" style="vertical-align:middle">'+esc(c.tag)+'</span></div>'+
+        '<div class="sp-see"><i>看什么</i>'+esc(c.see)+'</div>'+
+        (c.links.length?'<div class="ih-links">'+c.links.map(function(l){
+          return '<a href="'+l.u+'" target="_blank" rel="noopener noreferrer">'+esc(l.t)+' ↗</a>';
+        }).join('')+'</div>':'')+
+      '</div></div>';
+    }).join('')+
+    '<div class="sp-tip">链接均为外部网站，内容由对方提供；校内资源需用学校账号访问。</div>';
+  document.getElementById('interview-hub-sheet').classList.add('show');
+  body.scrollTop=0;
+}
+function closeInterviewHub(){
+  document.getElementById('interview-hub-sheet').classList.remove('show');
 }
 function closeSkillPath(){
   document.getElementById('skill-path-sheet').classList.remove('show');

@@ -406,6 +406,18 @@ var Auth = (function () {
         .ai-avatar svg{width:28px;height:28px;color:#fff}
         .ai-greeting{font-size:16px;font-weight:600;color:var(--gray-900);text-align:center;line-height:1.5}
 
+        /* ── 深度对话 · 三项能力 ── */
+        .deep-tools{display:none;flex-direction:column;gap:9px;width:100%;max-width:340px;margin-top:22px}
+        .deep-tools.show{display:flex}
+        .dt-cap{font-size:10.5px;color:var(--gray-400);text-align:center;margin-bottom:1px}
+        .dt-card{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:12px 13px;cursor:pointer;font-family:inherit;text-align:left;transition:all .18s;width:100%}
+        .dt-card:active{transform:scale(.985);border-color:var(--primary)}
+        .dt-ico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+        .dt-txt{flex:1;min-width:0}
+        .dt-txt b{display:block;font-size:12.5px;color:var(--gray-900);font-weight:700}
+        .dt-txt span{display:block;font-size:10.5px;color:var(--gray-400);margin-top:2px;line-height:1.5}
+        .dt-lock{flex-shrink:0;font-size:9.5px;font-weight:800;color:#B45309;background:var(--accent-light);border-radius:6px;padding:2px 6px}
+
         /* ── Messages ── */
         .chat-messages{display:none;padding:16px 20px 8px;flex-direction:column;gap:16px}
         .chat-messages.active{display:flex}
@@ -856,6 +868,7 @@ var Auth = (function () {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
             </div>
             <div class="ai-greeting" id="aiGreeting">小琳，需要我帮你进行哪些职业规划？</div>
+            <div class="deep-tools" id="deepTools"></div>
         </div>
 
         <!-- Messages -->
@@ -1107,8 +1120,178 @@ const MOCK_RESPONSES = {
     'default': `好的，我来帮你分析一下这个问题。\n\n作为你的职业规划 AI 助手，我结合你目前的情况来回答：\n\n### 分析框架\n\n1. **技能匹配** — 你当前的能力与目标岗位的差距\n2. **时间规划** — 剩余大学时间的最优利用方式\n3. **行动优先级** — 什么现在就该做，什么可以稍后再说\n\n### 快速建议\n\n| 维度 | 现状 | 下一步 |\n|------|------|--------|\n| 技能 | 设计+前端有基础 | 补量用研和数据能力 |\n| 项目 | 2 个项目 | 补充 1 个完整闭环案例 |\n| 求职 | 未开始 | 先优化简历和作品集 |\n\n你想先深入哪个方面？`
 };
 
-/* ── AI Response Matcher ── */
-function getAIResponse(userText){
+/* ══════════════════════════════════════
+   深度对话 · 三项能力（演示版预设脚本）
+   ══════════════════════════════════════ */
+
+const DEEP_FEATURES = [
+  { id:'resume', name:'AI 简历诊断', desc:'按目标岗位逐条给修改意见', icon:'简', bg:'#F0FDFA', fg:'#0F766E', userText:'帮我诊断一下简历' },
+  { id:'mock',   name:'模拟面试',   desc:'5 道题 + 追问 + 当场反馈', icon:'面', bg:'#EEF2FF', fg:'#6366F1', userText:'开始一场模拟面试' },
+  { id:'agent',  name:'Agent 多步执行', desc:'一句话跑完分析、改简历、出清单', icon:'跑', bg:'#FEF3C7', fg:'#B45309', userText:'帮我跑一遍求职 Agent' }
+];
+
+const DEEP_SCRIPT = {
+  resume: `## 📄 简历诊断 · 产品 / UX 方向
+
+我按「HR 前 6 秒扫描」和「面试官会追问什么」两种视角看了一遍。
+
+### 先说做得对的
+- 项目部分写的是产出，不是只罗列职责
+- 技能栏没有铺「精通」，至少没写没法验证的话
+
+### 4 个必须改的地方
+
+**1. 开头缺一句定位**
+现在：直接从教育背景开始
+改成：「深圳大学 · 网络与新媒体 · 目标岗位：UX 设计师（偏产品）」
+理由：HR 要在第一行判断你和这个岗位有没有关系。
+
+**2. 项目只有动作，没有结果**
+现在：「负责用户调研和原型设计」
+改成：「访谈 12 位同学，收敛出 3 个高频卡点；改版后关键任务完成率 62% → 81%」
+理由：没有数字的项目，面试官只能当它没发生过。
+
+**3. 技能写得太泛**
+现在：「熟悉 Figma、Axure、PS」
+改成：「Figma：能独立维护组件库、做可点击的交互原型（附 2 个链接）」
+理由：「熟悉」是谁都会写的词，附链接才有说服力。
+
+**4. 没有回答「为什么是你」**
+补 3 行差异化：新媒体背景 → 会写文案；会写前端 → 能和开发直接对话；做过完整项目 → 能从 0 跑到 1。
+理由：同岗位候选人很多，HR 记不住第十个「熟练使用 Figma」的人。
+
+### 下一步
+把改完的版本发我，我按具体 JD 再过一遍，标出哪些句子还会被追着问。`,
+
+  mock: `## 🎤 模拟面试 · UX 设计师（一面）
+
+规则：我出题 → 你回答 → 我追问 → 5 题结束给一份反馈。
+现在先看题，答完第 1 题我会顺着你的回答继续问。
+
+### Q1 自我介绍（60 秒内）
+考察：能不能一句话说清「你是谁 + 做过什么 + 为什么适合这个岗」
+框架：身份 → 1 个最相关的项目 → 1 个可验证的结果
+
+### Q2 挑一个项目展开讲
+考察：你是不是真的主导过
+一定会追问：为什么选这个方案？另一个方案为什么否掉？怎么验证有效？
+
+### Q3 如果上线后数据不好看，你怎么处理
+考察：诚实度和复盘能力
+提醒：别硬编一个漂亮数字，讲你怎么定位原因比讲结果更加分
+
+### Q4 产品经理和你有分歧，听谁的
+考察：协作方式，不是输赢
+好答案：先对齐目标 → 用数据或用户证据决定 → 定不下就小成本试
+
+### Q5 你有什么想问我的
+考察：你有没有认真研究过这个岗位
+建议：问团队怎么评估设计好坏，比问加班和转正更有信息量
+
+---
+先答 Q1，我马上按你的回答追问。答得短没关系，我会补问。`,
+
+  agent: `## ⚙️ Agent 多步执行 · 求职准备
+
+任务：帮我准备 UX 设计师实习投递
+下面 4 步是我自己跑完的，不是让你去跑。
+
+### 第 1 步 · 读取现状
+- 目标：UX 设计师（偏产品）
+- 已有项目：个人网页、Career OS
+- 明显缺口：缺一段有真实用户的完整研究闭环
+
+### 第 2 步 · 拆 3 个目标 JD
+| 公司 | 岗位 | 最看重什么 |
+|---|---|---|
+| 字节跳动 | UX 设计实习生 | 交互原型 + 数据意识 |
+| 美团 | 用户研究实习生 | 访谈质量与结论收敛 |
+| 深圳本地小厂 | UI/UX 设计师 | 能独立出图、上手快 |
+
+### 第 3 步 · 改简历
+把「负责原型设计」换成「访谈 12 人 → 3 个卡点 → 完成率 62%→81%」
+完整意见见「AI 简历诊断」。
+
+### 第 4 步 · 投递清单
+1. 本周：简历改完 + 作品集补一页「研究过程」
+2. 下周：投 5 家，优先走内推
+3. 每投一家记下 JD 关键词，反推自己还缺什么
+
+---
+要我展开哪一步？直接说「继续第 3 步」或「第 4 步再细一点」。`
+};
+
+/* 会员判断：读 cos_membership，与 membership.html 同一个键 */
+function aiIsPro(){
+    try{
+        var m = JSON.parse(localStorage.getItem('cos_membership') || 'null');
+        return !!(m && m.active && m.expiresAt && Date.now() < m.expiresAt);
+    }catch(e){ return false; }
+}
+/* 非会员：每项功能 1 次试用，记在 cos_ai_trial */
+function aiTrialLeft(id){
+    try{
+        var t = JSON.parse(localStorage.getItem('cos_ai_trial') || '{}');
+        return (typeof t[id] === 'number') ? t[id] : 1;
+    }catch(e){ return 1; }
+}
+function aiUseTrial(id){
+    try{
+        var t = JSON.parse(localStorage.getItem('cos_ai_trial') || '{}');
+        t[id] = Math.max(0, (typeof t[id] === 'number' ? t[id] : 1) - 1);
+        localStorage.setItem('cos_ai_trial', JSON.stringify(t));
+    }catch(e){}
+}
+
+function renderDeepTools(){
+    var el = document.getElementById('deepTools');
+    if(!el) return;
+    if(currentTab !== 'deep'){ el.classList.remove('show'); el.innerHTML = ''; return; }
+    var pro = aiIsPro();
+    el.innerHTML = '<div class="dt-cap">Pro 能力，非会员每项可试用 1 次</div>' +
+        DEEP_FEATURES.map(function(f){
+            var left = aiTrialLeft(f.id);
+            var tag = pro ? '' : (left > 0 ? '<span class="dt-lock">试用 1 次</span>' : '<span class="dt-lock">Pro</span>');
+            return '<button class="dt-card" onclick="runDeepFeature(\'' + f.id + '\')">' +
+                '<div class="dt-ico" style="background:' + f.bg + ';color:' + f.fg + '">' + f.icon + '</div>' +
+                '<div class="dt-txt"><b>' + f.name + '</b><span>' + f.desc + '</span></div>' + tag +
+            '</button>';
+        }).join('');
+    el.classList.add('show');
+}
+
+function runDeepFeature(id){
+    var f = null;
+    DEEP_FEATURES.forEach(function(x){ if(x.id === id) f = x; });
+    if(!f) return;
+    if(!aiIsPro()){
+        if(aiTrialLeft(id) <= 0){ showToast('这是 Pro 能力 · 会员不限次使用'); return; }
+        aiUseTrial(id);
+    }
+    var c = document.getElementById('chatMessages');
+    if(!c.classList.contains('active')){
+        document.getElementById('chatInitial').classList.add('hidden');
+        c.classList.add('active'); c.innerHTML = ''; currentChatId = Date.now();
+    }
+    addMessage('user', f.userText, true);
+    showTyping();
+    var resp = mockChat(id, '');
+    setTimeout(function(){
+        hideTyping(); scrollToBottom(); addMessage('ai', resp, false);
+        saveChat(f.userText, resp);
+    }, 700 + Math.random() * 300);
+}
+
+/* ── 统一模型调用入口（演示版） ──
+   现在全部返回预设脚本；将来接真 API 时，只改 mockChat 这一个函数。
+   feature: 'chat' 普通对话 | 'resume' 简历诊断 | 'mock' 模拟面试 | 'agent' 多步执行
+*/
+function mockChat(feature, payload){
+    if(feature === 'resume') return DEEP_SCRIPT.resume;
+    if(feature === 'mock')   return DEEP_SCRIPT.mock;
+    if(feature === 'agent')  return DEEP_SCRIPT.agent;
+
+    const userText = payload || '';
     const t = userText.toLowerCase();
     const tab = currentTab;
     /* Keyword matching table */
@@ -1147,6 +1330,9 @@ function getAIResponse(userText){
     }
     return MOCK_RESPONSES['default'];
 }
+
+/* 普通对话入口：转入统一 mockChat（现有调用方无需改动） */
+function getAIResponse(userText){ return mockChat('chat', userText); }
 
 /* ── 面试题存池：AI 回复为「模拟面试」时，把内容写入共享池，供面试题库页导入 ── */
 function maybeSaveInterviewPool(aiResp){
@@ -1396,6 +1582,7 @@ function renderInitial(){
         ? '小琳，需要我帮你进行哪些职业规划？'
         : '小琳，深度对话模式已开启 🚀<br>我可以为你提供更专业的分析服务';
     document.getElementById('aiGreeting').innerHTML = greeting;
+    renderDeepTools();
 }
 
 /* ══════════════════════════════════════
